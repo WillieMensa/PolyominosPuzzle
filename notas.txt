@@ -1,0 +1,30 @@
+PUZZLE CON ROTACION Y TRASLADO
+
+Hasta hoy, 15/5/2018, lo mejorcito y mas  parecido a lo que quiero hacer con mi puzzle de pentominos.
+
+Utiliza kinetics.js
+
+*----------------------------
+15/6/2018
+
+
+
+
+--------------------------------------------------
+Referencias citadas en la aplicacion de Simon Hung
+
+Window size and scrolling:
+	http://www.howtocreate.co.uk/tutorials/javascript/browserwindow
+
+Manejo de colores
+	https://www.w3schools.com/colors/colors_picker.asp
+	http://www.colorhexa.com/
+
+block colors: 
+	http://en.wikipedia.org/wiki/File:Pentomino_Puzzle_Solutions.svg	  
+
+just for fixed: chrome sets cursor to text while dragging, why?
+	http://stackoverflow.com/questions/2745028/chrome-sets-cursor-to-text-while-dragging-why
+
+Solucion problema poliominos: 
+	http://godel.hws.edu/java/pent1.html
