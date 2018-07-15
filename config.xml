@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<widget xmlns   = "http://www.w3.org/ns/widgets"
-    xmlns:gap   = "http://phonegap.com/ns/1.0"
-    id          = "ar.com.ingverger.pentominos"
-    versionCode = "01"
-    version     = "0.1.0" >
-
-<!-- versionCode is optional and Android only -->
+<?xml version='1.0' encoding='utf-8'?>
+<widget id = "ar.com.ingverger.pentominos"
+	version="0.1.1" 
+	xmlns="http://www.w3.org/ns/widgets" 
+	xmlns:cdv="http://cordova.apache.org/ns/1.0">
 
   <name>Pentominos Puzzle</name>
 
@@ -13,15 +10,31 @@
 	Pentominos Puzzle is a one player game. An opportunity for mental exercise and fun at the same time.
 	What does it consist of?
 	Hay un tablero cuadrado de 64 celdillas, 8 filas y ocho columnas. Cuatro celdillas se presentan ocupadas. El jugador debe colocar los doce pentominos de forma tal que cubran el resto del tablero.
-	Cada disposiciÛn diferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados numÈricamente. El jugador puede seguir esa secuencia numÈrica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
-	En caso de tener dificultades para encontrar la soluciÛn el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicaciÛn y le restar· un punto al finalizar el problema.
+	Cada disposici√≥n diferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados num√©ricamente. El jugador puede seguir esa secuencia num√©rica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
+	En caso de tener dificultades para encontrar la soluci√≥n el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicaci√≥n y le restar√° un punto al finalizar el problema.
  </description>
 
   <author href="http://www.ingverger.com.ar/pentominos.php" email="ingverger@gmail.com">
       Guillermo Verger
   </author>
 
-  <platform name="android" />
+  <content src="index.html" />
+  <plugin name="cordova-plugin-whitelist" spec="1" />
+  <access origin="*" />
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
+  <allow-intent href="tel:*" />
+  <allow-intent href="sms:*" />
+  <allow-intent href="mailto:*" />
+  <allow-intent href="geo:*" />
+  <platform name="android">
+      <allow-intent href="market:*" />
+  </platform>
+  <platform name="ios">
+      <allow-intent href="itms:*" />
+      <allow-intent href="itms-apps:*" />
+  </platform>
+
   <icon src="icon.png" />
   <splash src="splash.png" />
 
