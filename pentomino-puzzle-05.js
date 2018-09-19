@@ -1585,6 +1585,9 @@ function activePolygon()
 		});
 
 		poly.on('dragstart', function() {
+
+			console.log( "inicio Dragstart ----------------------------" );
+
 			removeFromBoard(this);
 			clearFocusPoly(getLastFocusPoly());
 			hideOperatorObject(); //disable operator before drag
@@ -1594,6 +1597,7 @@ function activePolygon()
 		});
 
 		poly.on('dragend', function() {
+			console.log( "inicio Dragend ----------------------------" );
 			if(tryInsert2Board(this)) {
 				//insert success
 				
@@ -1619,6 +1623,9 @@ function activePolygon()
 		});
 		
 		poly.on('click', function() {
+
+			console.log( "inicio click ----------------------------" );
+
 			clearFocusPoly(getLastFocusPoly());
 			hideOperatorObject(); //remove operator from old position 
 			removeFromBoard(this);

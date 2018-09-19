@@ -3,11 +3,11 @@
     xmlns:gap   = "http://phonegap.com/ns/1.0"
     id          = "ar.com.ingverger.pentominos"
     versionCode = "01"
-    version     = "0.1.0" >
+    version     = "0.2.1" >
 
 <!-- versionCode is optional and Android only -->
 
-  <name>Pentominos Puzzle</name>
+  <name>Pentominos Puzzle HTML</name>
 
   <description>
 	Pentominos Puzzle is a one player game. An opportunity for mental exercise and fun at the same time.

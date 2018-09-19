@@ -44,9 +44,6 @@
 
 	Elimino todas las acciones vinculadas a demo; no es lo que quiero hacer
 
-	23/6/2018
-		Habria que agregar un style a wCuadromGroup... Por ahora no.
-
 	18/6/2018	
 		Adecuacion de Willie Verger para un rompecabezas con pentominos
 		wpentomino.puzzle.js
@@ -255,6 +252,8 @@ function init()
 	
 	//	anulo la llamada siguiente para detectar donde reemplazar a kinetics
 	//	createStageLayer();
+	//		create stage object (Kinetic.Stage ) con propiedades container, width y height
+	//		y tres Kinetic.layers : Background, Board y Message
 
 	//	configuro el canvas
 	xCanvas.width=STAGE_X - 50 ;
