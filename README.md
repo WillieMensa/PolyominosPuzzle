@@ -1,6 +1,8 @@
 # PolyominosPuzzle02
 
 ### Versiones
+19/9/2018 - Version 0.2.1	-	Para verificar funcionamiento en un dispositivo touch.
+		Las piezas se arrastran pero no se pueden girar ni voltear.
 12/7/2018 - Version 0.2.0	-	El objetivo ahora es desarrollar una aplicacion que corra en windows y en Android
 
 9/7/2018 - Version 0.1.0	-	Primer version funcional para resolver el problema een tablero 8 x 8.
