@@ -1,74 +1,11 @@
 ﻿/*	=============================================================================
 	Pentomino Puzzle
-	archivo: pentomino-puzzle-05.js
+	archivo: pentomino-puzzle-09.js
 
-	Corregir:
-		no toma indicaciones de giro y volteo en la pantalla del celular.
-		Detalles menores de iconos, texto descripcion
-		Incorporar secuencia de problemas a resolver
-		ayudas mediante colocacion de pieza en su lugar, limite de ayudas, etc.
-		Tablas de logros y clasificaciones.
-		Pantalla de inicio con opciones de jugar, ayudas, acerca de, y otros.
+	Trato de reemplazar las llamadas a Kinetics.js
+	Utilizaría pixi.js
 
-	Corregido: Detectar resultado exitoso y avisar. Actualmente, al colocar la ultima pieza correcta, dice no haber solucion.
-
-	9/7/2018
-		Consegui hacer funcionar la colocacion de piezas con ayuditas.
-
-	8/7/2018
-		No puedo hacer detectar el cuadromino fijo.
-		auto-Sugerencia: insertarlo de forma similar a
-			function addFixedBlock2Layer(op, numOfFixedBlocks)
-		en lugar de la forma actual
-
-	6/7/2018
-		Debo intentar manejar la posicion del cuadromino de forma tal que
-		detecte el lugar como ocupado y no permita que lo ocupe un pentomino.
-
-	5/7/2018
-		Hay que crear estilos de bloque para el cuadromino fijo (!?)
-		Esto es para que funcione el buscador de soluciones y ayuditas.
-
-	2/7/2018
-	Pensar en resolver la insercion de cuadróminos fijos de la siguiente forma:
-		el cuadromino fijo a insertar se agrega al grupo de poliomonios
-		se establece en 1 la cantidad de poliominos fijos
-		adaptar la <<< function addFixedBlock2Layer(op, numOfFixedBlocks) >>> para  asegurarse que tome el cuadromino.
-		verificar
-
-	linea 433, he logrado insertar el cuadromino. Ahora falta pintar las celditas ocupadas.
-
-
-	Elimino todas las acciones vinculadas a demo; no es lo que quiero hacer
-
-	23/6/2018
-		Habria que agregar un style a wCuadromGroup... Por ahora no.
-
-	18/6/2018
-		Adecuacion de Willie Verger para un rompecabezas con pentominos
-		wpentomino.puzzle.js
-		descripcion de variables y funciones del script
-
-	include files: polyomino5.js, polySolution.js, animate.js, polyDemo.js
-
-	v1.3
-	12/16/2014 - (1) Bug fixed for Chrome 38.x
-				  (1.1) remark "context.stroke(context);"
-				  (1.2) change lib version to kinetic-v4.4.3
-
-	v1.2
-	07/10/2013 - (1) Bug fixed for Chrome 28.0.1500.71 m
-				  change context.fill(context) to context.fill()
-
-	v1.1
-	04/04/2013 - (1) For work with Chrome 26.0.1410.43m move to kineticJS 4.4.0
-			  (2) Support tranditional chinese
-
-	v1.0
-	11/05/2012 - recover play mode info after demo back and change board color
-
-	11/03/2012 - add demo function
-	10/26/2012 - create by Simon Hung
+	Cuidado con esta version que tiene anuladas muchas funciones llamadas por kinetics.js
 	=============================================================================
 
 	OBSERVACIONES
@@ -83,7 +20,24 @@
 //=========
 // define
 //=========
-var versionString="1.3"
+
+//Aliases
+"use strict";
+
+//=====================
+//	Constantes
+//=====================
+var	LIMITE_TABLERO = 450,
+	LINEA_BOTONES = 470,
+	LINEA_BOTONES_OFF = 700,
+	RENDERER_W = 800,
+	RENDERER_H = 600,
+	FONDO_AYUDA = 0x008cff,			//	FONDO_AYUDA = "#690",
+	FONDO_JUEGO = 0xffffff,		//	 "#ffc",
+	VERSION	= "1.0.0",			//	version inicial
+	//	DEBUG = false;
+	DEBUG = true;
+
 
 //-------------------------------------
 //	https://www.w3schools.com/colors/colors_picker.asp
@@ -188,6 +142,70 @@ var gBlockUsed = 0;		//	how many block used
 //	var	DEBUG = false;
 var	DEBUG = true;
 var	DEBUG2 = false;
+
+
+var rendererOptions = {
+	antialiasing: true,
+	transparent: false,
+	resolution: window.devicePixelRatio,
+	autoResize: true,
+	backgroundColor: BACKGROUND_COLOR	//	default: 0x000000
+}
+
+//Create the renderer
+//Create the renderer
+//	750 de alto solo para visualizar los botones cuando son desplazados
+var renderer = PIXI.autoDetectRenderer( RENDERER_W, RENDERER_H, rendererOptions );
+//	-----------------------------------------------
+//	To make the canvas fill the entire window, apply this CSS styling
+//	and resize the renderer to the size of the browser window.
+renderer.view.style.position = "absolute";
+renderer.view.style.display = "block";
+renderer.autoResize = true;
+renderer.resize(window.innerWidth - 40, window.innerHeight - 40);
+// Put the renderer on screen in the corner
+renderer.view.style.top = "0px";
+renderer.view.style.left = "0px";
+
+//		//Create a Pixi Application
+//		let app = new PIXI.Application({
+//			width: 512,         // default: 800
+//			height: 256,        // default: 600
+//			antialias: true,    // default: false
+//			transparent: false, // default: false
+//			resolution: 1,       // default: 1
+//			backgroundColor: BACKGROUND_COLOR	//	default: 0x000000
+//		});
+
+//	var renderer = new PIXI.Application( RENDERER_W, RENDERER_H, { backgroundColor: 0x1099bb } );
+//	var renderer = new PIXI.Application( 700, 550, rendererOptions );
+//	var app = new PIXI.Application(800, 600, { backgroundColor: 0x1099bb });
+
+//	-----------------------------------------------
+// Put the renderer on screen in the corner
+renderer.view.style.position = "absolute";
+renderer.view.style.top = "0px";
+renderer.view.style.left = "0px";
+
+//	Set the canvas's border style and background color
+renderer.view.style.border = "01px solid #0f0";
+renderer.backgroundColor = FONDO_JUEGO;
+
+//Add the canvas that Pixi automatically created for you to the HTML document
+document.body.appendChild(renderer.view);
+
+
+if (DEBUG)
+{
+	//	If you want to find the width or the height of the renderer, use
+	var rendererWidth = renderer.view.width;
+	var rendererHeight = renderer.view.height;
+	console.log('renderer width * height: ' + rendererWidth  + ' * ' + rendererHeight );
+	console.log('window width * height: ' + window.innerWidth + ' * ' +  window.innerHeight);
+	var	btMouseOver = undefined;
+
+}
+
 
 
 //==================
@@ -803,7 +821,7 @@ function addBackgroundLayer()
 		//fontFamily: "Calibri",
 		fontStyle:"bold",
 		shadowColor: 'black',
-		shadowBlur: 05,
+		shadowBlur: 5,
 		shadowOffset: [4,4],			//	2, 2],
 		shadowOpacity:0.7
 	});
@@ -1624,7 +1642,7 @@ function activePolygon()
 
 		poly.on('click', function() {
 
-			console.log( "inicio click, this: " + Object.values(this));
+			console.log( "inicio click ----------------------------" );
 
 			clearFocusPoly(getLastFocusPoly());
 			hideOperatorObject(); //remove operator from old position
@@ -2309,7 +2327,7 @@ function hintsButton()
 	if(!animateBlockBack(moveTime)) moveTime = 0;
 	flashObject = animateHintsBlock(result.solvedBoard, result.op, moveTime);
 
-	enableButtonAfterStopRunning(flashObject);
+	//	enableButtonAfterStopRunning(flashObject);
 }
 
 //---------------------------
@@ -2549,17 +2567,17 @@ function findAvailableBlock(solvedBoard)			//	busca aleatoriamente un bloque pro
 //------------------------------------------
 // enable all button after stop flash block
 //------------------------------------------
-function enableButtonAfterStopRunning(object, button )
-{
-	if(object.isRunning()) {
-		setTimeout(function() {
-			enableButtonAfterStopRunning(object, button);
-		}, 200)
-	} else {
-		delete object;
-		enableAllButton();
-	}
-}
+// function enableButtonAfterStopRunning(object, button )
+// {
+// 	if(object.isRunning()) {
+// 		setTimeout(function() {
+// 			enableButtonAfterStopRunning(object, button);
+// 		}, 200)
+// 	} else {
+// 		delete object;
+// 		enableAllButton();
+// 	}
+// }
 
 //=========================
 // BEGIN for reset button
