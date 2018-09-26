@@ -1,4 +1,4 @@
-# PolyominosPuzzle02
+# Pentomania Fatal
 
 ### Fuentes
 Desarrollado a partir de Polyomino Puzzle & Solver, codigo creado por Simon Hung
