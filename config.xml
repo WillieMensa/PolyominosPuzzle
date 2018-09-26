@@ -16,6 +16,8 @@
 		Guillermo Verger
 	</author>
 
+    <preference name="orientation"                value="portrait" />        <!-- all: default means both landscape and portrait are enabled -->
+
 	<content src="index.html" />
 	<access origin="*" />
 </widget>
