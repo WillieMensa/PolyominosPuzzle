@@ -1,4 +1,4 @@
-# PolyominosPuzzle02
+# Pentomania Fatal
 
 ### Fuentes
 Desarrollado a partir de Polyomino Puzzle & Solver, codigo creado por Simon Hung
@@ -121,9 +121,12 @@ clear select options reference:
 
 #### Version 0.2.2	-	25/9/2018
 	Se incorporan botones para girar y voltear piezas.
+
 #### Version 0.2.3	-	25/9/2018
 	Ajustes menores de presentacion
 
+#### Version 0.2.4	-	25/9/2018
+	Correcciones por fallas desconocidas en instalacion
 
 ### Corecciones a realizar
 Agrandar tamaño tablero. Experimentar metodos de SUMADO
@@ -198,5 +201,3 @@ Corregir:
 
 	11/03/2012 - add demo function
 	10/26/2012 - create by Simon Hung
-
-	
