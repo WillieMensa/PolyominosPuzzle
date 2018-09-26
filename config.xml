@@ -1,37 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<widget xmlns   = "http://www.w3.org/ns/widgets"
-    xmlns:gap   = "http://phonegap.com/ns/1.0"
-	xmlns:cdv	= "http://cordova.apache.org/ns/1.0"
+<widget 
     id          = "ar.com.ingverger.pentominos"
-    versionCode = "02"
-    version     = "0.2.4" >
+    version     = "0.2.5" >
 
-  <name>Pentomania fatal HTML</name>
+	<name>Pentomania-fatal</name>
 
-  <description>
-	Pentominos Puzzle is a one player game. An opportunity for mental exercise and fun at the same time.
-	What does it consist of?
-	Hay un tablero cuadrado de 64 celdillas, 8 filas y ocho columnas. Cuatro celdillas se presentan ocupadas. El jugador debe colocar los doce pentominos de forma tal que cubran el resto del tablero.
-	Cada disposición diferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados numéricamente. El jugador puede seguir esa secuencia numérica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
-	En caso de tener dificultades para encontrar la solución el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicación y le restará un punto al finalizar el problema.
- </description>
+	<description>
+		Pentominos Puzzle is a one player game. An opportunity for mental exercise and fun at the same time.
+		What does it consist of?
+		Hay un tablero cuadrado de 64 celdillas, 8 filas y ocho columnas. Cuatro celdillas se presentan ocupadas. El jugador debe colocar los doce pentominos de forma tal que cubran el resto del tablero.
+		Cada disposición diferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados numéricamente. El jugador puede seguir esa secuencia numérica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
+		En caso de tener dificultades para encontrar la solución el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicación y le restará un punto al finalizar el problema.
+	</description>
 
-  <author href="http://www.ingverger.com.ar/pentominos.php" email="ingverger@gmail.com">
-      Guillermo Verger
-  </author>
+	<author href="http://www.ingverger.com.ar/pentominos.php" email="ingverger@gmail.com">
+		Guillermo Verger
+	</author>
 
 	<content src="index.html" />
-
-	<preference name='phonegap-version' value='cli-8.0.0' />
-    <preference name="permissions" value="none"/>
-
-    <!-- Customize your app and platform with the preference element. -->
-    <preference name="orientation"                value="landscape" />        <!-- all: default means both landscape and portrait are enabled -->
-    <preference name="target-device"              value="handset" />      <!-- all: possible values handset, tablet, or universal -->
-    <preference name="fullscreen"                 value="false" />           <!-- all: hides the status bar at the top of the screen -->
-    <preference name="android-minSdkVersion"      value="26" />
-
-	<icon src="icon.png" />
-	<splash src="splash.png" />
-
+	<access origin="*" />
 </widget>
