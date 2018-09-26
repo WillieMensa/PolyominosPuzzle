@@ -201,5 +201,3 @@ Corregir:
 
 	11/03/2012 - add demo function
 	10/26/2012 - create by Simon Hung
-
-	
