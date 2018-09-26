@@ -1,6 +1,6 @@
 <widget 
     id          = "ar.com.ingverger.pentominos"
-    version     = "0.2.5" >
+    version     = "0.2.8" >
 
 	<name>Pentomania-fatal</name>
 
@@ -16,7 +16,7 @@
 		Guillermo Verger
 	</author>
 
-    <preference name="orientation"                value="landscape" />        <!-- all: default means both landscape and portrait are enabled -->
+    <preference name="orientation"                value="portrait" />        <!-- all: default means both landscape and portrait are enabled -->
 
 	<content src="index.html" />
 	<access origin="*" />
