@@ -225,7 +225,7 @@ function initBoardSize(boardSize, level)
 //-------------------------------------------------------------------
 var levelText = "Nivel";
 var noSolutionText = " Sin solución  ";
-var nextText = "PROXIMO";
+var nextText = "OTRO";
 var finishText = "Felicitaciones";
 var checkSolutionShift = 130;
 
@@ -258,13 +258,18 @@ function initScreenVariable()
 {
 	var screenWidth = 0, screenHeight = 0;
 
+	//	reemplazo para agrandar tablero
+	//	var maxStageX = 1000;
+	//	var maxStageY = 800;
+	//	var maxCellSize = 40;
+
 	var maxStageX = 1000;
 	var maxStageY = 800;
-	var maxCellSize = 40;
+	var maxCellSize = 56;
 
 	var midStageX = 800;
 	var midStageY = 600;
-	var midCellSize = 32;
+	var midCellSize = 40;		//	var midCellSize = 32;
 
 	var miniStageX = 600;
 	var miniStageY = 400;
@@ -330,13 +335,15 @@ function initScreenPosColor()
 {
 	document.getElementById('new').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
 
-	document.getElementById('reset').style.cssText = "top:" + (50) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
+	document.getElementById('reset').style.cssText = "top:" + (50) + "px; left:" + (SCREEN_X - 80) + "px; position: absolute;";
 
-	document.getElementById('giro').style.cssText = "top:" + (100) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
+	document.getElementById('giro').style.cssText = "top:" + (100) + "px; left:" + (SCREEN_X - 80) + "px; position: absolute;";
 
-	document.getElementById('voltea').style.cssText = "top:" + (170) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
+	document.getElementById('voltea').style.cssText = "top:" + (170) + "px; left:" + (SCREEN_X - 80) + "px; position: absolute;";
 
-	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y - 80) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
+	//	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y - 80) + "px; left:" + (SCREEN_X - 80) + "px; position: absolute;";
+	//	para deshabilitar temporalmente
+	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y + 80) + "px; left:" + (SCREEN_X + 80) + "px; position: absolute;";
 
 	document.getElementById('check').style.cssText = "top:" + (SCREEN_Y - 40) + "px; left:" + (SCREEN_X - checkSolutionShift) + "px; position: absolute;";
 
@@ -479,7 +486,6 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 			}
 */
 
-	if (DEBUG) { 'linea 510, initBoardState()'};
 	if (DEBUG) { dumpBoard(gBoardState); };
 	//	boardX	:	dimension X del tablero en celdillas
 	//	boardy	:	dimension y del tablero en celdillas
@@ -654,12 +660,12 @@ function addBackgroundLayer()
 {
 	var borderWidth = Math.round(BLOCK_CELL_SIZE/2);
 	var textOffset = Math.round(BLOCK_CELL_SIZE/6);
-	var titleFontSize = Math.round(BLOCK_CELL_SIZE*1.35);
+	var titleFontSize = Math.round(BLOCK_CELL_SIZE*1.00);	//	1.32
 
 	var titleText1 = new Kinetic.Text({
 		x: textOffset,
 		y: textOffset,
-		text: "Pentominos Puzzle",
+		text: "PENTOMANÍA FATAL",
 		fill: 'green',					//	fill: BACKGROUND_COLOR,
 		fontSize: titleFontSize,
 		//fontFamily: "Calibri",
@@ -673,7 +679,8 @@ function addBackgroundLayer()
 	var titleText2 = new Kinetic.Text({
 		x: textOffset,
 		y: STAGE_Y-titleFontSize - 15,
-		text: "Willie investiga, Nana ayuda",
+		//	text: "Willie investiga, Nana ayuda",
+		text: "por Willie (...el de Mensa)",
 		fill: 'blue',						//	diferencia aprobada
 		fontSize: titleFontSize,
 		//fontFamily: "Calibri",

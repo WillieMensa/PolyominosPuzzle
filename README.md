@@ -107,7 +107,7 @@ clear select options reference:
 ### Versiones
 #### Version 0.0.1	-	19/6/2018
 #### Version 0.0.2	-	21/6/2018
-	Iniciamos la conversi�n a un puzzle de pentominos en tablero de 8 x 8.
+	Iniciamos la conversi&otilde;n a un puzzle de pentominos en tablero de 8 x 8.
 
 #### Version 0.1.0	-	09/7/2018
 	Primer version funcional para resolver el problema een tablero 8 x 8.
@@ -121,6 +121,9 @@ clear select options reference:
 
 #### Version 0.2.2	-	25/9/2018
 	Se incorporan botones para girar y voltear piezas.
+#### Version 0.2.3	-	25/9/2018
+	Ajustes menores de presentacion
+
 
 ### Corecciones a realizar
 Agrandar tamaño tablero. Experimentar metodos de SUMADO
