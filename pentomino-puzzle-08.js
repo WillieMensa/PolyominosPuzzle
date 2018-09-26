@@ -269,15 +269,15 @@ function initScreenVariable()
 
 	var midStageX = 800;
 	var midStageY = 600;
-	var midCellSize = 40;		//	var midCellSize = 32;
+	var midCellSize = 44;		//	var midCellSize = 32;
 
 	var miniStageX = 600;
 	var miniStageY = 400;
-	var miniCellSize = 24;
+	var miniCellSize = 32;	// 24;
 
 	var microStageX = 400;
 	var microStageY = 300;
-	var microCellSize = 20;
+	var microCellSize = 28;	// 20;
 
 	//----------------------------------------------------------------------
 	// Window size and scrolling:
