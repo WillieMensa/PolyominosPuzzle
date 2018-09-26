@@ -3,8 +3,8 @@
     xmlns:gap   = "http://phonegap.com/ns/1.0"
 	xmlns:cdv	= "http://cordova.apache.org/ns/1.0"
     id          = "ar.com.ingverger.pentominos"
-    versionCode = "01"
-    version     = "0.2.3" >
+    versionCode = "02"
+    version     = "0.2.4" >
 
 <!-- versionCode is optional and Android only -->
 
@@ -24,18 +24,11 @@
       Guillermo Verger
   </author>
 
-  <content src="index.html" />
-  
-  <access origin="*" />
-  <allow-intent href="http://*/*" />
-  <allow-intent href="https://*/*" />
-  <allow-intent href="tel:*" />
-  <allow-intent href="sms:*" />
-  <allow-intent href="mailto:*" />
-  <allow-intent href="geo:*" />
-  <platform name="android">
-      <allow-intent href="market:*" />
-  </platform>
+	<content src="index.html" />
+
+	<preference name='phonegap-version' value='cli-8.0.0' />
+    <preference name="permissions" value="none"/>
+    <preference name="android-build-tool" value="gradle" />
 
     <!-- Customize your app and platform with the preference element. -->
     <preference name="orientation"                value="landscape" />        <!-- all: default means both landscape and portrait are enabled -->
