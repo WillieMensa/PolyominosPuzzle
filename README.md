@@ -8,7 +8,7 @@ Utiliza (por ahora) [KineticJS](http://kineticjs.com).
 Pentominos Puzzle is a one player game. An opportunity for mental exercise and fun at the same time.
 What does it consist of?
 Hay un tablero cuadrado de 64 celdillas, 8 filas y ocho columnas. Cuatro celdillas se presentan ocupadas. El jugador debe colocar los doce pentominos de forma tal que cubran el resto del tablero.
-Cada disposici&oacute;ndiferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados num�ricamente. El jugador puede seguir esa secuencia num�rica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
+Cada disposici&oacute;ndiferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados numéricamente. El jugador puede seguir esa secuencia numérica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
 En caso de tener dificultades para encontrar la soluci�n el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicaci�n y le restar� un punto al finalizar el problema.
 
 ### Generalidades
