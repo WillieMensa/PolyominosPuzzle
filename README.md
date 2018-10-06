@@ -8,7 +8,7 @@ Utiliza (por ahora) [KineticJS](http://kineticjs.com).
 Pentominos Puzzle is a one player game. An opportunity for mental exercise and fun at the same time.
 What does it consist of?
 Hay un tablero cuadrado de 64 celdillas, 8 filas y ocho columnas. Cuatro celdillas se presentan ocupadas. El jugador debe colocar los doce pentominos de forma tal que cubran el resto del tablero.
-Cada disposici�n diferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados num�ricamente. El jugador puede seguir esa secuencia num�rica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
+Cada disposici&oacute;ndiferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados num�ricamente. El jugador puede seguir esa secuencia num�rica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
 En caso de tener dificultades para encontrar la soluci�n el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicaci�n y le restar� un punto al finalizar el problema.
 
 ### Generalidades
@@ -104,7 +104,84 @@ clear select options reference:
 	http://www.somacon.com/p542.php
 
 
-### Versiones
+## Versiones de referencia para PC
+
+	10/26/2012 - create by Simon Hung
+
+	11/03/2012 - add demo function
+
+	v1.0
+	11/05/2012 - recover play mode info after demo back and change board color
+
+	v1.1
+	04/04/2013 - (1) For work with Chrome 26.0.1410.43m move to kineticJS 4.4.0
+			  (2) Support tranditional chinese
+
+	v1.2
+	07/10/2013 - (1) Bug fixed for Chrome 28.0.1500.71 m
+				  change context.fill(context) to context.fill()
+
+	v1.3
+	12/16/2014 - (1) Bug fixed for Chrome 38.x
+				  (1.1) remark "context.stroke(context);"
+				  (1.2) change lib version to kinetic-v4.4.3
+
+## Versiones previas de Willie Verger
+
+	Proximos pasos
+		eliminar la opcion de niveles de dificultad; quitar boton
+		detectar la forma de marcar las celditas ocupadas.
+		incorporar un cuadrominos en diferentes posiciones para los distintos problemas
+		mantener la ayuda
+		Impedir el modo autonomo de resolución (demo)
+
+	18/6/2018
+		Adecuacion de Willie Verger para un rompecabezas con pentominos
+		wpentomino.puzzle.js
+		descripcion de variables y funciones del script
+
+	include files: polyomino5.js, polySolution.js, animate.js, polyDemo.js
+
+	23/6/2018
+		Habria que agregar un style a wCuadromGroup... Por ahora no.
+
+	28/6/2018
+		Siendo que vamos emplear una sola dimension del tablero (8X8) los manejos
+		del mismo basdos en las dimensiones *** boardSize ***
+		deberian ser eliminados para simplificar
+
+	2/7/2018
+	Pensar en resolver la insercion de cuadróminos fijos de la siguiente forma:
+		el cuadromino fijo a insertar se agrega al grupo de poliomonios
+		se establece en 1 la cantidad de poliominos fijos
+		adaptar la <<< function addFixedBlock2Layer(op, numOfFixedBlocks) >>> para  asegurarse que tome el cuadromino.
+		verificar
+
+	linea 433, he logrado insertar el cuadromino. Ahora falta pintar las celditas ocupadas.
+
+
+	Elimino todas las acciones vinculadas a demo; no es lo que quiero hacer
+
+	5/7/2018
+		Hay que crear estilos de bloque para el cuadromino fijo (!?)
+		Esto es para que funcione el buscador de soluciones y ayuditas.
+
+	6/7/2018
+		Debo intentar manejar la posicion del cuadromino de forma tal que
+		detecte el lugar como ocupado y no permita que lo ocupe un pentomino.
+
+	8/7/2018
+		No puedo hacer detectar el cuadromino fijo.
+		auto-Sugerencia: insertarlo de forma similar a
+			function addFixedBlock2Layer(op, numOfFixedBlocks)
+		en lugar de la forma actual
+
+	9/7/2018
+		Consegui hacer funcionar la colocacion de piezas con ayuditas.
+
+
+### Versiones hibridas para PC y para smartphone
+
 #### Version 0.0.1	-	19/6/2018
 #### Version 0.0.2	-	21/6/2018
 	Iniciamos la conversi&otilde;n a un puzzle de pentominos en tablero de 8 x 8.
@@ -128,13 +205,24 @@ clear select options reference:
 #### Version 0.2.4	-	25/9/2018
 	Correcciones por fallas desconocidas en instalacion
 
-### Corecciones a realizar
-Agrandar tamaño tablero. Experimentar metodos de SUMADO
-Forzar posicion apaisada
----	Reemplazar el 'operator object' con un boton que produzca resultados similares.
+#### Version 0.2.8	-	26/9/2018
+	Esta version funcion con pantalla vertical en celulares y estaria estabilizada.
 
-Corregir:
-	no toma indicaciones de giro y volteo en la pantalla del celular.
+#### version     = "0.3.1"
+	Version construida para comprobar dimensiones de la pantalla en celular
+	Encaminada hacia una aplicacion forzada a posicion horizontal
+
+
+En linea 520, function randomPolyInitPos(availablePoly) define la posicion que tendran las piezas en el inicio.
+A partir de aqui diseñar la disposición que le daremos a las piezas.
+
+
+
+### Corecciones a realizar
+	Agrandar tamaño tablero.
+
+	Rediseñar posicion inicial de piezas, tamaño tablero, Posición botonesetc.
+
 	Detalles menores de iconos, texto descripcion
 	Incorporar secuencia de problemas a resolver
 	ayudas mediante colocacion de pieza en su lugar, limite de ayudas, etc.
@@ -144,60 +232,4 @@ Corregir:
 
 	Corregido: Detectar resultado exitoso y avisar. Actualmente, al colocar la ultima pieza correcta, dice no haber solucion.
 
-	9/7/2018
-		Consegui hacer funcionar la colocacion de piezas con ayuditas.
-
-	8/7/2018
-		No puedo hacer detectar el cuadromino fijo.
-		auto-Sugerencia: insertarlo de forma similar a
-			function addFixedBlock2Layer(op, numOfFixedBlocks)
-		en lugar de la forma actual
-
-	6/7/2018
-		Debo intentar manejar la posicion del cuadromino de forma tal que
-		detecte el lugar como ocupado y no permita que lo ocupe un pentomino.
-
-	5/7/2018
-		Hay que crear estilos de bloque para el cuadromino fijo (!?)
-		Esto es para que funcione el buscador de soluciones y ayuditas.
-
-	2/7/2018
-	Pensar en resolver la insercion de cuadróminos fijos de la siguiente forma:
-		el cuadromino fijo a insertar se agrega al grupo de poliomonios
-		se establece en 1 la cantidad de poliominos fijos
-		adaptar la <<< function addFixedBlock2Layer(op, numOfFixedBlocks) >>> para  asegurarse que tome el cuadromino.
-		verificar
-
-	linea 433, he logrado insertar el cuadromino. Ahora falta pintar las celditas ocupadas.
-
-
-	Elimino todas las acciones vinculadas a demo; no es lo que quiero hacer
-
-	23/6/2018
-		Habria que agregar un style a wCuadromGroup... Por ahora no.
-
-	18/6/2018
-		Adecuacion de Willie Verger para un rompecabezas con pentominos
-		wpentomino.puzzle.js
-		descripcion de variables y funciones del script
-
-	include files: polyomino5.js, polySolution.js, animate.js, polyDemo.js
-
-	v1.3
-	12/16/2014 - (1) Bug fixed for Chrome 38.x
-				  (1.1) remark "context.stroke(context);"
-				  (1.2) change lib version to kinetic-v4.4.3
-
-	v1.2
-	07/10/2013 - (1) Bug fixed for Chrome 28.0.1500.71 m
-				  change context.fill(context) to context.fill()
-
-	v1.1
-	04/04/2013 - (1) For work with Chrome 26.0.1410.43m move to kineticJS 4.4.0
-			  (2) Support tranditional chinese
-
-	v1.0
-	11/05/2012 - recover play mode info after demo back and change board color
-
-	11/03/2012 - add demo function
-	10/26/2012 - create by Simon Hung
+    version     = "0.3.1" >

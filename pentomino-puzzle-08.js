@@ -447,6 +447,8 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 	clearPolyInsertOrder(); //for hints
 	randomBlock(gBlockGroup); //external function; random the block order
 	randomBlockStyle(gBlockGroup); //external function; //	reordena aleatoriamente los estilos de bloque
+	
+	// Random the initial position of polygon
 	randomPolyInitPos(gBlockGroup.length - numOfFixedBlocks);
 
 	clearFixedBlock();
@@ -516,7 +518,10 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 var polyInitPos;
 function randomPolyInitPos(availablePoly)
 {
+	//	midId: vendria a ser la cantidad de piezas a colocar en una linea
 	var midId = (availablePoly > 5)?Math.floor((availablePoly+1)/2): availablePoly;
+
+	//	distance: distancia horizontal entre las piezas
 	var distance =  Math.floor((STAGE_X - BLOCK_CELL_SIZE*2) / midId);
 
 	polyInitPos=[];
@@ -543,6 +548,10 @@ function randomPolyInitPos(availablePoly)
 			x:Math.round(((index<midId)?index:(index-midId)) * distance + BLOCK_CELL_SIZE*2.5),
 			y:Math.round((index < midId)?(BLOCK_CELL_SIZE*2.8):(STAGE_Y - BLOCK_CELL_SIZE * 2.8))
 		};
+
+		if (DEBUG)	{
+			console.log( 'id: ' + id + ', x: ' +  polyInitPos[id].x + ', y: ' + polyInitPos[id].y );
+		}
 	}
 }
 
