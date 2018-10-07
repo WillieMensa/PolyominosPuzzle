@@ -2806,8 +2806,8 @@ function writeMessage(message) {
 	var context = gMessageLayer.getContext();
 	
 	gMessageLayer.clear();
-	context.font = '32pt arial';
-	context.fillStyle = 'red';
+	context.font = '28pt arial';
+	context.fillStyle = 'maroon';
 	context.fillText(message, STAGE_X/2-message.length*9.5, STAGE_Y/2+BLOCK_CELL_SIZE * (SCREEN_BOARD_Y/2));
 	gBoardLayer.draw(); //FOR: firefox first time will not display 10/21/2012
 }

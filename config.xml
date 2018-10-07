@@ -16,8 +16,15 @@
 		Guillermo Verger
 	</author>
 
-    <preference name="orientation"                value="landscape" />        <!-- all: default means both landscape and portrait are enabled -->
+    <preference name="orientation"	value="landscape" />        <!-- all: default means both landscape and portrait are enabled -->
 
 	<content src="index.html" />
 	<access origin="*" />
+
+    <platform name="android">
+        <allow-intent href="market:*" />
+		<icon   src="icon.png" />
+    </platform>
+
+
 </widget>

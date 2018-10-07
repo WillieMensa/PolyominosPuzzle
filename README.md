@@ -9,25 +9,25 @@ Pentominos Puzzle is a one player game. An opportunity for mental exercise and f
 What does it consist of?
 Hay un tablero cuadrado de 64 celdillas, 8 filas y ocho columnas. Cuatro celdillas se presentan ocupadas. El jugador debe colocar los doce pentominos de forma tal que cubran el resto del tablero.
 Cada disposici&oacute;ndiferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados numéricamente. El jugador puede seguir esa secuencia numérica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
-En caso de tener dificultades para encontrar la soluci�n el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicaci�n y le restar� un punto al finalizar el problema.
+En caso de tener dificultades para encontrar la soluci&oacute;n el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicaci&oacute;n y le restar&aacute; un punto al finalizar el problema.
 
 ### Generalidades
-Espa�olizaci�n del original. La utlizar� como master para volver en caso de no funcionar las variantes que se vayan planteando.
-El objetivo es crear un puzzle con pentominos en una tablero de 8 x 8 utilizando los doce pentominos y ocupando previamente 4 cuadraditos con cuadr�minos o cuatro cuadraditos independientes.
+Espa�olizaci&oacute;n del original. La utlizar&aacute; como master para volver en caso de no funcionar las variantes que se vayan planteando.
+El objetivo es crear un puzzle con pentominos en una tablero de 8 x 8 utilizando los doce pentominos y ocupando previamente 4 cuadraditos con cuadr&oacute;minos o cuatro cuadraditos independientes.
 
-## Funcionamiento de la aplicaci�n
-La ocupaci�n de celdas fijas, cudr�minos o cuadraditos separados, define diferentes problemas. Estos ser�n identificados / codificados para tener una secuencia fija para el jugador.
+## Funcionamiento de la aplicaci&oacute;n
+La ocupaci&oacute;n de celdas fijas, cudr&oacute;minos o cuadraditos separados, define diferentes problemas. Estos ser&aacute;n identificados / codificados para tener una secuencia fija para el jugador.
 Los problemas se iran desarrollando secuencialmente (o siguiendo el orden que elija el jugador).
-Se deber� llevar una tabla de registro donde se guarden los problemas resueltos por el jugador, los puntos obtenidos en cada caso y el total de puntos acumulados.
-Tambi�n deber�a presentarse una tabla de clasificaci�n general de acuerdo a los puntos obtenidos.
+Se deber&aacute; llevar una tabla de registro donde se guarden los problemas resueltos por el jugador, los puntos obtenidos en cada caso y el total de puntos acumulados.
+Tambi&eacute;n deber&iacute;a presentarse una tabla de clasificaci&oacute;n general de acuerdo a los puntos obtenidos.
 
-En cada problema el jugador tendr� la posibilidad de solicitar ayuda. Por cada ayuda solicitada se descontar� un punto del total posible. Se podr�n solicitar hasta una m�ximo de x ayudas (por ejemplo: 8)
-De forma tal que el jugador est� obligado a resolver, al menos, un problema m�s simple y justifique los puntos que obtenga.
+En cada problema el jugador tendr&aacute; la posibilidad de solicitar ayuda. Por cada ayuda solicitada se descontar&aacute; un punto del total posible. Se podr&aacute;n solicitar hasta una m&aacute;ximo de x ayudas (por ejemplo: 8)
+De forma tal que el jugador est&aacute; obligado a resolver, al menos, un problema m&aacute;s simple y justifique los puntos que obtenga.
 
-Tabla de clasificaci�n general y tabla de logros personal.
+Tabla de clasificaci&oacute;n general y tabla de logros personal.
 
-El cuadr�mino o los cuadraditos estar�n programados previamente. Cada disposici�n da lugar a un problema diferente; tendr� asignado un n�mero o codigo. Creo que para los jugadores es mejor presentarlos ordenados numericamente.
-El jugador podr� seguir la secuencia num�rica o elegir los numeros arbitrariamente.
+El cuadr&oacute;mino o los cuadraditos estar&aacute;n programados previamente. Cada disposici&oacute;n da lugar a un problema diferente; tendr&aacute; asignado un n&uacute;mero o codigo. Creo que para los jugadores es mejor presentarlos ordenados numericamente.
+El jugador podr&aacute; seguir la secuencia num&eacute;rica o elegir los numeros arbitrariamente.
 
 
 ### ----------------------------------
