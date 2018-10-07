@@ -12,7 +12,7 @@ Cada disposici&oacute;ndiferentes de las celdillas ocupadas previamente da lugar
 En caso de tener dificultades para encontrar la soluci&oacute;n el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicaci&oacute;n y le restar&aacute; un punto al finalizar el problema.
 
 ### Generalidades
-Espa�olizaci&oacute;n del original. La utlizar&aacute; como master para volver en caso de no funcionar las variantes que se vayan planteando.
+Españolizaci&oacute;n del original. La utlizar&aacute; como master para volver en caso de no funcionar las variantes que se vayan planteando.
 El objetivo es crear un puzzle con pentominos en una tablero de 8 x 8 utilizando los doce pentominos y ocupando previamente 4 cuadraditos con cuadr&oacute;minos o cuatro cuadraditos independientes.
 
 ## Funcionamiento de la aplicaci&oacute;n
