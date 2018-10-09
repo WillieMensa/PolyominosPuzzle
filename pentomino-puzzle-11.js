@@ -2,6 +2,7 @@
 	Pentomino Puzzle
 	archivo: pentomino-puzzle-11.js
 	06/10/2018
+	#### version     = "0.3.5"	-	8/10/2018
 
 	include files: polyomino5.js, polySolution.js, animate.js, polyDemo.js
 
@@ -455,7 +456,7 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 	//	BOARD_WIDTH = (SCREEN_BOARD_X * BLOCK_CELL_SIZE);
 	//	BOARD_HIGH  = (SCREEN_BOARD_Y * BLOCK_CELL_SIZE);
 	BOARD_WIDTH = ( Math.floor( 0.45 * SCREEN_X / SCREEN_BOARD_X ) * SCREEN_BOARD_X );
-	BOARD_HIGH  = ( Math.floor( 0.75 * SCREEN_Y / SCREEN_BOARD_Y ) * SCREEN_BOARD_Y );
+	BOARD_HIGH  = ( Math.floor( 0.70 * SCREEN_Y / SCREEN_BOARD_Y ) * SCREEN_BOARD_Y );
 
 	if ( BOARD_WIDTH > BOARD_HIGH )	{ BOARD_WIDTH = BOARD_HIGH;	} else { BOARD_HIGH = BOARD_WIDTH };
 
@@ -571,7 +572,7 @@ function randomPolyInitPos(availablePoly)
 	//	reparto el espacio desde el tablero al borde derecho
 	//	var distance =  Math.floor((STAGE_X - BLOCK_CELL_SIZE*2) / ppl);
 	var distance_X =  Math.floor((STAGE_X - BLOCK_CELL_SIZE - BOARD_WIDTH) / (ppl + 1));
-	var distance_Y =  Math.floor(0.9 * (STAGE_Y - BLOCK_CELL_SIZE) / ((availablePoly/ppl) + 1));
+	var distance_Y =  Math.floor(0.8 * (STAGE_Y - BLOCK_CELL_SIZE) / ((availablePoly/ppl) + 1));
 
 	polyInitPos=[];
 	for(var id=0; id < availablePoly; id++) {
@@ -595,7 +596,7 @@ function randomPolyInitPos(availablePoly)
 
 		polyInitPos[id] = {
 			x:( STAGE_OFFSET_X + boardStartX + BOARD_WIDTH ) + (distance_X * (0.7 + (index % ppl))),
-			y:Math.floor( distance_Y  * (0.9 + (index % (( availablePoly / ppl ) + 1 ))))
+			y:Math.floor( distance_Y  * (1.2 + (index % (( availablePoly / ppl ) + 1 ))))
 		};
 
 
@@ -1406,8 +1407,8 @@ function createPolygon(blockGroup, fixedBlock)
 		setShadow(poly);
 
 		//hasRotate and hasFlip for display filp & rotate operator
-		poly.hasRotate = (blockGroup[id].blockStyle.length != 1);
-		poly.hasFlip   = blockGroup[id].hasFlip;
+		//	poly.hasRotate = (blockGroup[id].blockStyle.length != 1);
+		//	poly.hasFlip   = blockGroup[id].hasFlip;
 
 		polyId++;
 	}
@@ -1527,10 +1528,10 @@ function activePolygon()
 
 			removeFromBoard(this);
 			clearFocusPoly(getLastFocusPoly());
-			hideOperatorObject(); //disable operator before drag
+			//	hideOperatorObject(); //disable operator before drag
 
 			//	boton operador
-			ocultaBotonOperador();
+			//	ocultaBotonOperador();
 
 			setFocusPoly(this);
 			setShadow(this);
@@ -1553,7 +1554,7 @@ function activePolygon()
 				hideOperatorObject();
 
 				//	boton operador
-				ocultaBotonOperador();
+				//	ocultaBotonOperador();
 
 				clearShadow(this);
 				//drawOutline(this);
@@ -1561,9 +1562,9 @@ function activePolygon()
 				gBoardLayer.draw();
 				insertCheck();
 			} else {
-				showOperatorObject(this); //enable operator if insert failed
+				//	showOperatorObject(this); //enable operator if insert failed
 				//	y habilito el boton equivalente
-				muestraBotonOperador(this);
+				muestraBotonOperador(this);		//	para vincular al boton operador
 			}
 
 			//dumpBoard(gBoardState); //for debug only
@@ -1577,7 +1578,7 @@ function activePolygon()
 			hideOperatorObject(); //remove operator from old position
 
 			//	boton operador
-			ocultaBotonOperador();
+			//	ocultaBotonOperador();
 
 			removeFromBoard(this);
 			setFocusPoly(this);
@@ -2263,7 +2264,7 @@ function hintsButton()
 	hideOperatorObject();
 
 	//	boton operador
-	ocultaBotonOperador();
+	//	ocultaBotonOperador();
 
 	disableAllButton();
 	if(!animateBlockBack(moveTime)) moveTime = 0;
@@ -2563,7 +2564,7 @@ function resetButton()
 	hideOperatorObject();
 
 	//	boton operador
-	ocultaBotonOperador();
+	//	ocultaBotonOperador();
 
 	if(animateBlockBack(moveTime)) {
 		disableAllButton();
@@ -3104,7 +3105,7 @@ function CalcCeldasOcupadas()		//	arma un vector con los datos de las celdas ocu
 
 
 function muestraBotonOperador(poly) {
-	console.log('----	function muestraBotonOperador(poly)	')
+	//	console.log('----	function muestraBotonOperador(poly)	')
 	var cx = poly.getPosition().x;
 	var cy = poly.getPosition().y;
 
@@ -3140,6 +3141,7 @@ function muestraBotonOperador(poly) {
 //--------------------------------------------------
 function ocultaBotonOperador()
 {
+	/*
 	if(rotateOperatorStatus) {
 		//gBoardLayer.remove(rotateObject);
 		document.getElementById('giraPieza').disabled=true;
@@ -3151,6 +3153,7 @@ function ocultaBotonOperador()
 		document.getElementById('volteaPieza').style.visibility='hidden';
 
 	}
+	*/
 }
 
 

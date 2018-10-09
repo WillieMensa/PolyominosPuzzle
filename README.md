@@ -229,8 +229,10 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 #### version     = "0.3.4"	-	8/10/2018
 	Eliminar writemessage en pantalla para debug
 
-### Corecciones a realizar
+#### version     = "0.3.5"	-	8/10/2018
 	Eliminar operadores sobre las piezas
+
+### Corecciones a realizar
 	Detalles menores de iconos, texto descripcion
 	Incorporar secuencia de problemas a resolver
 	ayudas mediante colocacion de pieza en su lugar, limite de ayudas, etc.
@@ -240,6 +242,9 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 	Compilar archivo js
 
 
+
+Se puede descargar desde 
+	https://build.phonegap.com/apps/3314127/share
 
 
 
