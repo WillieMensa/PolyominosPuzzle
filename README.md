@@ -217,12 +217,16 @@ En linea 520, function randomPolyInitPos(availablePoly) define la posicion que t
 A partir de aqui diseñar la disposición que le daremos a las piezas.
 
 
+#### version     = "0.3.2"	-	6/10/2018
+	Cambio de la forma de calculo de las dimensiones y posicion del talero.
+	BOARD_WIDTH y BOARD_HIGH van a ser iguales porque utilizamos un tablero cuadrado.
+	Sus medidas las tomamos en base a las dimensiones de la pantalla.
 
-### Corecciones a realizar
+#### version     = "0.3.3"	-	8/10/2018
 	Agrandar tamaño tablero.
-
 	Rediseñar posicion inicial de piezas, tamaño tablero, Posición botonesetc.
 
+### Corecciones a realizar
 	Detalles menores de iconos, texto descripcion
 	Incorporar secuencia de problemas a resolver
 	ayudas mediante colocacion de pieza en su lugar, limite de ayudas, etc.
@@ -232,4 +236,4 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 
 	Corregido: Detectar resultado exitoso y avisar. Actualmente, al colocar la ultima pieza correcta, dice no haber solucion.
 
-    version     = "0.3.1" >
+

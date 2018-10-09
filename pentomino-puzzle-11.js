@@ -63,22 +63,22 @@ var	COLOR_BLOCK_FIJO	= '#112233';	//	gris bastante oscuro
 //===========================
 // values based on screen size
 //===========================
-var BLOCK_CELL_SIZE;
+var BLOCK_CELL_SIZE;	//	medida de las cldas en px
 var STAGE_X;			//	ancho adoptado para area de juego (stage o canvas)
 var STAGE_Y;			//	alto adoptado para area de juego (stage o canvas)
 var STAGE_OFFSET_X;		//	vertice izquierdo de la pantalla
-var STAGE_OFFSET_Y;		//	vertice superior de la pantalla 
+var STAGE_OFFSET_Y;		//	vertice superior de la pantalla
 var SCREEN_X;			//	ancho de pantalla en px
 var SCREEN_Y;			//	alto de pantalla en px
 
 //==================
 // global variable
 //==================
-var SCREEN_BOARD_X;		//	ancho del tablero en celdas. ordenada X de tablero
-var SCREEN_BOARD_Y;		//	ordenada Y de tablero
-var BOARD_WIDTH;		//	ancho del tablero en unidades de tablero
-var BOARD_HIGH;			//	alto del tablero en unidades de tablero
-var boardStartX;		//	coordenadas para ubicar tablero. 
+var SCREEN_BOARD_X;		//	ancho del tablero en celdas. En nuestro caso: 8
+var SCREEN_BOARD_Y;		//	alto del tablero en celdas. En nuestro caso: 8 (igual al anterior
+var BOARD_WIDTH;		//	ancho del tablero en unidades de pantalla. Este es el que vamos a calcular para usar de base de calculo.
+var BOARD_HIGH;			//	alto del tablero en unidades de pantalla
+var boardStartX;		//	coordenadas para ubicar tablero.
 var boardStartY;
 
 var gBoardSizeId = 0;	//board size. Identifica la opcion elegida para tamaño de tablero
@@ -161,7 +161,7 @@ function init()
 	//	wCuadromino = polyomino4.blockGroup[nCuadromId];	//	esta linea o la que sigue, vuelan
 	wCuadromGroup = polyomino4.blockGroup;
 	gCeldasOcupadas = CalcCeldasOcupadas();
-	if (DEBUG)
+	if (DEBUG2)
 	{
 		for (var j=0; j < gCeldasOcupadas.length ; j++)
 		{
@@ -190,7 +190,7 @@ function init()
 	//debug
 	//	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
 	writeMessage( 'SCREEN_X: ' + SCREEN_X + ' SCREEN_Y: ' + SCREEN_Y );
-	
+
 
 }
 
@@ -306,34 +306,50 @@ function initScreenVariable()
 	SCREEN_X = screenWidth;
 	SCREEN_Y = screenHeight;
 
-	STAGE_X = ((screenWidth%2)? (screenWidth-1):screenWidth) - microCellSize*2;
-	if(STAGE_X > maxStageX) STAGE_X = maxStageX;
-	if(STAGE_X < microStageX) STAGE_X = microStageX;
+	//	STAGE_X = ((screenWidth%2)? (screenWidth-1):screenWidth) - microCellSize*2;
+	STAGE_X = Math.floor(screenWidth*0.95);
+
+
+	//	if(STAGE_X > maxStageX) STAGE_X = maxStageX;
+	//	if(STAGE_X < microStageX) STAGE_X = microStageX;
 	STAGE_OFFSET_X = Math.floor((screenWidth - STAGE_X)/2);
 	if(STAGE_OFFSET_X < microCellSize) STAGE_OFFSET_X = microCellSize;
 
-	STAGE_Y = ((screenHeight%2)?(screenHeight-1):screenHeight) - microCellSize*2;
+	//	STAGE_Y = ((screenHeight%2)?(screenHeight-1):screenHeight) - microCellSize*2;
+	STAGE_Y = Math.floor(screenHeight*0.90);
+
 	if(STAGE_Y > maxStageY) STAGE_Y = maxStageY;
 	if(STAGE_Y < microStageY) STAGE_Y = microStageY;
 	STAGE_OFFSET_Y = Math.floor((screenHeight - STAGE_Y)/2);
 	if(STAGE_OFFSET_Y < microCellSize) STAGE_OFFSET_Y = microCellSize;
 
+
 	//	if (DEBUG)	{	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);	}
 	if (DEBUG)	{	console.log("SCREEN_X: " + SCREEN_X + ' SCREEN_Y: ' + SCREEN_Y ); }
-	
 
-	BLOCK_CELL_SIZE = maxCellSize;
-	switch(true) {
-	case (STAGE_X <= microStageX || STAGE_Y <= microStageY):
-		BLOCK_CELL_SIZE = microCellSize;
-		break;
-	case (STAGE_X <= miniStageX || STAGE_Y <= miniStageY):
-		BLOCK_CELL_SIZE = miniCellSize;
-		break;
-	case (STAGE_X <= midStageX || STAGE_Y <= midStageY):
-		BLOCK_CELL_SIZE = midCellSize;
-		break;
-	}
+
+	//	BLOCK_CELL_SIZE = maxCellSize;
+	//	switch(true) {
+	//	case (STAGE_X <= microStageX || STAGE_Y <= microStageY):
+	//		BLOCK_CELL_SIZE = microCellSize;
+	//		break;
+	//	case (STAGE_X <= miniStageX || STAGE_Y <= miniStageY):
+	//		BLOCK_CELL_SIZE = miniCellSize;
+	//		break;
+	//	case (STAGE_X <= midStageX || STAGE_Y <= midStageY):
+	//		BLOCK_CELL_SIZE = midCellSize;
+	//		break;
+	//	}
+
+	console.log( 'Parametros de pantalla'	);
+	console.log( 'SCREEN_X: ' +		SCREEN_X       );
+	console.log( 'SCREEN_Y: ' + 		SCREEN_Y       );
+	console.log( 'STAGE_X: ' + 		STAGE_X        );
+	console.log( 'STAGE_OFFSET_X: ' + 	STAGE_OFFSET_X );
+	console.log( 'STAGE_Y: ' + 		STAGE_Y        );
+	console.log( 'STAGE_OFFSET_Y: ' +  	STAGE_OFFSET_Y );
+	console.log( 'BLOCK_CELL_SIZE: ' +  BLOCK_CELL_SIZE );
+
 }
 
 //----------------------------------------------
@@ -341,21 +357,22 @@ function initScreenVariable()
 //----------------------------------------------
 function initScreenPosColor()
 {
+	//	var Y_Offset = Math.round(BLOCK_CELL_SIZE/6);	//	todavia no se conoce BLOCK_CELL_SIZE
+	//	if (DEBUG)	{ console.log('BLOCK_CELL_SIZE, Y_Offset, Y_Offset + 200: ' + BLOCK_CELL_SIZE + ', ' +(Y_Offset) + ', ' +	Y_Offset + 200 );	}
+
 	document.getElementById('new').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
 
-	document.getElementById('reset').style.cssText = "top:" + (50) + "px; left:" + (SCREEN_X - 80) + "px; position: absolute;";
+	document.getElementById('reset').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (20) + "px; position: absolute;";
 
-	document.getElementById('giro').style.cssText = "top:" + (100) + "px; left:" + (SCREEN_X - 80) + "px; position: absolute;";
+	document.getElementById('giro').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (110) + "px; position: absolute;";
 
-	document.getElementById('voltea').style.cssText = "top:" + (170) + "px; left:" + (SCREEN_X - 80) + "px; position: absolute;";
+	document.getElementById('voltea').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (200) + "px; position: absolute;";
 
-	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y - 80) + "px; left:" + (SCREEN_X - 80) + "px; position: absolute;";
-	//	para deshabilitar temporalmente
-	//	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y + 80) + "px; left:" + (SCREEN_X + 80) + "px; position: absolute;";
+	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (290) + "px; position: absolute;";
 
-	document.getElementById('check').style.cssText = "top:" + (SCREEN_Y - 40) + "px; left:" + (SCREEN_X - checkSolutionShift) + "px; position: absolute;";
+	document.getElementById('check').style.cssText = "top:" + (SCREEN_Y-060) + "px; left:" + (380) + "px; position: absolute;";
 
-	document.getElementById('start').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 120) + "px; position: absolute;";
+	//	document.getElementById('start').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 120) + "px; position: absolute;";
 
 	document.body.style.background = BACKGROUND_COLOR; //body background color
 }
@@ -434,10 +451,25 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 	//initial global variable
 	SCREEN_BOARD_X = boardX;
 	SCREEN_BOARD_Y = boardY;
-	BOARD_WIDTH = (SCREEN_BOARD_X * BLOCK_CELL_SIZE);
-	BOARD_HIGH  = (SCREEN_BOARD_Y * BLOCK_CELL_SIZE);
-	boardStartX = (STAGE_X-BOARD_WIDTH)/2;
-	boardStartY = (STAGE_Y-BOARD_HIGH)/2;
+
+	//	BOARD_WIDTH = (SCREEN_BOARD_X * BLOCK_CELL_SIZE);
+	//	BOARD_HIGH  = (SCREEN_BOARD_Y * BLOCK_CELL_SIZE);
+	BOARD_WIDTH = ( Math.floor( 0.45 * SCREEN_X / SCREEN_BOARD_X ) * SCREEN_BOARD_X );
+	BOARD_HIGH  = ( Math.floor( 0.75 * SCREEN_Y / SCREEN_BOARD_Y ) * SCREEN_BOARD_Y );
+
+	if ( BOARD_WIDTH > BOARD_HIGH )	{ BOARD_WIDTH = BOARD_HIGH;	} else { BOARD_HIGH = BOARD_WIDTH };
+
+	BLOCK_CELL_SIZE = BOARD_WIDTH / SCREEN_BOARD_X;
+
+	console.log( 'BOARD_WIDTH, BOARD_HIGH, BLOCK_CELL_SIZE: ' + BOARD_WIDTH + ', ' + BOARD_HIGH + ', ' + BLOCK_CELL_SIZE);
+	console.log('STAGE_X, STAGE_Y: ' + STAGE_X + ', ' + STAGE_Y);
+
+	//	boardStartX = (STAGE_X-BOARD_WIDTH)/2;
+	boardStartX = BLOCK_CELL_SIZE;
+	boardStartY = Math.floor((SCREEN_Y-BOARD_HIGH)/2);
+
+	console.log( 'boardStartX, boardStartY: ' + boardStartX + ', ' + boardStartY );
+
 	gTotalBlockCell = (SCREEN_BOARD_X * SCREEN_BOARD_Y);
 	gBlockUsed = 0
 	gBlockCellUsed = 0;
@@ -459,7 +491,7 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 	clearPolyInsertOrder(); //for hints
 	randomBlock(gBlockGroup); //external function; random the block order
 	randomBlockStyle(gBlockGroup); //external function; //	reordena aleatoriamente los estilos de bloque
-	
+
 	// Random the initial position of polygon
 	randomPolyInitPos(gBlockGroup.length - numOfFixedBlocks);
 
@@ -532,10 +564,14 @@ function randomPolyInitPos(availablePoly)
 {
 	//	midId: vendria a ser la cantidad de piezas a colocar en una linea
 	//	en nuestro caso siempre seran 12
-	var midId = (availablePoly > 5)?Math.floor((availablePoly+1)/2): availablePoly;
+	//	var midId = (availablePoly > 5)?Math.floor((availablePoly+1)/2): availablePoly;
+	var ppl = 3;	//	Piezas Por Linea; primera prueba: 4 filas de 3 piezas c/u
 
 	//	distance: distancia horizontal entre las piezas
-	var distance =  Math.floor((STAGE_X - BLOCK_CELL_SIZE*2) / midId);
+	//	reparto el espacio desde el tablero al borde derecho
+	//	var distance =  Math.floor((STAGE_X - BLOCK_CELL_SIZE*2) / ppl);
+	var distance_X =  Math.floor((STAGE_X - BLOCK_CELL_SIZE - BOARD_WIDTH) / (ppl + 1));
+	var distance_Y =  Math.floor(0.9 * (STAGE_Y - BLOCK_CELL_SIZE) / ((availablePoly/ppl) + 1));
 
 	polyInitPos=[];
 	for(var id=0; id < availablePoly; id++) {
@@ -558,17 +594,17 @@ function randomPolyInitPos(availablePoly)
 		var index = polyInitPos[id];
 
 		polyInitPos[id] = {
-			x:Math.round(((index<midId)?index:(index-midId)) * distance + BLOCK_CELL_SIZE*2.5),
-			// y:Math.round((index < midId)?(BLOCK_CELL_SIZE*2.8):(STAGE_Y - BLOCK_CELL_SIZE * 2.8))
-			y:Math.round((index < midId)?(STAGE_Y - BLOCK_CELL_SIZE * 5.6):(STAGE_Y - BLOCK_CELL_SIZE * 2.8))
-			//	y:STAGE_Y - (3 * BLOCK_CELL_SIZE * Math.round(index < midId)?(1):(2))
+			x:( STAGE_OFFSET_X + boardStartX + BOARD_WIDTH ) + (distance_X * (0.7 + (index % ppl))),
+			y:Math.floor( distance_Y  * (0.9 + (index % (( availablePoly / ppl ) + 1 ))))
 		};
+
 
 		if (DEBUG)	{
 			console.log( 'id: ' + id + ', x,y: ' + Object.values(polyInitPos[id]) );
 			;
 		}
 	}
+	console.log( 'distance_X, distance_Y: ' + distance_X + ', ' +  distance_Y );
 
 }
 
@@ -684,14 +720,14 @@ function SolvedPos2BoardPos(op, pos)
 //--------------------------
 function addBackgroundLayer()
 {
-	var borderWidth = Math.round(BLOCK_CELL_SIZE/2);
+	var borderWidth = Math.round(BLOCK_CELL_SIZE/4);
 	var textOffset = Math.round(BLOCK_CELL_SIZE/6);
-	var titleFontSize = Math.round(BLOCK_CELL_SIZE*1.00);	//	1.32
+	var titleFontSize = Math.round(BLOCK_CELL_SIZE*0.70);	//	1.32
 
 	var titleText1 = new Kinetic.Text({
 		x: textOffset,
 		y: textOffset,
-		text: "PENTOMANÍA FATAL",
+		text: "PENTOMANÍA FATAL by Willie",
 		fill: 'green',					//	fill: BACKGROUND_COLOR,
 		fontSize: titleFontSize,
 		//fontFamily: "Calibri",
@@ -702,20 +738,20 @@ function addBackgroundLayer()
 		shadowOpacity:0.7
 	});
 
-	var titleText2 = new Kinetic.Text({
-		x: textOffset,
-		y: STAGE_Y-titleFontSize - 15,
-		//	text: "Willie investiga, Nana ayuda",
-		text: "por Willie (...el de Mensa)",
-		fill: 'blue',						//	diferencia aprobada
-		fontSize: titleFontSize,
-		//fontFamily: "Calibri",
-		fontStyle:"bold",
-		shadowColor: 'black',
-		shadowBlur: 10,
-		shadowOffset: [2, 2],
-		shadowOpacity:0.3
-	});
+	//	var titleText2 = new Kinetic.Text({
+	//		x: textOffset,
+	//		y: STAGE_Y-titleFontSize - Math.round(BLOCK_CELL_SIZE*0.30),
+	//		//	text: "Willie investiga, Nana ayuda",
+	//		text: "por Willie (...el de Mensa)",
+	//		fill: 'blue',						//	diferencia aprobada
+	//		fontSize: titleFontSize,
+	//		//fontFamily: "Calibri",
+	//		fontStyle:"bold",
+	//		shadowColor: 'black',
+	//		shadowBlur: 10,
+	//		shadowOffset: [2, 2],
+	//		shadowOpacity:0.3
+	//	});
 
 	var versionText = new Kinetic.Text({
 		x: 0,
@@ -788,7 +824,7 @@ function addBackgroundLayer()
 
 	gBackgroundLayer.add(background);
 	gBackgroundLayer.add(titleText1);
-	gBackgroundLayer.add(titleText2);
+	//	gBackgroundLayer.add(titleText2);
 	gBackgroundLayer.add(versionText);
 	gBackgroundLayer.add(boardBackground);
 	gBackgroundLayer.add(borderUp);
@@ -2804,7 +2840,7 @@ function getSystemLanguage()
 //===============================================
 function writeMessage(message) {
 	var context = gMessageLayer.getContext();
-	
+
 	gMessageLayer.clear();
 	context.font = '28pt arial';
 	context.fillStyle = 'maroon';
@@ -3145,7 +3181,7 @@ function giraPieza()
 
 //-----------------------------------
 //	con el boton
-// left-right flip the focus polygon 
+// left-right flip the focus polygon
 //-----------------------------------
 function volteaPieza()
 {
@@ -3173,4 +3209,3 @@ function addContorno2Layer()
 	context.fillRect( STAGE_X, STAGE_Y, STAGE_OFFSET_X, STAGE_OFFSET_Y );
 
 }
-
