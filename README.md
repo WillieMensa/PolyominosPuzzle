@@ -226,14 +226,20 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 	Agrandar tamaño tablero.
 	Rediseñar posicion inicial de piezas, tamaño tablero, Posición botonesetc.
 
+#### version     = "0.3.4"	-	8/10/2018
+	Eliminar writemessage en pantalla para debug
+
 ### Corecciones a realizar
+	Eliminar operadores sobre las piezas
 	Detalles menores de iconos, texto descripcion
 	Incorporar secuencia de problemas a resolver
 	ayudas mediante colocacion de pieza en su lugar, limite de ayudas, etc.
 	Tablas de logros y clasificaciones.
 	Pantalla de inicio con opciones de jugar, ayudas, acerca de, y otros.
+	Eliminar todos los console.log
+	Compilar archivo js
 
 
-	Corregido: Detectar resultado exitoso y avisar. Actualmente, al colocar la ultima pieza correcta, dice no haber solucion.
+
 
 

@@ -189,7 +189,7 @@ function init()
 
 	//debug
 	//	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
-	writeMessage( 'SCREEN_X: ' + SCREEN_X + ' SCREEN_Y: ' + SCREEN_Y );
+	//	writeMessage( 'SCREEN_X: ' + SCREEN_X + ' SCREEN_Y: ' + SCREEN_Y );
 
 
 }
