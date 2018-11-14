@@ -232,6 +232,11 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 #### version     = "0.3.5"	-	8/10/2018
 	Eliminar operadores sobre las piezas
 
+#### version     = "0.4.0"	-	3/11/2018
+
+#### version     = "0.4.1"	-	14/11/2018
+	Version para respaldar estado del desarrollo antes de hacer alguna modificaciones 'grosas'
+
 ### Corecciones a realizar
 	Detalles menores de iconos, texto descripcion
 	Incorporar secuencia de problemas a resolver

@@ -8,6 +8,7 @@ npm-debug.log
 
 # project ignores
 !.gitkeep
+.privado
 *__temp
 node_modules
 docs/
@@ -16,3 +17,6 @@ examples_old/
 # respaldo temporal
 *.bak
 plqpp
+
+# textos notas, observaciones y ayudas mios
+*.txt

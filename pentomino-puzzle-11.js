@@ -103,7 +103,7 @@ var	wPolyCuadrom;		//	datos para colocacion en pantalla
 var	nCuadromId	= 3;	//	identificador del cuadromino fijo a colocar en el tablero
 
 //	var wCuadromino;		//	datos de cuadromino a colocar en posición fija
-var wCuadromPos = {x:1,y:1};	//	posicion del cuadromino fijo
+var wCuadromPos = {x:2,y:2};	//	posicion del cuadromino fijo
 var gCeldasOcupadas;
 
 
@@ -145,7 +145,7 @@ function init()
 	document.getElementById('checkButton').checked=false;
 
 	//	Elimino los botones para elegir tablero y nivel de dificultad
-	//	document.getElementById('boardSizeButton').options[gBoardSizeId].selected = true;
+	//	document.getElementById('boardSizeButton').options[gBoardSizeId].selected = true;tht
 	//	document.getElementById('levelButton').options[gLevelId-1].selected  = true;
 
 	initLanguage();					//	adaptación a diferentes idiomas
@@ -257,7 +257,7 @@ function initLanguage()		//	para adaptar a diferentes idiomas
 
 
 //----------------------------------------------
-// initial screen variable base on screen size
+//	asignacion de valores a variables basados en medidas de pantalla
 //----------------------------------------------
 function initScreenVariable()
 {

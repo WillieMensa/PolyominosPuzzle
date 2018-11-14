@@ -1,100 +1,59 @@
-﻿<html>
-<head>
-<title>Pentominos Puzzle en desarrollo</title>
+<!DOCTYPE html>
+<html lang="es" >
 <!--
 
+	version     = "0.4.0"
+	Introducimos presentacion, menu de acceso y opcion de diferentes problemas
+
+	Idea de https://codepen.io/brandondward/pen/WjyBQW
 -->
-<meta http-equiv="X-UA-Compatible" content="chrome=1, IE=edge">
-<meta name="description" content="Investigando Pentominos Puzzle">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="willie.ico"  rel="shortcut icon" >
-<style>
-	body {
-		margin: 1px;
-		padding: 1px;
-	}
-	#newButton, #demoButton {
-		background: transparent;
-		border: 0;
-	}
-	#hintsButton, #newButton, #resetButton, #demoButton   {
-		width: 70px;
-		padding: 5px;
-		display: block;
-		margin-top: 5px;
-	}
-	#select {
-		width: 80px;
-	}
-	#checkboxtext, input, select {
-		font:  15px arial;
-		visibility: hidden;
-	}
-	#startButton {
-		width: 100px;
-		padding: 5px;
-		display: block;
-		margin-top: 5px;
-		font:  20px arial;
-	}
-	#giraPieza, #volteaPieza {
-		width: 70px;
-		padding: 0px;
-		display: block;
-		margin-top: 5px;
-		font:  28px arial bold ;
-	}
-	#containedor {
-		background: #9988ff;
-		border: 2;
-	}
+<head>
+    <!-- Viewport meta tag is critical to have mobile browsers actually report correct screen dimensions -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="chrome=1, IE=edge">
+	<meta charset="ISO-8859-1">
 
-</style>
+	<title> PENTOMANIA FATAL </title>
 
-<!-- utilizo la version extendida de kinetics.js para tratar de entender el funcionamiento -->
-<script src="kineticJS/kinetic-v4.4.3.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 
-<script src="animate.js"></script>
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Luckiest+Guy|Sriracha|Roboto:300,400,500,700|Material+Icons">
 
-<script src="polyDemo.js"></script>
-
-<!-- Include local copy of Pixi.js -->
-<!-- <script src=".\lib\pixi.js"></script> -->
-
-<!-- el script que sigue está basado en pentomino.puzzle.js del original -->
-<script src="pentomino-puzzle-11.js"></script>
-
-<!--
-<script src="wpentomino.puzzle.js"></script>
-<script src="wfunciones.js"></script>
- -->
-<script src="polySolution.js"></script>
-<script src="polyomino5.js"></script>
-<script src="polyomino4.js"></script>
-
+	<link href="willie.ico"  rel="shortcut icon" >
+	<link rel="stylesheet" href="css/style.css">
 
 </head>
 
-<!-- <body onload="init()"> -->
-<body >
+<body>
 
-
-<div id="container" ></div>
-
-<div id="hints"><input type="button" id="hintsButton" onclick="hintsButton();" value="Ayudita"></div> 
-
-
-<div id="reset"><input type="button" id="resetButton" onclick="resetButton();" value="Reinicia"></div>
-
-<!-- experimento boton para girar -->
-<div id="giro"><input type="button" id="giraPieza" onclick="giraPieza();" value="&#X21BB;"></div>
-<div id="voltea"><input type="button" id="volteaPieza" onclick="volteaPieza();" value="&#X2194;"></div>
-
-<div id="check"><input type="checkbox" id="checkButton" onclick="checkButton(this.checked);">
-	<span id="checkboxtext">Verifica Soluci&oacute;n</span>
+<div class="container">
+	<div class="menu-container" id="toggle">
+		<a href="#" class="menu" ><i class="fa fa-bars" aria-hidden="true"></i></a>
+	</div>
+	<div class="title-container"><h1><span> PENTOMANIA FATAL </span></h1>
+		<div class="circle">
+		</div>
+	</div>
 </div>
-<div id="start"><input type="button" id="startButton" onclick="startButton(1);" value="Play"></div>
-<div id="new"><input type="button" id="newButton" onclick="createPuzzle(1, true);" value=""></div>
-<!-- <div id="demo"><input type="button" id="demoButton" onclick="demoButton(1);" value=""></div> -->
+
+<div class="overlay" id="overlay">
+  <nav class="overlay-menu">
+    <ul>
+		<li><a href="#">Logros</a></li>
+		<li><a href="pentomania.html">Jugar</a></li>
+		<li><a href="#">Como se juega...</a></li>
+		<li><a href="#">Acerca de..</a></li>
+		<li><a href="#">Salir</a></li>
+
+    </ul>
+  </nav>
+</div>
+
+<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script> -->
+
+<!-- <script  src="js/index.js"></script> -->
+
 </body>
+
 </html>

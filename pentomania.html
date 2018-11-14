@@ -1,0 +1,100 @@
+﻿<html>
+<head>
+<title>Pentominos Puzzle en desarrollo</title>
+<!--
+
+-->
+<meta http-equiv="X-UA-Compatible" content="chrome=1, IE=edge">
+<meta name="description" content="Investigando Pentominos Puzzle">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="willie.ico"  rel="shortcut icon" >
+<style>
+	body {
+		margin: 1px;
+		padding: 1px;
+	}
+	#newButton, #demoButton {
+		background: transparent;
+		border: 0;
+	}
+	#hintsButton, #newButton, #resetButton, #demoButton   {
+		width: 70px;
+		padding: 5px;
+		display: block;
+		margin-top: 5px;
+	}
+	#select {
+		width: 80px;
+	}
+	#checkboxtext, input, select {
+		font:  15px arial;
+		visibility: hidden;
+	}
+	#startButton {
+		width: 100px;
+		padding: 5px;
+		display: block;
+		margin-top: 5px;
+		font:  20px arial;
+	}
+	#giraPieza, #volteaPieza {
+		width: 70px;
+		padding: 0px;
+		display: block;
+		margin-top: 5px;
+		font:  28px arial bold ;
+	}
+	#containedor {
+		background: #9988ff;
+		border: 2;
+	}
+
+</style>
+
+<!-- utilizo la version extendida de kinetics.js para tratar de entender el funcionamiento -->
+<script src="kineticJS/kinetic-v4.4.3.js"></script>
+
+<script src="animate.js"></script>
+
+<script src="polyDemo.js"></script>
+
+<!-- Include local copy of Pixi.js -->
+<!-- <script src=".\lib\pixi.js"></script> -->
+
+<!-- el script que sigue está basado en pentomino.puzzle.js del original -->
+<script src="pentomino-puzzle-11.js"></script>
+
+<!--
+<script src="wpentomino.puzzle.js"></script>
+<script src="wfunciones.js"></script>
+ -->
+<script src="polySolution.js"></script>
+<script src="polyomino5.js"></script>
+<script src="polyomino4.js"></script>
+
+
+</head>
+
+<!-- <body onload="init()"> -->
+<body >
+
+
+<div id="container" ></div>
+
+<div id="hints"><input type="button" id="hintsButton" onclick="hintsButton();" value="Ayudita"></div> 
+
+
+<div id="reset"><input type="button" id="resetButton" onclick="resetButton();" value="Reinicia"></div>
+
+<!-- experimento boton para girar -->
+<div id="giro"><input type="button" id="giraPieza" onclick="giraPieza();" value="&#X21BB;"></div>
+<div id="voltea"><input type="button" id="volteaPieza" onclick="volteaPieza();" value="&#X2194;"></div>
+
+<div id="check"><input type="checkbox" id="checkButton" onclick="checkButton(this.checked);">
+	<span id="checkboxtext">Verifica Soluci&oacute;n</span>
+</div>
+<div id="start"><input type="button" id="startButton" onclick="startButton(1);" value="Play"></div>
+<div id="new"><input type="button" id="newButton" onclick="createPuzzle(1, true);" value=""></div>
+<!-- <div id="demo"><input type="button" id="demoButton" onclick="demoButton(1);" value=""></div> -->
+</body>
+</html>
