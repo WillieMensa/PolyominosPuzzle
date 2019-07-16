@@ -10,7 +10,7 @@ function createBoard(boardX, boardY)		// genera / crea un tablero nuevo con sus 
 		}
 	}
 	
-	if (DEBUG)	{	dumpBoard(board);	};
+	if (DEBUG2)	{	dumpBoard(board);	};
 
 	return board;
 }
@@ -164,7 +164,7 @@ function insertBlockToBoard(board, boardX, boardY, block, curPos, value)	//	inse
 //	board	:	estado del tablero; celdas ocupadas / vacias
 //	boardX	:	dimension X del tablero en celdillas
 //	boardy	:	dimension y del tablero en celdillas
-//	block	:	el bloque-poliomino a insertar
+//	block	:	el bloque-poliomino a insertar; trae las coordenadas de los cuadrados componentes
 //	curPos	:	posicion en coordenadas de tablero de la pieza a insertar
 //	value	:	valor a asignar a la celdilla ocupada
 {
@@ -173,40 +173,44 @@ function insertBlockToBoard(board, boardX, boardY, block, curPos, value)	//	inse
 	var blockSize = block.length;
 	var lCeldaOcupada;
 
-	if (DEBUG2)
-	{
-		console.log('--------------------------------- ');
+	if (DEBUG2) {
+		console.log( '*'.repeat(16) + ' insertBlockToBoard' );	
+	//		console.log('Parametros recibidos en insertBlockToBoard(...)');
 		console.log('block.length: ' + block.length);
-	}
-	//	veamos los valores indicados
-	if (DEBUG2)		//	Ojo con esta seccion. Demora ejecucion
-	{
-		console.log('Parametros recibidos en insertBlockToBoard(...): ');
-		//	console.log('board  :  --->>>' );
-		//	dumpBoard(gBoardState);
-		//	console.log('boardX : ' + boardX );
-		//	console.log('boardY : ' + boardY );
-		console.log('block  : ' + block );
-		console.log('value  : ' + value );
-		console.log('blockSize : ' + blockSize );
-		console.log('curPos : ' + curPos.x + ',' + curPos.y );
+	//		dumpBoard(gBoardState);
+	//		console.log('boardX : ' + boardX );
+	//		console.log('boardY : ' + boardY );
+		console.log( "mostrarPropiedades( block ): " + mostrarPropiedades( block, 'block' ));
+		console.log( "mostrarPropiedades( block.0 ): " + mostrarPropiedades( block[0], 'block.0' ));
+	//		console.log('value  : ' + value );
+	//		console.log('blockSize : ' + blockSize );
+	//		console.log('curPos : ' + curPos.x + ',' + curPos.y );
 	}
 
 	//empty position 
-	x = curPos.x; 
+	x = curPos.x;
 	y = curPos.y;
+
+	if (DEBUG2) {		console.log( 'x, y: ' + x +', '+ y );	};
 
 	//try to insert the block
 	for(i = 0 ; i < blockSize; i++) {
 
-		cx = block[i].x+x;
-		cy = block[i].y+y; 
+		cx = block[i].x + x;
+		cy = block[i].y + y; 
 
+		if (DEBUG2) {
+			console.log( 'block[i].x, x: ' + block[i].x + ', ' + x );
+			console.log( 'block[i].y, y: ' + block[i].y + ', ' + y );
+			console.log( 'cx: ' + cx );
+			console.log( 'cy: ' + cy );
+		}
 
 		//block cell need fit into x:[1..boardX], y:[1..boardY]	
 		if(cx > boardX || cx < 1) break;
 		if(cy > boardY || cy < 1) break;
 		if(board[cx][cy] != 0) break;
+
 /*
 		//	veamos los valores indicados
 		if (DEBUG2)

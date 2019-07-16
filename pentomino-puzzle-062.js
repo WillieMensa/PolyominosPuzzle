@@ -1,12 +1,24 @@
 ﻿/*	=============================================================================
 	Pentomino Puzzle
-	archivo: pentomino-puzzle-11.js
-	06/10/2018
-	#### version     = "0.3.5"	-	8/10/2018
+
+	#### version     = "0.6.2"	-	8/7/2019
+	agrupar la preparacion de botones en una funcion: haceBotones()
+	incorporacion de seleccion de diferentes problemas
+
+
+	#### version     = "0.6.1"	-	7/7/2019
+	Separacion de funcionalidades en archivos individuales
+
+	ajustes.js
+	status.js
 
 	include files: polyomino5.js, polySolution.js, animate.js, polyDemo.js
 
 	=============================================================================
+
+	Ejemplos de botones creados en javascript:
+		file:///E:/Dropbox/GitHub/aca_pruebas/javascript-create-button/dist/index.html
+
 
 	OBSERVACIONES
 
@@ -19,20 +31,20 @@
 //=========
 // define
 //=========
-var versionString="1.3"
+const versionString="0.6.2"			//	lleva el numero de version actual
 
 //-------------------------------------
 //	https://www.w3schools.com/colors/colors_picker.asp
 //	http://www.colorhexa.com/
 //-------------------------------------
-var BACKGROUND_COLOR = "#ddff99";
+var BACKGROUND_COLOR = '#113322';	// "#446622";	//	"#ddff99";
 var BACKGROUND_BOARD_COLOR = "white";
 
 var BORDER_COLOR = "#666600";
 var BORDER_STROKE_COLOR = "#ffff66";			//	"yellow";
 
 var BOARD_COLOR = "#B7F7DE"; //light green
-var FIXED_BLOCK_COLOR = "#666666";  //light gray
+var FIXED_BLOCK_COLOR = "#555";  //light gray
 var FIXED_BORDER_COLOR = BOARD_COLOR;
 
 var FOCUS_BORDER_COLOR = "red";
@@ -48,25 +60,32 @@ var NEXT_BUTTON_TEXT_COLOR = "#FF8800";
 var NEXT_BUTTON_FILL_COLOR = "white";
 var NEXT_BUTTON_BORDER_COLOR = "green";
 
+//-----------------------------------------------------
+//	fonts para textos
+const
+	FONT_NIVEL1 = "luckiest_guyregular",	//	titulo:	"Bangers",	"Luckiest Guy",	"Titan One", "Sigmar One"
+	FONT_NIVEL2 = "bangersregular",				//	botones: "Bangers",	//	"Sigmar One",
+	FONT_NIVEL3 = "sriracharegular"				//	textos:
+
 //-------------------------------------------------------------------------
 // block colors:
 // from : http://en.wikipedia.org/wiki/File:Pentomino_Puzzle_Solutions.svg
 //-------------------------------------------------------------------------
 //	BLOCK_COLOR vector contiene los colores asignados a cada pentomino
 
-var BLOCK_COLOR = [ "#FF0000", "#660000", "#FFFF00", "#666600",
+var BLOCK_COLOR = [ "#FF0000", "#660000", "#EE9944", "#666600",
 					"#00FF00", "#006600", "#00FFFF", "#006666",
 					"#0000FF", "#000044", "#FF00FF", "#660066" ];
 
 
-var	COLOR_BLOCK_FIJO	= '#112233';	//	gris bastante oscuro
+var	COLOR_BLOCK_FIJO	= '#112222';	//	gris bastante oscuro
 
 //===========================
 // values based on screen size
 //===========================
 var BLOCK_CELL_SIZE;	//	medida de las cldas en px
-var STAGE_X;			//	ancho adoptado para area de juego (stage o canvas)
-var STAGE_Y;			//	alto adoptado para area de juego (stage o canvas)
+var STAGE_X;					//	ancho adoptado para area de juego (stage o canvas)
+var STAGE_Y;					//	alto adoptado para area de juego (stage o canvas)
 var STAGE_OFFSET_X;		//	vertice izquierdo de la pantalla
 var STAGE_OFFSET_Y;		//	vertice superior de la pantalla
 var SCREEN_X;			//	ancho de pantalla en px
@@ -77,20 +96,29 @@ var SCREEN_Y;			//	alto de pantalla en px
 //==================
 var SCREEN_BOARD_X;		//	ancho del tablero en celdas. En nuestro caso: 8
 var SCREEN_BOARD_Y;		//	alto del tablero en celdas. En nuestro caso: 8 (igual al anterior
-var BOARD_WIDTH;		//	ancho del tablero en unidades de pantalla. Este es el que vamos a calcular para usar de base de calculo.
-var BOARD_HIGH;			//	alto del tablero en unidades de pantalla
-var boardStartX;		//	coordenadas para ubicar tablero.
+var BOARD_WIDTH;			//	ancho del tablero en unidades de pantalla. Este es el que vamos a calcular para usar de base de calculo.
+var BOARD_HIGH;				//	alto del tablero en unidades de pantalla
+var boardStartX;			//	coordenadas para ubicar tablero.
 var boardStartY;
 
-var gBoardSizeId = 0;	//board size. Identifica la opcion elegida para tamaño de tablero
-						//	nuestro tablero es siempre el único, de 8 X 8
-var gLevelId = 1;		//	play level. Nivel de dificultad; seleccionable con el levelButton
-						//	en nuestro caso va a ser unico.
+var gBoardSizeId = 0;	//	board size. Identifica la opcion elegida para tamaño de tablero
+											//	nuestro tablero es siempre el único, de 8 X 8
+var gLevelId = 1;			//	play level. Nivel de dificultad; seleccionable con el levelButton
+											//	en nuestro caso va a ser unico. (por ahora)
 
-var gStage;            //kinetic stage
-var gBackgroundLayer;  //kinetic layer
-var gBoardLayer;       //kinetic layer
-var gMessageLayer;     //kinetic layer
+
+//	preparacion de layers
+var gStage;           //kinetic stage
+var gBackgroundLayer; //kinetic layer
+var gBoardLayer;      //kinetic layer
+var gMessageLayer;    //kinetic layer
+
+var gInitLayer;				//kinetic layer
+var gHelpLayer;				//kinetic layer
+var gConfigLayer;			//kinetic layer
+var gAboutLayer;			//kinetic layer
+var gStatusLayer;			//kinetic layer
+
 
 var gBlockGroup;		//este array contiene datos de los poliominos / poligonos a tratar (pentominos)
 var gPolyGroup;			//for output on screen
@@ -99,12 +127,16 @@ var gPolyGroup;			//for output on screen
 //	Preparacion de cuadromino a posicion fija
 //	------------------------------------------------
 var wCuadromGroup;		//	vector con datos de cuadrominos. Uno va en posición fija
-var	wPolyCuadrom;		//	datos para colocacion en pantalla
+var	wPolyCuadrom;			//	datos para colocacion en pantalla
 var	nCuadromId	= 3;	//	identificador del cuadromino fijo a colocar en el tablero
 
 //	var wCuadromino;		//	datos de cuadromino a colocar en posición fija
 var wCuadromPos = {x:2,y:2};	//	posicion del cuadromino fijo
 var gCeldasOcupadas;
+
+//	variables globales
+//	problema actual. Lleva la cuenta del problema a resolver / en resolucion.
+var nProblema = 1;
 
 
 //---------------------------
@@ -118,8 +150,26 @@ var gBlockUsed = 0;		//	how many block used
 
 
 //	var	DEBUG = false;
-var	DEBUG = true;
-var	DEBUG2 = false;
+const	DEBUG = true,
+	DEBUG2 = false;
+
+//====================================
+//	botones
+//====================================
+var
+	helpBtn,			//	help button
+	hintBtn,			//	hint button
+	aboutBtn,			//	about button
+	giraPieza,		//	rotate button
+	volteaPieza,
+	configBtn,		//	config button
+	statusBtn,		//	status button
+	getOutBtn,		//	salir
+	playBtn,			//	jugar
+	menuBtn,			//	menu ppal
+	nroProbBtn,		//	aceptar nro problema
+	fakeBtn				//	este boton no existe
+
 
 
 //==================
@@ -128,6 +178,7 @@ var	DEBUG2 = false;
 window.onload = function(){
 	init();
 };
+
 
 //--------------------
 // Initial
@@ -139,19 +190,18 @@ function init()
 	//This will disable any text selection on the page and it seems that browser starts to show custom cursors.
 	document.onselectstart = function(){ return false; } ;
 
-	//	initIdleDemo(); //external function for demo puzzle
-
 	//initial input
-	document.getElementById('checkButton').checked=false;
 
-	//	Elimino los botones para elegir tablero y nivel de dificultad
-	//	document.getElementById('boardSizeButton').options[gBoardSizeId].selected = true;tht
+	document.getElementById('container').innerHTML = "";		//	vacia la pantalla
+
+	document.getElementById('checkButton').checked=false;
 	//	document.getElementById('levelButton').options[gLevelId-1].selected  = true;
 
 	initLanguage();					//	adaptación a diferentes idiomas
 	initScreenVariable();
-	initScreenPosColor();
+	initScreenPosColor();		// game screen position and background color
 
+	
 	gBlockGroup = polyomino5.blockGroup;
 	createBlockStyle(gBlockGroup);			//external function. creacion de todos los estilos de bloque a partir del block inicial
 	bindBlockColor(gBlockGroup);
@@ -167,26 +217,37 @@ function init()
 		for (var j=0; j < gCeldasOcupadas.length ; j++)
 		{
 			console.log('gCeldasOcupadas['+ j + '] : ' + gCeldasOcupadas[j].x + ' : ' + gCeldasOcupadas[j].y );
-			//	console.log(' true || false :' + true || false );
-			//	console.log(' true && false :' + ( true && false ));
 		}
 	}
 
 	createBlockStyle(wCuadromGroup);			//external function. creacion de todos los estilos de bloque a partir del block inicial
 	//	asignamos color a los cuadrominos
 	for(var id=0; id < wCuadromGroup.length; id++) {
-		wCuadromGroup[id].color = '#000000';
+		wCuadromGroup[id].color = COLOR_BLOCK_FIJO;	// '#000000';
 	}
-	//	wCuadromino.color = COLOR_BLOCK_FIJO;
-	//	------------------------------------------
 
 	createStageLayer();
 
-	if (DEBUG2) {
-		console.log('linea 201, gPolyGroup: ' + gPolyGroup);
-	};
 
-	playPuzzle(1); //new puzzle for play
+	initLanguage();					//	adaptación a diferentes idiomas
+
+	//	prepara los botones de la aplicacion
+	HaceBotones()
+
+
+	//	Preparacion de pantallas
+	//	HaceInitLayer();
+	HaceHelpLayer();	
+	//	HaceConfigLayer();
+	HaceAboutLayer();
+	HaceStatusLayer();
+
+	//	document.getElementById('levelButton').options[gLevelId-1].selected  = true;
+	nProblema = getNroProbl();
+
+	MenuInicial();
+
+	//	playPuzzle(1); //new puzzle for play
 
 	//debug
 	//	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
@@ -196,6 +257,141 @@ function init()
 }
 
 
+
+
+
+//-----------------------------------------------------
+//	Prepara botones
+//-----------------------------------------------------
+function 	HaceBotones() {		//	Preparar los botones
+
+	//helpBtn,	// Help button in javascript code
+	helpBtn = document.createElement("button");
+	helpBtn.innerHTML = "Help";
+	document.body.appendChild(helpBtn);               // Append <button> to <body>
+	helpBtn.addEventListener ("click", function() {  alert("pico en helpBtn") } );// 3. Add event handler
+	helpBtn.style.cssText = "top:" + (150) + "px; left:" + (050) + "px; position: absolute;";// 4. Position in screen
+
+	//aboutBtn	// About button in javascript code
+	aboutBtn = document.createElement("button");
+	aboutBtn.innerHTML = "About";
+	document.body.appendChild(aboutBtn);               // Append <button> to <body>
+	aboutBtn.addEventListener ("click", function() {  alert("picoen About button") } );// 3. Add event handler
+	aboutBtn.style.cssText = "top:" + (250) + "px; left:" + (050) + "px; position: absolute;";// 4. Position in screen
+
+	//configBtn	// Status button in javascript code
+	configBtn = document.createElement("button");
+	configBtn.innerHTML = "Ajustes";
+	document.body.appendChild(configBtn);
+	configBtn.addEventListener ("click", function() {  haceAjustes() } );// 3. Add event handler
+	configBtn.style.cssText = "top:" + (450) + "px; left:" + (050) + "px; position: absolute;";// 4. Position in screen
+
+	//statusBtn,	// Status button in javascript code
+	statusBtn = document.createElement("button");
+	statusBtn.innerHTML = "Status";
+	document.body.appendChild(statusBtn);
+	statusBtn.addEventListener ("click", function() {  pantallaStatus() } );// 3. Add event handler
+	statusBtn.style.cssText = "top:" + (350) + "px; left:" + (050) + "px; position: absolute;";// 4. Position in screen
+
+	//playBtn	; button in javascript code
+	playBtn = document.createElement("button");
+	playBtn.innerHTML = "Jugar";
+	document.body.appendChild(playBtn);
+	playBtn.addEventListener ("click", function() {	playPuzzle(1); });
+	playBtn.style.cssText = "top:" + (050) + "px; left:" + (050) + "px; position: absolute;";
+
+	//menuBtn	//	boton menu inicial in javascript code
+	menuBtn = document.createElement("button");
+	menuBtn.innerHTML = "Inicio";
+	document.body.appendChild(menuBtn);
+	menuBtn.addEventListener ("click", function() {  MenuInicial() } );// 3. Add event handler
+	menuBtn.style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (050) + "px; position: absolute;";	// 4. Position in screen
+
+	//	hintBtn: boton ayuditas in javascript code
+	hintBtn = document.createElement("button");
+	hintBtn.innerHTML = "Ayudita";
+	document.body.appendChild(hintBtn);
+	hintBtn.addEventListener ("click", function() {  hintsButton() } );
+	hintBtn.style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (500) + "px; position: absolute;";
+
+	//	giraPieza: boton para rotar piezzas
+	giraPieza = document.createElement("button");
+	giraPieza.innerHTML = "&#X21BB;";
+	document.body.appendChild(giraPieza);
+	giraPieza.addEventListener ("click", function() { girarPieza() } );// 3. Add event handler
+	giraPieza.style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + 
+		(200) + "px; position: absolute; font:" + (28) + "px sriracharegular bold";
+
+	//	volteaPieza: boton para rotar piezzas
+	volteaPieza = document.createElement("button");
+	volteaPieza.innerHTML = "&#X2194;";
+	document.body.appendChild(volteaPieza);
+	volteaPieza.addEventListener ("click", function() { voltearPieza() } );// 3. Add event handler
+	volteaPieza.style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + 
+		(350) + "px; position: absolute; font:" + (28) + "px sriracharegular bold";
+
+
+//	nroProbBtn boton aceptar numero de problema
+	nroProbBtn = document.createElement("button");
+	nroProbBtn.innerHTML = "aceptar";
+	document.body.appendChild(nroProbBtn);
+	nroProbBtn.addEventListener ("click", function() {  setNroProbl() } );// 3. Add event handler
+	nroProbBtn.style.cssText = "top:" + (350) + "px; left:" + (050) + "px; position: absolute;";	// 4. Position in screen
+
+
+	//	botones no creados
+	//	salir		getOutBtn,		
+	//					fakeBtn				
+
+}
+
+
+//-----------------------------------------------------
+//	menu de inicio
+//-----------------------------------------------------
+function MenuInicial() {
+		
+	console.log( '*'.repeat(16) + ' Menu inicial');
+
+	clearStageLayer();
+
+	hiddenAllButton();
+	gBoardLayer.destroy();
+	gBackgroundLayer.destroy();
+	gMessageLayer.destroy();
+	gStatusLayer.destroy();
+
+	
+	HaceInitLayer();
+
+
+	//	enableMnuButton()		// enable buttons in main menu
+	//	helpBtn.disabled=false;
+	//	aboutBtn.disabled=false;
+	//	configBtn.disabled=false;
+
+	//	visibleMnuButton()
+	//	helpBtn.visible = false;
+	//	aboutBtn.visible = false;
+	//	configBtn.visible = false;
+
+	aboutBtn.style.visibility='visible';
+	helpBtn.style.visibility='visible';			//	help button
+	configBtn.style.visibility='visible';		//	config button
+	statusBtn.style.visibility='visible';		//	status button
+
+	playBtn.style.visibility='visible';			//	jugar
+	menuBtn.style.visibility='hidden';			//	menu ppal
+	hintBtn.style.visibility='hidden';			//	menu ppal
+
+	document.getElementById('nroProblema').style.visibility='hidden';
+
+	if (DEBUG) { console.log('nProblema: ' + nProblema ); };
+
+}
+
+
+
 //-----------------------------------------------------
 // start a play puzzle
 // newPuzzle: 1: create new puzzle, 0: back from demo
@@ -203,16 +399,45 @@ function init()
 function playPuzzle()
 {
 	//	waitIdleDemo();
+	hiddenAllButton();
 
-	hiddenStartButton();
+	//	hiddenStartButton();
 
 	initBoardSize(gBoardSizeId, gLevelId); //back from demo
 
-	if (DEBUG2) { console.log('linea 223, playPuzzle, gPolyGroup: ' + gPolyGroup);	};
+	if (DEBUG2) { console.log('playPuzzle, gPolyGroup: ' + gPolyGroup);	};
 
 	createPuzzle(1, true);
 	enableAllButton();
-	visibleAllButton();
+
+	//-------------------------------------------------
+	//	visibleAllButton();
+	aboutBtn.style.visibility='hidden';
+	configBtn.style.visibility='hidden';		//	config button
+	helpBtn.style.visibility='hidden';			//	help button
+	playBtn.style.visibility='hidden';			//	jugar
+	statusBtn.style.visibility='hidden';		//	status button
+
+	hintBtn.style.visibility='visible';			//	hint button
+	menuBtn.style.visibility='visible';			//	menu ppal
+	//	getOutBtn,		//	salir
+
+	//	document.getElementById('levelButton').style.visibility='visible';
+
+	//	document.getElementById('hintsButton').style.visibility='visible';
+	//	document.getElementById('newButton').style.visibility='visible';
+	//	document.getElementById('resetButton').style.visibility='visible';
+	//	document.getElementById('initButton').style.visibility='visible';
+	giraPieza.style.visibility='visible';
+	volteaPieza.style.visibility='visible';
+
+
+	//checkbox
+	document.getElementById('checkButton').style.visibility='visible';
+	document.getElementById('checkboxtext').style.visibility='visible';
+
+	//-----------------------------------------------------
+
 }
 
 
@@ -229,10 +454,10 @@ function initBoardSize(boardSize, level)
 // initial button language to traditional chinese if system support
 //-------------------------------------------------------------------
 var levelText = "Nivel";
-var noSolutionText = " Sin solución  ";
+var noSolutionText = " Sin solución ";
 var nextText = "OTRO";
 var finishText = "Felicitaciones";
-var checkSolutionShift = 130;
+var checkSolutionShift = 90;
 
 function initLanguage()		//	para adaptar a diferentes idiomas
 {
@@ -241,15 +466,27 @@ function initLanguage()		//	para adaptar a diferentes idiomas
 	if(sysLang == "en" || sysLang == "en") { //	ingles
 		noSolutionText = "No solution ";
 		nextText = "NEXT";
-		finishText = "Congratulation";
+		finishText = "Congratulations";
 		levelText = "Level";
 
-		document.getElementById('hintsButton').value = "Hint";
-		document.getElementById('resetButton').value = "Reset";
+		hintBtn.value = "Hint";
+		//	document.getElementById('resetButton').value = "Reset";
 		document.getElementById('startButton').value = "Start";
 
 		checkSolutionShift = 90;
 		document.getElementById('checkboxtext').innerHTML = "CHECK";
+
+	} else if(sysLang == "de" || sysLang == "de") { //	aleman
+		noSolutionText = "keine losung ";
+		nextText = "Nächste";
+		finishText = "Glückwunsch!";
+		levelText = "Niveau";		
+		hintBtn.value = "Hilfe";
+		//	document.getElementById('resetButton').value = "Zurücksetzen";
+		document.getElementById('startButton').value = "Beginnen";
+
+		checkSolutionShift = 90;
+		document.getElementById('checkboxtext').innerHTML = "Überprüfen";
 
 	}
 }
@@ -325,8 +562,11 @@ function initScreenVariable()
 	if(STAGE_OFFSET_Y < microCellSize) STAGE_OFFSET_Y = microCellSize;
 
 
-	//	if (DEBUG)	{	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);	}
-	if (DEBUG)	{	console.log("SCREEN_X: " + SCREEN_X + ' SCREEN_Y: ' + SCREEN_Y ); }
+	if (DEBUG2)	{	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);	}
+	if (DEBUG2)	{	
+		console.log('SCREEN_X: SCREEN_Y: ' + SCREEN_X + ', ' + SCREEN_Y + '\n'+
+			'STAGE_X, STAGE_Y: ' + STAGE_X +', ' + STAGE_Y		); 
+	}
 
 
 	//	BLOCK_CELL_SIZE = maxCellSize;
@@ -342,40 +582,50 @@ function initScreenVariable()
 	//		break;
 	//	}
 
-	console.log( 'Parametros de pantalla'	);
-	console.log( 'SCREEN_X: ' +		SCREEN_X       );
-	console.log( 'SCREEN_Y: ' + 		SCREEN_Y       );
-	console.log( 'STAGE_X: ' + 		STAGE_X        );
-	console.log( 'STAGE_OFFSET_X: ' + 	STAGE_OFFSET_X );
-	console.log( 'STAGE_Y: ' + 		STAGE_Y        );
-	console.log( 'STAGE_OFFSET_Y: ' +  	STAGE_OFFSET_Y );
-	console.log( 'BLOCK_CELL_SIZE: ' +  BLOCK_CELL_SIZE );
+	if (DEBUG2){
+		console.log( 'Parametros de pantalla'	);
+		console.log( 'SCREEN_X: ' +		SCREEN_X       );
+		console.log( 'SCREEN_Y: ' + 		SCREEN_Y       );
+		console.log( 'STAGE_X: ' + 		STAGE_X        );
+		console.log( 'STAGE_OFFSET_X: ' + 	STAGE_OFFSET_X );
+		console.log( 'STAGE_Y: ' + 		STAGE_Y        );
+		console.log( 'STAGE_OFFSET_Y: ' +  	STAGE_OFFSET_Y );
+		console.log( 'BLOCK_CELL_SIZE: ' +  BLOCK_CELL_SIZE );
+	}
 
 }
 
+
 //----------------------------------------------
-// initial screen position and background color
+// game screen position and background color
 //----------------------------------------------
 function initScreenPosColor()
 {
 	//	var Y_Offset = Math.round(BLOCK_CELL_SIZE/6);	//	todavia no se conoce BLOCK_CELL_SIZE
 	//	if (DEBUG)	{ console.log('BLOCK_CELL_SIZE, Y_Offset, Y_Offset + 200: ' + BLOCK_CELL_SIZE + ', ' +(Y_Offset) + ', ' +	Y_Offset + 200 );	}
 
-	document.getElementById('new').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
+	document.getElementById('ProblemSelect').style.cssText = "top:" + (300) + "px; left:" + (500) + "px; position: absolute;";
+	//	document.getElementById('seleccion').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (600) + "px; position: absolute;";
 
-	document.getElementById('reset').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (20) + "px; position: absolute;";
+	//	document.getElementById('new').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
 
-	document.getElementById('giro').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (110) + "px; position: absolute;";
+	//	document.getElementById('numero').style.cssText = "top:10px; left:120px; position: absolute;";
 
-	document.getElementById('voltea').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (200) + "px; position: absolute;";
+	//	document.getElementById('reset').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (50) + "px; position: absolute;";
+	//	document.getElementById('initButton').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (50) + "px; position: absolute;";
 
-	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (290) + "px; position: absolute;";
+	//	document.getElementById('giro').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (200) + "px; position: absolute;";
 
-	document.getElementById('check').style.cssText = "top:" + (SCREEN_Y-060) + "px; left:" + (380) + "px; position: absolute;";
+	//	document.getElementById('voltea').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (350) + "px; position: absolute;";
+
+	//	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (500) + "px; position: absolute;";
+
+	document.getElementById('check').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (650) + "px; position: absolute;";
 
 	//	document.getElementById('start').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 120) + "px; position: absolute;";
 
 	document.body.style.background = BACKGROUND_COLOR; //body background color
+
 }
 
 //------------------------------
@@ -401,9 +651,17 @@ function createStageLayer()
 	});
 
 	//create layer object
-	gBackgroundLayer  = new Kinetic.Layer();
-	gBoardLayer = new Kinetic.Layer();
+	gBackgroundLayer = new Kinetic.Layer();
+	gBoardLayer		= new Kinetic.Layer();
 	gMessageLayer = new Kinetic.Layer();
+
+	gInitLayer		= new Kinetic.Layer();
+	gHelpLayer		= new Kinetic.Layer();
+	gConfigLayer	= new Kinetic.Layer();
+	gAboutLayer		= new Kinetic.Layer();
+	gStatusLayer	= new Kinetic.Layer();
+
+
 }
 
 //------------------------------------------------
@@ -415,8 +673,38 @@ function clearStageLayer()
 	gBoardLayer.removeChildren();
 	gMessageLayer.removeChildren();
 
-	gStage.removeChildren();
+	gInitLayer.removeChildren();	
+	gHelpLayer.removeChildren();
+	//	gConfigLayer.removeChildren();
+	gConfigLayer.remove();
+	gAboutLayer.removeChildren();
+	gStatusLayer.remove();
+
+	//	console.log( 'clearStageLayer() -----------' );
+
+	//	gStage.removeChildren();
+	//	console.log( gStage );
+
 }
+
+
+//----------------------------------------------
+//	Preparacion de pantallas
+//----------------------------------------------
+
+
+function	HaceHelpLayer()  	{
+};
+
+
+
+
+//--------------------------------------------------------------------
+function	HaceAboutLayer() 	{
+};
+
+
+
 
 //----------------------------------------------
 // create a puzzle
@@ -427,6 +715,8 @@ function clearStageLayer()
 //----------------------------------------------
 function createPuzzle(newPuzzle, activePoly)
 {
+	console.log( '*'.repeat(16) + ' createPuzzle');
+
 	//	var fixedBlock = boardSizeInfo[gBoardSizeId].x * boardSizeInfo[gBoardSizeId].y / 5 - 1; //for debug only
 	var fixedBlock = 0;	//	(boardSizeInfo[gBoardSizeId].numOfLevel - gLevelId)* 2;
 
@@ -435,7 +725,7 @@ function createPuzzle(newPuzzle, activePoly)
 	initBoardState( 8, 8, fixedBlock, 1);
 
 	if (DEBUG2) {
-		console.log('linea 439, gPolyGroup: ' + gPolyGroup);
+		console.log('gPolyGroup: ' + gPolyGroup);
 	};
 
 	//	if(activePoly) activePolygon();		//	original pero siempre verdadero
@@ -444,11 +734,14 @@ function createPuzzle(newPuzzle, activePoly)
 	//writeFinishMsg(); //for test only
 }
 
+
 //---------------------
-// initial board state
+// initial board state (game board)
 //---------------------
 function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 {
+	console.log( '*'.repeat(16) + ' initBoardState' );
+
 	//initial global variable
 	SCREEN_BOARD_X = boardX;
 	SCREEN_BOARD_Y = boardY;
@@ -462,14 +755,17 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 
 	BLOCK_CELL_SIZE = BOARD_WIDTH / SCREEN_BOARD_X;
 
-	console.log( 'BOARD_WIDTH, BOARD_HIGH, BLOCK_CELL_SIZE: ' + BOARD_WIDTH + ', ' + BOARD_HIGH + ', ' + BLOCK_CELL_SIZE);
-	console.log('STAGE_X, STAGE_Y: ' + STAGE_X + ', ' + STAGE_Y);
+	if (DEBUG2)	{
+		console.log( 'BLOCK_CELL_SIZE = BOARD_WIDTH / SCREEN_BOARD_X: ' +	BLOCK_CELL_SIZE +', '+ BOARD_WIDTH +', '+ SCREEN_BOARD_X );
+		console.log( 'BOARD_WIDTH, BOARD_HIGH, BLOCK_CELL_SIZE: ' + BOARD_WIDTH + ', ' + BOARD_HIGH + ', ' + BLOCK_CELL_SIZE);
+		console.log('STAGE_X, STAGE_Y: ' + STAGE_X + ', ' + STAGE_Y);
+	}
 
 	//	boardStartX = (STAGE_X-BOARD_WIDTH)/2;
 	boardStartX = BLOCK_CELL_SIZE;
 	boardStartY = Math.floor((SCREEN_Y-BOARD_HIGH)/2);
 
-	console.log( 'boardStartX, boardStartY: ' + boardStartX + ', ' + boardStartY );
+	//	console.log( 'boardStartX, boardStartY: ' + boardStartX + ', ' + boardStartY );
 
 	gTotalBlockCell = (SCREEN_BOARD_X * SCREEN_BOARD_Y);
 	gBlockUsed = 0
@@ -498,6 +794,17 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 
 	clearFixedBlock();
 
+	//	en este punto ya debe estar seleccionado el cuadromino a colocar y su posicion
+	wCuadromPos = { x:problemas[nProblema].posX, y:problemas[nProblema].posY };	//	posicion del cuadromino fijo
+	var str = "LSIOT";
+	nCuadromId	= str.indexOf(problemas[nProblema].pieza);
+
+	if (DEBUG)	{
+		console.log('contenido de problemas[nProblema] \n'+
+			mostrarPropiedades(problemas[nProblema], 'problemas[nProblema]' ) );
+		console.log('wCuadromPos, nCuadromId: ' +	wCuadromPos.x +', ' + wCuadromPos.y +', ' + nCuadromId	);
+	}
+
 	//	-------------------------------------------------------------------------------------
 	//	Atencion: antes de buscar una solución y colocar bloques fijos se debería colocar el cuadrómino.
 	//	Intento incorporar el cuadromino como fijo
@@ -519,36 +826,7 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 	//	wAddCuadrom2Layer();
 
 
-/*
-
-	//	linea 400, aqui debiera agregar el cuadrómino
-	var bloque = wCuadromGroup[nCuadromId].blockStyle[0];
-
-	//	anulo esta seccion porque antes inserto el cuadromino con wAgregaCuadromino()
-	if (DEBUG)	{ console.log('linea 468, llamamos a insertBlockToBoard()'); }
-
-	if(!insertBlockToBoard(gBoardState, SCREEN_BOARD_X, SCREEN_BOARD_Y, bloque, {x:1,y:1}, 99)) {
-				dumpBoard(gBoardState);
-				throw new Error("Error de diseño");
-			}
-*/
-
-	if (DEBUG) { dumpBoard(gBoardState); };
-	//	boardX	:	dimension X del tablero en celdillas
-	//	boardy	:	dimension y del tablero en celdillas
-	//	block	:	el bloque-poliomino a insertar
-	//	curPos	:	posicion en coordenadas de tablero de la pieza a insertar
-	//	value	:	valor a asignar a la celdilla ocupada. 99 para diferenciar con los pentominos
-
-	//	no empleo pentominos como bloques fijos por eso anulo sector que sigue
-	//	if(numOfFixedBlocks) {
-	//		//random assign fixed block to board from solved board
-	//		result = findAnswer(gBoardState, 0);
-	//		addFixedBlock2Layer(result.op, numOfFixedBlocks);
-	//	}
-
-	//	addBlock2Layer(0);				//	numOfFixedBlocks);
-	//	wAddCuadrom2Layer();
+	console.log( 'initBoardState -----------' );
 
 	gStage.add(gBackgroundLayer);
 	gStage.add(gBoardLayer);
@@ -600,12 +878,10 @@ function randomPolyInitPos(availablePoly)
 		};
 
 
-		if (DEBUG)	{
-			console.log( 'id: ' + id + ', x,y: ' + Object.values(polyInitPos[id]) );
-			;
-		}
+		//	if (DEBUG)	{ console.log( 'id: ' + id + ', x,y: ' + Object.values(polyInitPos[id]) )	}
+
 	}
-	console.log( 'distance_X, distance_Y: ' + distance_X + ', ' +  distance_Y );
+	//	console.log( 'distance_X, distance_Y: ' + distance_X + ', ' +  distance_Y );
 
 }
 
@@ -725,19 +1001,19 @@ function addBackgroundLayer()
 	var textOffset = Math.round(BLOCK_CELL_SIZE/6);
 	var titleFontSize = Math.round(BLOCK_CELL_SIZE*0.70);	//	1.32
 
-	var titleText1 = new Kinetic.Text({
-		x: textOffset,
-		y: textOffset,
-		text: "PENTOMANÍA FATAL by Willie",
-		fill: 'green',					//	fill: BACKGROUND_COLOR,
-		fontSize: titleFontSize,
-		//fontFamily: "Calibri",
-		fontStyle:"bold",
-		shadowColor: 'black',
-		shadowBlur: 05,
-		shadowOffset: [4,4],			//	2, 2],
-		shadowOpacity:0.7
-	});
+	//	var titleText1 = new Kinetic.Text({
+	//		x: textOffset,
+	//		y: textOffset,
+	//		text: "PENTOMANÍA FATAL by Willie",
+	//		fill: 'green',					//	fill: BACKGROUND_COLOR,
+	//		fontSize: titleFontSize,
+	//		//fontFamily: "Calibri",
+	//		fontStyle:"bold",
+	//		shadowColor: 'black',
+	//		shadowBlur: 05,
+	//		shadowOffset: [4,4],			//	2, 2],
+	//		shadowOpacity:0.7
+	//	});
 
 	//	var titleText2 = new Kinetic.Text({
 	//		x: textOffset,
@@ -755,8 +1031,8 @@ function addBackgroundLayer()
 	//	});
 
 	var versionText = new Kinetic.Text({
-		x: 0,
-		y: STAGE_Y-titleFontSize/3.5,
+		x: 200,
+		y: STAGE_Y-titleFontSize/2,
 		text: versionString,
 		fill: BACKGROUND_COLOR,
 		fontSize: titleFontSize/4,
@@ -824,7 +1100,7 @@ function addBackgroundLayer()
 	});
 
 	gBackgroundLayer.add(background);
-	gBackgroundLayer.add(titleText1);
+	//	gBackgroundLayer.add(titleText1);
 	//	gBackgroundLayer.add(titleText2);
 	gBackgroundLayer.add(versionText);
 	gBackgroundLayer.add(boardBackground);
@@ -881,6 +1157,8 @@ function addBlock2Layer(fixedBlock)
 		gBoardLayer.add(gPolyGroup[g].poly);
 	}
 }
+
+
 
 //----------------------------------
 // restore polygon blocks to layer
@@ -1061,10 +1339,8 @@ var lastFocusPolyId = -1; //focus polygon block
 function getLastFocusPoly()
 {
 
-	if (DEBUG)
-	{
-		console.log('lastFocusPolyId: ' + lastFocusPolyId );
-	}
+	if (DEBUG2)	{		console.log('lastFocusPolyId: ' + lastFocusPolyId );	}
+
 	if(lastFocusPolyId < 0) return; //return "undefined"
 
 	return gPolyGroup[lastFocusPolyId].poly;
@@ -2113,10 +2389,10 @@ var checkSolution = false;
 //--------------------------------------
 function insertCheck()
 {
-	if (DEBUG2)
+	if (DEBUG)
 	{
-		console.log('linea 2129, gBlockCellUsed: ' + gBlockCellUsed );
-		console.log('linea 2130, gTotalBlockCell: ' + gTotalBlockCell);
+		console.log('gBlockCellUsed: ' + gBlockCellUsed + ' / ' + gTotalBlockCell);
+		console.log('nProblema: ' + nProblema )
 	};
 
 	if(gBlockCellUsed >= gTotalBlockCell) {
@@ -2124,12 +2400,18 @@ function insertCheck()
 		disableAllButton();
 		setTimeout(function() {writeFinishMsg();}, 500); //wait 500 ms
 		sloveState = 1;
+		//	resolvio, incremento nro problema
+
+		nProblema = (nProblema < CANTPROBLEMAS) ? nProblema+1 : nProblema
+
+		if (DEBUG) { console.log('nProblema: ' + nProblema ) };
+
 		return;
 	}
 
-	if (DEBUG2)
+	if (DEBUG)
 	{
-		console.log('linea 2143, checkSolution: ' + checkSolution);
+		console.log('*** checkSolution: ' + checkSolution);
 	};
 
 
@@ -2279,47 +2561,60 @@ function hintsButton()
 function disableAllButton()
 {
 	//select
+	//	document.getElementById('levelButton').disabled=true;
 
-	document.getElementById('hintsButton').disabled=true;
-	document.getElementById('newButton').disabled=true;
-	document.getElementById('resetButton').disabled=true;
-	document.getElementById('giraPieza').disabled=true;
-	document.getElementById('volteaPieza').disabled=true;
+	//	hintBtn.disabled=true;
+	//	document.getElementById('hintsButton').disabled=true;
+	//	document.getElementById('newButton').disabled=true;
+	//	document.getElementById('resetButton').disabled=true;
+	giraPieza.disabled=true;
+	volteaPieza.disabled=true;
 
 
 	//checkbox
 	document.getElementById('checkButton').disabled=true;
 }
 
-//--------------------------
-// enable start input button
-//--------------------------
-function visibleStartButton()
-{
-	document.getElementById('startButton').disabled=false;
-	document.getElementById('startButton').style.visibility='visible';
-}
+
 
 //--------------------------
 // enable start input button
 //--------------------------
-function hiddenStartButton()
-{
-	document.getElementById('startButton').disabled=true;
-	document.getElementById('startButton').style.visibility='hidden';
-}
+//	function visibleStartButton()
+//	{
+//		document.getElementById('startButton').disabled=false;
+//		document.getElementById('startButton').style.visibility='visible';
+//	
+//		//	document.getElementById('myNumber').disabled=false;
+//		//	document.getElementById('myNumber').style.visibility='visible';
+//	
+//		
+//	}
+
+//--------------------------
+// enable start input button
+//--------------------------
+//	function hiddenStartButton()
+//	{
+//		document.getElementById('startButton').disabled=true;
+//		document.getElementById('startButton').style.visibility='hidden';
+//	}
+
 
 //--------------------------
 // enable all input button
 //--------------------------
 function enableAllButton()
 {
+	//	document.getElementById('levelButton').disabled=false;
 
-	document.getElementById('hintsButton').disabled=false;
-	document.getElementById('newButton').disabled=false;
-	document.getElementById('resetButton').disabled=false;
-	document.getElementById('giraPieza').disabled=false;
-	document.getElementById('volteaPieza').disabled=false;
+	hintBtn.disabled=false;
+	//	document.getElementById('hintsButton').disabled=false;
+	//	document.getElementById('newButton').disabled=false;
+	//	document.getElementById('resetButton').disabled=false;
+	//	document.getElementById('initButton').disabled=false;
+	giraPieza.disabled=false;
+	volteaPieza.disabled=false;
 
 
 	//checkbox
@@ -2332,11 +2627,15 @@ function enableAllButton()
 function visibleAllButton()
 {
 
-	document.getElementById('hintsButton').style.visibility='visible';
-	document.getElementById('newButton').style.visibility='visible';
-	document.getElementById('resetButton').style.visibility='visible';
-	document.getElementById('giraPieza').style.visibility='visible';
-	document.getElementById('volteaPieza').style.visibility='visible';
+	document.getElementById('levelButton').style.visibility='visible';
+
+	hintBtn.style.visibility='visible';
+	//	document.getElementById('hintsButton').style.visibility='visible';
+	//	document.getElementById('newButton').style.visibility='visible';
+	//	document.getElementById('resetButton').style.visibility='visible';
+	document.getElementById('initButton').style.visibility='visible';
+	giraPieza.style.visibility='visible';
+	volteaPieza.style.visibility='visible';
 
 
 	//checkbox
@@ -2349,17 +2648,25 @@ function visibleAllButton()
 //--------------------
 function hiddenAllButton()
 {
+	//	document.getElementById('nroProblema').style.visibility='hidden';
+	document.getElementById('ProblemSelect').style.visibility='hidden';
 
-	document.getElementById('hintsButton').style.visibility='hidden';
-	document.getElementById('newButton').style.visibility='hidden';
-	document.getElementById('resetButton').style.visibility='hidden';
-	document.getElementById('giraPieza').style.visibility='hidden';
-	document.getElementById('volteaPieza').style.visibility='hidden';
-
+	//	botones para giro y volteo
+	giraPieza.style.visibility='hidden';
+	volteaPieza.style.visibility='hidden';
 
 	//checkbox
 	document.getElementById('checkButton').style.visibility='hidden';
 	document.getElementById('checkboxtext').style.visibility='hidden';
+
+	helpBtn.style.visibility='hidden';
+	hintBtn.style.visibility='hidden';
+	aboutBtn.style.visibility='hidden';
+	playBtn.style.visibility='hidden';
+	statusBtn.style.visibility='hidden';
+	configBtn.style.visibility='hidden';
+	nroProbBtn.style.visibility='hidden';
+	
 }
 
 //-----------------------------------------------
@@ -2446,7 +2753,7 @@ function findAvailableBlock(solvedBoard)			//	busca aleatoriamente un bloque pro
 
 	if (DEBUG2)
 	{
-		console.log('linea 2427, findAvailableBlock(solvedBoard)');
+		console.log('findAvailableBlock(solvedBoard)');
 		//	dumpBoard(solvedBoard);
 	}
 
@@ -2538,6 +2845,7 @@ function enableButtonAfterStopRunning(object, button )
 // Press reset button
 // ==> move all polygon back to initial position
 //------------------------------------------------
+/*
 function resetButton()
 {
 	var result;
@@ -2572,6 +2880,9 @@ function resetButton()
 		setTimeout("enableAllButton();", moveTime+10);
 	}
 }
+*/
+
+
 
 //============================================
 // BEGIN for board size and level selection
@@ -2580,9 +2891,11 @@ function resetButton()
 //---------------------------
 // Input Selection info
 //---------------------------
+//	lo dejo preparado para incorporar niveles de dificultad en cada problema
 var boardSizeInfo = [
 	{x:6, y:5,  numOfLevel:3 },
 	{x:8, y:5,  numOfLevel:3 },
+	{x:8, y:8,  numOfLevel:3 },
 	{x:10, y:5, numOfLevel:4 },
 	{x:10, y:6, numOfLevel:4 }
 ];
@@ -2605,6 +2918,8 @@ function writeFinishMsg()
 	var scaleX = Math.floor((STAGE_X -10) / (finishText.length * textWidth));
 	var scaleY = Math.floor((STAGE_Y/3)/textHigh) ;
 
+if (!DEBUG)
+{
 	var finishMsg = new Kinetic.Text({
 
 		x: STAGE_X/2 - finishText.length * textWidth/2,
@@ -2631,6 +2946,7 @@ function writeFinishMsg()
 	});
 	setTimeout("nextButton();",600); //after 600ms, display next button
 }
+}
 
 //----------------------
 // display next button
@@ -2656,7 +2972,6 @@ function nextButton()
 		fill: NEXT_BUTTON_TEXT_COLOR,
 		fontSize: textHigh,
 		//fontFamily: "sans-serif",
-		//fontFamily:"微軟正黑體",
 		//fontStyle:"bold",
 
 		align: 'center',
@@ -2713,7 +3028,8 @@ function nextButton()
 	});
 
 	nextGroup.on('click', function() {
-		setNextLevel();
+		//	setNextLevel();
+		setNextProblem();
 		//	waitIdleDemo();
 		createPuzzle(1, true);
 		enableAllButton();
@@ -2725,15 +3041,34 @@ function nextButton()
 //-----------------------
 function setNextLevel()
 {
+	//incrementar nivel de dificultad
 	if(++gLevelId > boardSizeInfo[gBoardSizeId].numOfLevel) {
 		//reset level id and change board size
 		gLevelId = 1;
+
+		// incrementamos el nro de problema a resolver
+		setStorage("nroProblema", nProblema);
+
 		if(++gBoardSizeId >= boardSizeInfo.length) {
 			//reset board size
 			gBoardSizeId = 0;
 		}
 	}
 	saveBoardSize(gBoardSizeId, gLevelId);
+}
+
+
+//-----------------------
+// change problem to next
+//-----------------------
+function setNextProblem()
+{
+	//	incrementar nro de problema
+	if(++nProblema > CANTPROBLEMAS ) {
+		//	reset nProblema 
+		nProblema = 1;
+	}
+	setStorage("nroProblema", nProblema);
 }
 
 
@@ -2768,9 +3103,6 @@ function setColor(poly, softerValue)
 //==========================================================
 // BEGIN for Save|Restore boardSize & Level (localstorage)
 //==========================================================
-
-
-
 
 
 //----------------------------------
@@ -2852,8 +3184,7 @@ function writeMessage(message) {
 //==============================================
 // dump board value to console (for debug only)
 //==============================================
-function dumpBoard(board)
-{
+function dumpBoard(board) {
 	var buf = "";
 	var boardX = board.length;
 	var boardY = board[0].length;
@@ -2867,9 +3198,9 @@ function dumpBoard(board)
 				buf += "0" + board[x][y] + " ";
 			}
 		}
-		//	console.log(buf);
+		console.log(buf);
 	}
-	//	console.log("");
+	console.log("");
 }
 
 
@@ -2950,18 +3281,14 @@ function wAgregaCuadrominoFijo(pos)	// coloca cuadromino fijo
 		//	veamos cuales son los parametros que se van a pasar
 		if (DEBUG2)
 		{
-			console.log('gBoardState---->');
+			//	console.log('gBoardState---->' + gBoardState );
+			//	console.log( '-'.repeat(16) + ' gBoardState' );
 			dumpBoard(gBoardState);
-			//	console.log( 'linea 3109, SCREEN_BOARD_X: ' + SCREEN_BOARD_X );
-			//	console.log( 'linea 3110, SCREEN_BOARD_Y: ' + SCREEN_BOARD_Y );
-			//	console.log( 'linea 3111, block         : ' + block          );
-			console.log( 'linea 2909, pos           : ' + pos.x + ' , ' + pos.y            );
-			//	console.log( 'linea 3113, id+1          : ' + id+1           );
+			//	console.log( '-'.repeat(12));
+			console.log( 'pos : ' + pos.x + ' , ' + pos.y            );
+			console.log('llamamos a insertBlockToBoard() desde wAgregaCuadrominoFijo(pos)	'); 
 		}
 
-
-		//	hasta tanto encuentre el error
-		if (DEBUG2)	{ console.log('linea 2916, llamamos a insertBlockToBoard() desde wAgregaCuadrominoFijo(pos)	'); }
 
 		if(!insertBlockToBoard(gBoardState, SCREEN_BOARD_X, SCREEN_BOARD_Y, block, pos, 99)) {
 			dumpBoard(gBoardState);
@@ -2974,25 +3301,6 @@ function wAgregaCuadrominoFijo(pos)	// coloca cuadromino fijo
 	//dumpBoard(gBoardState);
 }
 
-
-
-
-
-//-----------------------------------------
-//	function wAddCuadrom2Layer()		//	crea el bloque cuadromino y lo agrega al layer
-//										//	similar a function addBlock2Layer(fixedBlock)
-//	{
-//		if (DEBUG)
-//		{
-//			console.log('linea 2857,   wCuadromino: ' + wCuadromino );
-//			console.log('linea 2858, wCuadromino.x: ' + wCuadromino.x );
-//			console.log('linea 2859, wCuadromino.y: ' + wCuadromino.y );
-//			console.log('linea 2859, wCuadromino.poly: ' + wCuadromino.poly );
-//		}
-//		createPolygon(wCuadromGroup[nCuadromId], 1);		//	fixedBlock)
-//
-//		gBoardLayer.add(wCuadromGroup[nCuadromId].poly);
-//	}
 
 
 
@@ -3061,19 +3369,6 @@ function wCreateCuadrado(blockGroup, fixedBlock)
 
 
 
-//-----------------------------------------
-// create polygon block from cuadromino and add to layer
-//-----------------------------------------
-function addBlock2Layer(fixedBlock)
-{
-	createPolygon(gBlockGroup, 0);		//	fixedBlock);
-
-	for(var g = 0; g < gPolyGroup.length; g++) {
-		gBoardLayer.add(gPolyGroup[g].poly);
-	}
-}
-
-
 //	--------------------------------
 function CalcCeldasOcupadas()		//	arma un vector con los datos de las celdas ocupadas en el tablero
 {
@@ -3110,8 +3405,8 @@ function muestraBotonOperador(poly) {
 	var cy = poly.getPosition().y;
 
 	if(poly.hasRotate) {
-		document.getElementById('giraPieza').disabled=false;
-		document.getElementById('giraPieza').style.visibility='visible';
+		giraPieza.disabled=false;
+		giraPieza.style.visibility='visible';
 	}
 
 	//	rotateObject.show();
@@ -3122,8 +3417,8 @@ function muestraBotonOperador(poly) {
 
 
 	if(poly.hasFlip) {
-		document.getElementById('volteaPieza').disabled=false;
-		document.getElementById('volteaPieza').style.visibility='visible';
+		volteaPieza.disabled=false;
+		volteaPieza.style.visibility='visible';
 
 		//	flipObject.show();
 		//	flipObject.setX(cx);
@@ -3162,10 +3457,10 @@ function ocultaBotonOperador()
 //	con el boton
 // 90 degree clockwise the focus polygon
 //---------------------------------------
-function giraPieza()
+function girarPieza()
 {
 	//	por las dudas no haya pieza seleccionada
-	if (DEBUG)	{	console.log('lastFocusPolyId: ' + lastFocusPolyId );	};
+	//	if (DEBUG)	{	console.log('lastFocusPolyId: ' + lastFocusPolyId );	};
 	if(lastFocusPolyId < 0) return; //return "undefined"
 
 	//----------------------------------------------------------------------------------------
@@ -3186,7 +3481,7 @@ function giraPieza()
 //	con el boton
 // left-right flip the focus polygon
 //-----------------------------------
-function volteaPieza()
+function voltearPieza()
 {
 	//	por las dudas no haya pieza seleccionada
 	if (DEBUG)	{	console.log('lastFocusPolyId: ' + lastFocusPolyId );	};
@@ -3207,8 +3502,192 @@ function volteaPieza()
 //------------------------------------------
 function addContorno2Layer()
 {
-	var context = canvas.getContext();
-	context.fillStyle = "#FF0000";
-	context.fillRect( STAGE_X, STAGE_Y, STAGE_OFFSET_X, STAGE_OFFSET_Y );
+	var background = new Kinetic.Rect({
+		x: 0,
+		y: 0,
+		width: STAGE_X,
+		height: STAGE_Y,
+		fill: "#FF0000"
+	});
+
+	gBackgroundLayer.add(background);
 
 }
+
+
+//------------------------------------------
+//	funciones para seleccionar problema
+//------------------------------------------
+var CANTPROBLEMAS = 103;
+
+	function PresentaOpciones() {
+		var txt = '<select id="mySelect">'
+		for (var i = 1; i <= CANTPROBLEMAS ; i++ ) {
+			txt += '<option>' + i + '</option>'
+		}
+		txt += '</select>'
+
+        document.getElementById("problema").innerHTML = txt;
+
+	};
+
+	function myFunction() {
+		//	obtener y mostrar el valor elegido	
+		var x = document.getElementById("mySelect").selectedIndex;
+		alert(document.getElementsByTagName("option")[x].value + ", " + x);
+	};
+
+
+
+/*
+function initProblema() {
+	document.getElementById("myNumber").value = NroProblema();
+	function getNroProbl()
+
+	console.log( document.getElementById("myNumber").value );
+};
+
+
+
+
+function myFunction() {
+	if (myNumber.value > CANTPROBLEMAS || myNumber.value < 1 ) {
+		console.log(" numero muy grande! ( ... o muy chico )" );
+		document.getElementById("myNumber").value = NroProblema();
+	}
+}
+
+
+function NroProblema() {
+	return Math.ceil(Math.random() * CANTPROBLEMAS );
+};
+
+*/
+
+//-----------------
+// on level change
+//-----------------
+function levelButton(id)
+{
+	gLevelId = parseInt(id);
+	createPuzzle(1, true);
+}
+
+
+//---------------------------------------
+//	banderitas seleccion idioma
+//---------------------------------------
+function selectIdioma() {
+
+//	idioma ingles
+var imgEng = new Image();
+imgEng.onload = function() {
+	var english = new Kinetic.Image({
+		x: SCREEN_X - 400,
+		y: 20,
+		image: imgEng,
+		width: 100,
+		height: 60
+	});
+	gInitLayer.add(english);			// add the shape to the gInitLayer        
+	gStage.add(gInitLayer);			// add the layer to the stage
+};
+imgEng.src = 'images/ingles.jpg';
+
+//	idioma español
+var imgEsp = new Image();
+imgEsp.onload = function() {
+	var espa = new Kinetic.Image({
+		x: SCREEN_X - 280,
+		y: 20,
+		image: imgEsp,
+		width: 100,
+		height: 60
+	});
+	gInitLayer.add(espa);			// add the shape to the gInitLayer        
+	gStage.add(gInitLayer);			// add the layer to the stage
+};
+imgEsp.src = 'images/espanol.jpg';
+
+//	idioma aleman
+var imgDeu = new Image();
+imgDeu.onload = function() {
+	var aleman = new Kinetic.Image({
+		x: SCREEN_X - 160,
+		y: 20,
+		image: imgDeu,
+		width: 100,
+		height: 60
+	});
+	gInitLayer.add(aleman);			// add the shape to the gInitLayer        
+	gStage.add(gInitLayer);			// add the layer to the stage
+};
+imgDeu.src = 'images/aleman.jpg';
+
+}
+
+
+
+//-------------------------------------------------------------------
+function HaceInitLayer()  {//pantalla de inicio
+
+	//	if (DEBUG){console.log(' en HaceInitLayer()');}
+
+	var simpleText = new Kinetic.Text({
+		x: gStage.getWidth() / 2,
+		y: (gStage.getHeight() * 0.3),
+		text: 'PENTO\nMANÍA',
+		fontSize: SCREEN_X/10,//130,
+		fontFamily: FONT_NIVEL1,//'Calibri',
+		fill: '#8a2',
+
+		shadowColor: 'black',
+		shadowBlur: 05,
+		shadowOffset: [6,6],			//	2, 2],
+		shadowOpacity:0.7
+
+	});
+
+	// to align text in the middle of the screen, we can set the
+	// shape offset to the center of the text shape after instantiating it
+	simpleText.setOffset({
+		x: simpleText.getWidth() / 2
+	});
+
+
+
+
+	// add the shapes to the layer
+	gInitLayer.add(simpleText);
+	//	console.log('simpleText, agregado');
+
+	selectIdioma();
+
+	gStage.add(gInitLayer);
+
+};
+
+
+function updateProb() {
+
+}
+
+
+
+
+
+//-------------------------------------------------
+//	funciones exclusivas para depuracion
+//-------------------------------------------------
+function mostrarPropiedades(objeto, nombreObjeto) {
+	//	https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Trabajando_con_objectos
+
+	var resultado = "";
+	for (var i in objeto) {
+		//	if (objeto.hasOwnProperty(i)) {
+			resultado += nombreObjeto + "." + i + " = " + objeto[i] + "\n";
+		//	}
+	}
+	return resultado;
+}
+

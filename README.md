@@ -50,7 +50,7 @@ Las soluciones vienen en una clase ()generalmente identificada como result) que 
 
 Las funciones que siguen se ejecutan en la etapa preparatoria
 
-####	function createBoard(boardX, boardY)		
+####	function createBoard(boardX, boardY)
 	genera / crea un tablero nuevo con sus celdas inicializadas a cero
 
 ####	gBoardState = createBoard(SCREEN_BOARD_X, SCREEN_BOARD_Y); //external function
@@ -89,7 +89,7 @@ Manejo de colores
 	http://www.colorhexa.com/
 
 block colors:
-	http://en.wikipedia.org/wiki/File:Pentomino_Puzzle_Solutions.svg	  
+	http://en.wikipedia.org/wiki/File:Pentomino_Puzzle_Solutions.svg
 
 just for fixed: chrome sets cursor to text while dragging, why?
 	http://stackoverflow.com/questions/2745028/chrome-sets-cursor-to-text-while-dragging-why
@@ -237,19 +237,56 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 #### version     = "0.4.1"	-	14/11/2018
 	Version para respaldar estado del desarrollo antes de hacer alguna modificaciones 'grosas'
 
+
+### Version para pixi js desechada
+#### version	= "0.5.0"	-	23/11/2018
+	Version para reemplazar Kinetics con pixi
+
+### version		= "0.6.0"	-	5/7/2019
+	Incorporo el uso de diferentes pantallas: menu inicial, juego, ayudas, acerca de, ajustes, etc
+	Preparando lista de problemas ordenados por grado (supuesto de dificultad)
+	-	asumo que la dificultad aumenta cuando disminuye la cantidad de soluciones.
+	- cada problema puede tener variantes, según forma del cuadromino fijo, se pueden
+		plantear variantes del problema mediante giro y simetria del tablero. Cuatro u ocho variantes segun el caso.
+
+### version		= "0.6.1"	-	7/7/2019
+	La tabla para seleccionar problema viene de un array tipo json
+	Cambio la identificacion de los archivos. Utilizaré los tres digitos de la version com sufijo del nombre
+	comienzo con pentomino-puzzle-061.js
+
+	los problemas serán expuestos
+
+### version		= "0.6.2"	-	16/7/2019
+	Se incorpora la seleccion de problema y el avance automatico a un nuevo problema al resolver el actual.
+	Preparada para ser publicada con muchos defectos.
+
+
 ### Corecciones a realizar
 	Detalles menores de iconos, texto descripcion
-	Incorporar secuencia de problemas a resolver
 	ayudas mediante colocacion de pieza en su lugar, limite de ayudas, etc.
 	Tablas de logros y clasificaciones.
-	Pantalla de inicio con opciones de jugar, ayudas, acerca de, y otros.
 	Eliminar todos los console.log
 	Compilar archivo js
+	Encuestar grado de dificultad de los diferentes problemas.
+	Idiomas alternativos
 
 
 
-Se puede descargar desde 
+Se puede descargar desde
 	https://build.phonegap.com/apps/3314127/share
 
+
+======================================================
+SOBRE EL MECANISMO DE MANIPULACION DE PIEZAS (BLOQUES)
+======================================================
+
+Se identifica el lugar ocupado por cada pieza mediante las coordenadas de cada componente de bloque (cuadradito)
+En polyomino5.js se tienen las definiciones de coordenadas para todos los pentominos.
+En polyomino4.js iden para cuadrominos.
+
+blockStyle: array con las coordenadas de los componentes de bloque
+blockUsed: indica si el bloque (pieza) esta en uso
+
+normalize: (Normalizar) ordenar la definicion del bloque primero por fila y luego por columna
 
 

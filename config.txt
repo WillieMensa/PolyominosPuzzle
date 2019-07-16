@@ -6,7 +6,7 @@
     versionCode = "02"
     version     = "0.2.4" >
 
-  <name>Pentomania fatal HTML</name>
+  <name>Pentomania HTML</name>
 
   <description>
 	Pentominos Puzzle is a one player game. An opportunity for mental exercise and fun at the same time.
@@ -16,7 +16,7 @@
 	En caso de tener dificultades para encontrar la solución el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicación y le restará un punto al finalizar el problema.
  </description>
 
-  <author href="http://www.ingverger.com.ar/pentominos.php" email="ingverger@gmail.com">
+  <author href="http://www.ingverger.com.ar/pentomania.php" email="ingverger@gmail.com">
       Guillermo Verger
   </author>
 

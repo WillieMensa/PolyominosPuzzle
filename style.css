@@ -1,0 +1,218 @@
+/*
+	style.css
+	22/4/2019
+*/
+
+@font-face {
+    font-family: 'bangersregular';
+    src: url('bangers-regular-webfont.woff2') format('woff2'),
+         url('bangers-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'luckiest_guyregular';
+    src: url('luckiestguy-regular-webfont.woff2') format('woff2'),
+         url('luckiestguy-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'sriracharegular';
+    src: url('sriracha-regular-webfont.woff2') format('woff2'),
+         url('sriracha-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+		font-family: 'Carter One';
+		src: url('carter-one.woff2') format('woff2'),
+				 url('carter-one.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+}
+
+/*
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+*/
+
+
+/*
+manejo con @media screen trae problema con tamaños de objetos
+por eso anulo esta seccion
+	
+@media screen and (max-width:400px) {
+	body {
+		background-color: #666;
+		max-width: 400px;
+		max-height: 300px;
+	}
+	.setButton {
+		font-size:  1em;
+	}
+}
+
+
+
+@media screen and (max-width:640px)  and (min-width:400px) {
+	body {
+		background-color: #600;
+		max-width: 600px;
+		max-height: 300px;
+	}
+	.setButton {
+		font-size:  2em;
+	}
+}
+
+@media screen and (max-width:1024px) and (min-width:640px) {
+	body {
+		background-color: #0d0;
+		max-width: 800px;
+		max-height: 500px;
+	}
+	.setButton {
+		font-size:  5em;
+	}
+}
+
+@media screen and (min-width:1024px) {
+	body {
+		background-color: #006;	
+		max-width: 1200px;
+		max-height: 600px;
+	}
+	.setButton {
+		font-size:  8em;
+	}
+}
+*/
+
+
+
+* {
+	box-sizing: border-box;
+}
+
+
+h1 {
+    font-family: 'luckiest_guyregular';
+	font-size: 20px;
+
+}
+
+h2 {
+	font-family: 'sriracharegular', cursive;
+	font-size: 12px;
+
+}
+
+.auxiliar { fill:gray; stroke:#444;stroke-width:1;opacity:0.8; }
+
+.logo {
+  float: left;
+  position: relative;
+  display: inline-block;
+}
+
+
+#levelButton {
+	margin-top: 20px;
+	width: 120px;
+	line-height: 80px;
+	font-size: 1em;
+	font-weight: bold;
+	padding: 10 10px;
+	font-family: 'sriracharegular';
+	background: #892;
+	border: none;
+}
+
+/*
+input, label, select {
+	background: #ddeeff;
+	border-radius: 8px;
+	font-family: 'sriracharegular';
+	font-size: 16px;
+	text-align: right;
+	padding: 4px 4px;
+	color: #222244;
+	width: 120px;
+}
+*/
+
+#checkboxtext, input, select {
+	font:  15px arial;
+	visibility: hidden;
+}
+
+
+/*
+#initButton, #demoButton {
+	background: #892;
+	border: none;
+	font-family: 'sriracharegular';
+	font-size: 1em;
+	font-weight: bold;
+	line-height: 40px;
+	margin-top: 20px;
+	padding: 0 0px;
+	width: 120px;
+}
+
+#giraPieza, #volteaPieza {
+	background: #892;
+	border-radius: 8px;
+	border: none;
+	display: block;
+	font-weight: bold;
+	font:  28px sriracharegular bold ;
+	margin-top: 5px;
+	padding: 0px;
+	width: 100px;
+
+}
+*/
+
+#containedor {
+	background: #9988ff;
+	border: 2;
+}
+
+input {
+	background: #bbddff
+	border-radius: 8px;
+	font-size: 16px;
+	text-align: center;
+	padding: 4px 4px;
+	color: #112222;
+	width: 100px;
+}
+
+button {
+	background: #669900;
+	border-radius: 8px;
+	border: none;
+	font-family: 'sriracharegular';
+	font-size: 1em;
+	font-weight: bold;
+	line-height: 40px;
+	margin-top: 20px;
+	padding: 0 0px;
+	width: 120px;
+	height: 40px;
+}
+
+#giraPieza, #volteaPieza {
+	font:  28px sriracharegular bold ;
+}
+
+button:hover {
+  background: #ad1;
+}
+
