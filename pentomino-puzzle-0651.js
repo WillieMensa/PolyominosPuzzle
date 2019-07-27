@@ -1,6 +1,25 @@
 ﻿/*	=============================================================================
 	Pentomino Puzzle
 
+	#### version     = "0.6.51"	-	24/7/2019
+	modifico la forma de dimensionar el canvas
+	siendo que tengo las pantas clasificadas por tamaño en cuatro grupos
+	experimentalmente voy a adoptar 4 grupos de medidas para medidas 
+
+	#### version     = "0.6.5"	-	22/7/2019
+	mejorar las proporciones de los elementos.
+
+	#### version     = "0.6.4"	-	19/7/2019
+	El uso de escala para los layers no me funciona. 
+	Reintento con tres o cuatro medidas alternativas de pantallas.
+	corregido
+
+	#### version     = "0.6.3"	-	19/7/2019
+	cuidar las proporciones en todo tamaño de pantalla
+	Pruebo una tecnica diferente para mantener proporciones; presento para 
+	una pantalla base determinada y segun las medidas reales aplico escala.
+
+
 	#### version     = "0.6.2"	-	8/7/2019
 	agrupar la preparacion de botones en una funcion: haceBotones()
 	incorporacion de seleccion de diferentes problemas
@@ -28,10 +47,13 @@
 
 */
 
+//Aliases
+"use strict";
+
 //=========
 // define
 //=========
-const versionString="0.6.2"			//	lleva el numero de version actual
+const versionString="0.6.5"			//	lleva el numero de version actual
 
 //-------------------------------------
 //	https://www.w3schools.com/colors/colors_picker.asp
@@ -60,12 +82,14 @@ var NEXT_BUTTON_TEXT_COLOR = "#FF8800";
 var NEXT_BUTTON_FILL_COLOR = "white";
 var NEXT_BUTTON_BORDER_COLOR = "green";
 
+const	TITLE_COLOR = '#8a2';
+
 //-----------------------------------------------------
 //	fonts para textos
 const
 	FONT_NIVEL1 = "luckiest_guyregular",	//	titulo:	"Bangers",	"Luckiest Guy",	"Titan One", "Sigmar One"
 	FONT_NIVEL2 = "bangersregular",				//	botones: "Bangers",	//	"Sigmar One",
-	FONT_NIVEL3 = "sriracharegular"				//	textos:
+	FONT_NIVEL3 = "robotomedium"				//	textos:
 
 //-------------------------------------------------------------------------
 // block colors:
@@ -83,13 +107,15 @@ var	COLOR_BLOCK_FIJO	= '#112222';	//	gris bastante oscuro
 //===========================
 // values based on screen size
 //===========================
-var BLOCK_CELL_SIZE;	//	medida de las cldas en px
+var BLOCK_CELL_SIZE;	//	medida de las celdas en px. Tratare de usarla como unidad de mediada (referencia)
 var STAGE_X;					//	ancho adoptado para area de juego (stage o canvas)
 var STAGE_Y;					//	alto adoptado para area de juego (stage o canvas)
 var STAGE_OFFSET_X;		//	vertice izquierdo de la pantalla
 var STAGE_OFFSET_Y;		//	vertice superior de la pantalla
 var SCREEN_X;			//	ancho de pantalla en px
 var SCREEN_Y;			//	alto de pantalla en px
+//	var nEscala;
+//	var cTransfProp;
 
 //==================
 // global variable
@@ -124,19 +150,19 @@ var gBlockGroup;		//este array contiene datos de los poliominos / poligonos a tr
 var gPolyGroup;			//for output on screen
 
 //	------------------------------------------------
-//	Preparacion de cuadromino a posicion fija
+//	Preparacion de tetromino a posicion fija
 //	------------------------------------------------
-var wCuadromGroup;		//	vector con datos de cuadrominos. Uno va en posición fija
-var	wPolyCuadrom;			//	datos para colocacion en pantalla
-var	nCuadromId	= 3;	//	identificador del cuadromino fijo a colocar en el tablero
+var wTetromGroup;		//	vector con datos de tetrominos. Uno va en posición fija
+var	wPolyTetrom;			//	datos para colocacion en pantalla
+var	nTetromId	= 3;	//	identificador del tetromino fijo a colocar en el tablero
 
-//	var wCuadromino;		//	datos de cuadromino a colocar en posición fija
-var wCuadromPos = {x:2,y:2};	//	posicion del cuadromino fijo
+//	var wtetromino;		//	datos de tetromino a colocar en posición fija
+var wTetromPos = {x:2,y:2};	//	posicion del tetromino fijo
 var gCeldasOcupadas;
 
 //	variables globales
 //	problema actual. Lleva la cuenta del problema a resolver / en resolucion.
-var nProblema = 1;
+let nProblema = undefined;
 
 
 //---------------------------
@@ -149,25 +175,28 @@ var gBlockCellUsed = 0; //	how many block cell used. Leva la cuenta de las celdi
 var gBlockUsed = 0;		//	how many block used
 
 
-//	var	DEBUG = false;
-const	DEBUG = true,
+const	
+	DEBUG = true,
+	//	DEBUG = false,
 	DEBUG2 = false;
 
 //====================================
 //	botones
 //====================================
 var
+	//	checkBtn,			//	check button
+	aboutBtn,			//	about button
+	configBtn,		//	config button
+	getOutBtn,		//	salir
+	giraPieza,		//	rotate button
 	helpBtn,			//	help button
 	hintBtn,			//	hint button
-	aboutBtn,			//	about button
-	giraPieza,		//	rotate button
-	volteaPieza,
-	configBtn,		//	config button
-	statusBtn,		//	status button
-	getOutBtn,		//	salir
-	playBtn,			//	jugar
 	menuBtn,			//	menu ppal
-	nroProbBtn,		//	aceptar nro problema
+	//	nroProbBtn,		//	aceptar nro problema
+	nroProblema,	//	boton para ingresar nro de problema
+	playBtn,			//	jugar
+	statusBtn,		//	status button
+	volteaPieza,
 	fakeBtn				//	este boton no existe
 
 
@@ -190,40 +219,36 @@ function init()
 	//This will disable any text selection on the page and it seems that browser starts to show custom cursors.
 	document.onselectstart = function(){ return false; } ;
 
-	//initial input
-
 	document.getElementById('container').innerHTML = "";		//	vacia la pantalla
 
 	document.getElementById('checkButton').checked=false;
+
 	//	document.getElementById('levelButton').options[gLevelId-1].selected  = true;
 
 	initLanguage();					//	adaptación a diferentes idiomas
-	initScreenVariable();
-	initScreenPosColor();		// game screen position and background color
-
+	initScreenVariable();		//	asigna valores a variables que controlan medidas en pantalla
+	initScreenPosColor();	
 	
 	gBlockGroup = polyomino5.blockGroup;
 	createBlockStyle(gBlockGroup);			//external function. creacion de todos los estilos de bloque a partir del block inicial
 	bindBlockColor(gBlockGroup);
 
 	//	---------------------------------------------
-	//	Preparacion de el/los cuadrominos
+	//	Preparacion de el/los tetrominos
 	//------------------------------
-	//	wCuadromino = polyomino4.blockGroup[nCuadromId];	//	esta linea o la que sigue, vuelan
-	wCuadromGroup = polyomino4.blockGroup;
+	//	wtetromino = polyomino4.blockGroup[nTetromId];	//	esta linea o la que sigue, vuelan
+	wTetromGroup = polyomino4.blockGroup;
 	gCeldasOcupadas = CalcCeldasOcupadas();
-	if (DEBUG2)
-	{
-		for (var j=0; j < gCeldasOcupadas.length ; j++)
-		{
+	if (DEBUG2)	{
+		for (var j=0; j < gCeldasOcupadas.length ; j++)		{
 			console.log('gCeldasOcupadas['+ j + '] : ' + gCeldasOcupadas[j].x + ' : ' + gCeldasOcupadas[j].y );
 		}
 	}
 
-	createBlockStyle(wCuadromGroup);			//external function. creacion de todos los estilos de bloque a partir del block inicial
-	//	asignamos color a los cuadrominos
-	for(var id=0; id < wCuadromGroup.length; id++) {
-		wCuadromGroup[id].color = COLOR_BLOCK_FIJO;	// '#000000';
+	createBlockStyle(wTetromGroup);			//external function. creacion de todos los estilos de bloque a partir del block inicial
+	//	asignamos color a los tetrominos
+	for(var id=0; id < wTetromGroup.length; id++) {
+		wTetromGroup[id].color = COLOR_BLOCK_FIJO;	// '#000000';
 	}
 
 	createStageLayer();
@@ -242,17 +267,19 @@ function init()
 	HaceAboutLayer();
 	HaceStatusLayer();
 
-	//	document.getElementById('levelButton').options[gLevelId-1].selected  = true;
+	if (DEBUG) { console.log('getNroProbl(): ' + getNroProbl())	};
 	nProblema = getNroProbl();
 
-	MenuInicial();
+	//	checkButton.checked=false;		//	inicializo en false
 
-	//	playPuzzle(1); //new puzzle for play
+	if (DEBUG) { DibujaGrilla()	}
 
 	//debug
-	//	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
-	//	writeMessage( 'SCREEN_X: ' + SCREEN_X + ' SCREEN_Y: ' + SCREEN_Y );
-
+	if (DEBUG) {
+		console.log( "writeMessage( cell, etc." );
+		writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
+	}
+	MenuInicial();
 
 }
 
@@ -261,83 +288,126 @@ function init()
 
 
 //-----------------------------------------------------
-//	Prepara botones
-//-----------------------------------------------------
 function 	HaceBotones() {		//	Preparar los botones
+
+	//	---------------------------------
+	//	botones de la pantalla inicial
+	//	esta tecnica permite incorporar al body (no a los layers)
+	//	---------------------------------
+	//playBtn	; button in javascript code
+	playBtn = document.createElement("button");
+	playBtn.innerHTML = "Jugar";
+	document.body.appendChild(playBtn);
+	playBtn.addEventListener ("click", function() {	playPuzzle(1); });
+	playBtn.style.left			=	STAGE_OFFSET_X + (50) + "px";
+	playBtn.style.position	= "absolute";     
+	playBtn.style.top				= STAGE_OFFSET_Y + 0.6 * BLOCK_CELL_SIZE;			//	"050px";
+
 
 	//helpBtn,	// Help button in javascript code
 	helpBtn = document.createElement("button");
 	helpBtn.innerHTML = "Help";
 	document.body.appendChild(helpBtn);               // Append <button> to <body>
 	helpBtn.addEventListener ("click", function() {  alert("pico en helpBtn") } );// 3. Add event handler
-	helpBtn.style.cssText = "top:" + (150) + "px; left:" + (050) + "px; position: absolute;";// 4. Position in screen
+	helpBtn.style.left			=	STAGE_OFFSET_X + (50) + "px";
+	helpBtn.style.position	= "absolute";     
+	helpBtn.style.top				= STAGE_OFFSET_Y + 1.8 * BLOCK_CELL_SIZE;			//	"050px";
 
 	//aboutBtn	// About button in javascript code
 	aboutBtn = document.createElement("button");
 	aboutBtn.innerHTML = "About";
 	document.body.appendChild(aboutBtn);               // Append <button> to <body>
 	aboutBtn.addEventListener ("click", function() {  alert("picoen About button") } );// 3. Add event handler
-	aboutBtn.style.cssText = "top:" + (250) + "px; left:" + (050) + "px; position: absolute;";// 4. Position in screen
-
-	//configBtn	// Status button in javascript code
-	configBtn = document.createElement("button");
-	configBtn.innerHTML = "Ajustes";
-	document.body.appendChild(configBtn);
-	configBtn.addEventListener ("click", function() {  haceAjustes() } );// 3. Add event handler
-	configBtn.style.cssText = "top:" + (450) + "px; left:" + (050) + "px; position: absolute;";// 4. Position in screen
+	aboutBtn.style.left			=	STAGE_OFFSET_X + (50) + "px";
+	aboutBtn.style.position	= "absolute";     
+	aboutBtn.style.top				= STAGE_OFFSET_Y + 3.0 * BLOCK_CELL_SIZE;
 
 	//statusBtn,	// Status button in javascript code
 	statusBtn = document.createElement("button");
 	statusBtn.innerHTML = "Status";
 	document.body.appendChild(statusBtn);
 	statusBtn.addEventListener ("click", function() {  pantallaStatus() } );// 3. Add event handler
-	statusBtn.style.cssText = "top:" + (350) + "px; left:" + (050) + "px; position: absolute;";// 4. Position in screen
+	statusBtn.style.left			=	STAGE_OFFSET_X + (50) + "px";
+	statusBtn.style.position	= "absolute";     
+	statusBtn.style.top				= STAGE_OFFSET_Y + 4.2 * BLOCK_CELL_SIZE;
 
-	//playBtn	; button in javascript code
-	playBtn = document.createElement("button");
-	playBtn.innerHTML = "Jugar";
-	document.body.appendChild(playBtn);
-	playBtn.addEventListener ("click", function() {	playPuzzle(1); });
-	playBtn.style.cssText = "top:" + (050) + "px; left:" + (050) + "px; position: absolute;";
 
-	//menuBtn	//	boton menu inicial in javascript code
+	//configBtn	// Status button in javascript code
+	configBtn = document.createElement("button");
+	configBtn.innerHTML = "Ajustes";
+	document.body.appendChild(configBtn);
+	configBtn.addEventListener ("click", function() {  haceAjustes() } );// 3. Add event handler
+	configBtn.style.left			=	STAGE_OFFSET_X + (50) + "px";
+	configBtn.style.top 		= STAGE_OFFSET_Y + 5.4 * BLOCK_CELL_SIZE;
+	configBtn.style.position = "absolute";
+
+
+	
+	//	---------------------------------
+	//	botones de la pantalla de juego
+	//	---------------------------------
+	//menuBtn	//	boton menu inicio in javascript code
 	menuBtn = document.createElement("button");
 	menuBtn.innerHTML = "Inicio";
 	document.body.appendChild(menuBtn);
 	menuBtn.addEventListener ("click", function() {  MenuInicial() } );// 3. Add event handler
-	menuBtn.style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (050) + "px; position: absolute;";	// 4. Position in screen
+	menuBtn.style.left			=	STAGE_OFFSET_X + 1.2 * BLOCK_CELL_SIZE;
+	menuBtn.style.top = (STAGE_Y - 0.7* BLOCK_CELL_SIZE)+"px";
+	menuBtn.style.position = "absolute";
 
-	//	hintBtn: boton ayuditas in javascript code
-	hintBtn = document.createElement("button");
-	hintBtn.innerHTML = "Ayudita";
-	document.body.appendChild(hintBtn);
-	hintBtn.addEventListener ("click", function() {  hintsButton() } );
-	hintBtn.style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (500) + "px; position: absolute;";
 
 	//	giraPieza: boton para rotar piezzas
 	giraPieza = document.createElement("button");
 	giraPieza.innerHTML = "&#X21BB;";
 	document.body.appendChild(giraPieza);
 	giraPieza.addEventListener ("click", function() { girarPieza() } );// 3. Add event handler
-	giraPieza.style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + 
-		(200) + "px; position: absolute; font:" + (28) + "px sriracharegular bold";
+	giraPieza.style.left			=	STAGE_OFFSET_X + 4.2 * BLOCK_CELL_SIZE;
+	giraPieza.style.top = (STAGE_Y - 0.7* BLOCK_CELL_SIZE)+"px";
+	giraPieza.style.position = "absolute";
+	giraPieza.style.font = 30 + "px arial";
+
 
 	//	volteaPieza: boton para rotar piezzas
 	volteaPieza = document.createElement("button");
 	volteaPieza.innerHTML = "&#X2194;";
 	document.body.appendChild(volteaPieza);
 	volteaPieza.addEventListener ("click", function() { voltearPieza() } );// 3. Add event handler
-	volteaPieza.style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + 
-		(350) + "px; position: absolute; font:" + (28) + "px sriracharegular bold";
+	volteaPieza.style.left			=	STAGE_OFFSET_X + 7.2 * BLOCK_CELL_SIZE;
+	volteaPieza.style.top = (STAGE_Y - 0.7* BLOCK_CELL_SIZE)+"px";
+	volteaPieza.style.position = "absolute";
+	volteaPieza.style.font = 30 + "px arial";
 
 
-//	nroProbBtn boton aceptar numero de problema
-	nroProbBtn = document.createElement("button");
-	nroProbBtn.innerHTML = "aceptar";
-	document.body.appendChild(nroProbBtn);
-	nroProbBtn.addEventListener ("click", function() {  setNroProbl() } );// 3. Add event handler
-	nroProbBtn.style.cssText = "top:" + (350) + "px; left:" + (050) + "px; position: absolute;";	// 4. Position in screen
+	//	hintBtn: boton ayuditas in javascript code
+	hintBtn = document.createElement("button");
+	hintBtn.innerHTML = "Ayudita";
+	document.body.appendChild(hintBtn);
+	hintBtn.addEventListener ("click", function() {  hintsButton() } );
+	hintBtn.style.left			=	STAGE_OFFSET_X + 10.2 * BLOCK_CELL_SIZE;
+	hintBtn.style.top = (STAGE_Y - 0.7* BLOCK_CELL_SIZE)+"px";
+	hintBtn.style.position = "absolute";
 
+
+	//	---------------------------------
+	//	botones de la pantalla de ajustes
+	//	---------------------------------
+	//	nroProbBtn boton aceptar numero de problema
+	//	nroProbBtn = document.createElement("button");
+	//	nroProbBtn.innerHTML = "Fijar";
+	//	document.body.appendChild(nroProbBtn);
+	//	nroProbBtn.addEventListener ("click", function() {  setNroProbl() } );// 3. Add event handler
+	//	nroProbBtn.style.left			=	(STAGE_OFFSET_X) + (0.6 * STAGE_X) + 'px';		// + 1.2 * BLOCK_CELL_SIZE;
+	//	nroProbBtn.style.top			= (STAGE_OFFSET_Y) + (0.6 * STAGE_Y) + 'px';		
+	//	nroProbBtn.style.position = "absolute";
+/*
+	nroProblema = document.createElement("INPUT");
+	nroProblema.setAttribute("type", "number");
+	nroProblema.label = " Problema número (1-103) ";
+	nroProblema.value = nProblema;
+	document.body.appendChild(nroProblema);
+	nroProblema.style.left			=	STAGE_OFFSET_X + "400px";	
+	nroProblema.style.position = "absolute";
+*/
 
 	//	botones no creados
 	//	salir		getOutBtn,		
@@ -351,15 +421,16 @@ function 	HaceBotones() {		//	Preparar los botones
 //-----------------------------------------------------
 function MenuInicial() {
 		
-	console.log( '*'.repeat(16) + ' Menu inicial');
+	if (DEBUG){console.log( '*'.repeat(16) + ' Menu inicial')}
 
 	clearStageLayer();
 
 	hiddenAllButton();
 	gBoardLayer.destroy();
 	gBackgroundLayer.destroy();
-	gMessageLayer.destroy();
+	//	gMessageLayer.destroy();
 	gStatusLayer.destroy();
+	gConfigLayer.destroy();
 
 	
 	HaceInitLayer();
@@ -384,7 +455,11 @@ function MenuInicial() {
 	menuBtn.style.visibility='hidden';			//	menu ppal
 	hintBtn.style.visibility='hidden';			//	menu ppal
 
-	document.getElementById('nroProblema').style.visibility='hidden';
+	//	document.getElementById('nroProblema').style.visibility='hidden';
+	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
+
+	//	cTransfProp
+	//	document.getElementById("mainBody").style.transform = cTransfProp;
 
 	if (DEBUG) { console.log('nProblema: ' + nProblema ); };
 
@@ -411,12 +486,14 @@ function playPuzzle()
 	enableAllButton();
 
 	//-------------------------------------------------
-	//	visibleAllButton();
+	//	botones de inicio invisibles
+	playBtn.style.visibility='hidden';			//	jugar
 	aboutBtn.style.visibility='hidden';
 	configBtn.style.visibility='hidden';		//	config button
 	helpBtn.style.visibility='hidden';			//	help button
-	playBtn.style.visibility='hidden';			//	jugar
 	statusBtn.style.visibility='hidden';		//	status button
+
+	//	if (DEBUG) { DibujaGrilla()	}
 
 	hintBtn.style.visibility='visible';			//	hint button
 	menuBtn.style.visibility='visible';			//	menu ppal
@@ -433,8 +510,9 @@ function playPuzzle()
 
 
 	//checkbox
-	document.getElementById('checkButton').style.visibility='visible';
+	//	checkBtn.style.visibility='visible';
 	document.getElementById('checkboxtext').style.visibility='visible';
+	document.getElementById('checkButton').style.visibility='visible';
 
 	//-----------------------------------------------------
 
@@ -455,8 +533,8 @@ function initBoardSize(boardSize, level)
 //-------------------------------------------------------------------
 var levelText = "Nivel";
 var noSolutionText = " Sin solución ";
-var nextText = "OTRO";
-var finishText = "Felicitaciones";
+var nextText = "NEXT";
+var finishText = "Congrats!";
 var checkSolutionShift = 90;
 
 function initLanguage()		//	para adaptar a diferentes idiomas
@@ -466,7 +544,7 @@ function initLanguage()		//	para adaptar a diferentes idiomas
 	if(sysLang == "en" || sysLang == "en") { //	ingles
 		noSolutionText = "No solution ";
 		nextText = "NEXT";
-		finishText = "Congratulations";
+		finishText = "Congrats!";
 		levelText = "Level";
 
 		hintBtn.value = "Hint";
@@ -500,26 +578,7 @@ function initScreenVariable()
 {
 	var screenWidth = 0, screenHeight = 0;	// ancho y alto de pantallla
 
-	//	reemplazo para agrandar tablero
-	//	var maxStageX = 1000;
-	//	var maxStageY = 800;
-	//	var maxCellSize = 40;
-
-	var maxStageX = 1000;
-	var maxStageY = 800;
-	var maxCellSize = 64;
-
-	var midStageX = 800;
-	var midStageY = 600;
-	var midCellSize = 50;		//	var midCellSize = 32;
-
-	var miniStageX = 600;
-	var miniStageY = 400;
-	var miniCellSize = 36;	// 24;
-
-	var microStageX = 400;
-	var microStageY = 300;
-	var microCellSize = 32;	// 20;
+	//	relacion promedio: 0.7
 
 	//----------------------------------------------------------------------
 	// Window size and scrolling:
@@ -544,89 +603,66 @@ function initScreenVariable()
 	SCREEN_X = screenWidth;
 	SCREEN_Y = screenHeight;
 
-	//	STAGE_X = ((screenWidth%2)? (screenWidth-1):screenWidth) - microCellSize*2;
-	STAGE_X = Math.floor(screenWidth*0.95);
+	var nRelHeightWidth = SCREEN_Y / SCREEN_X;
 
+	//	relacion alto/ancho pantalla
+	//	let nRel = SCREEN_X / SCREEN_Y;
 
-	//	if(STAGE_X > maxStageX) STAGE_X = maxStageX;
-	//	if(STAGE_X < microStageX) STAGE_X = microStageX;
-	STAGE_OFFSET_X = Math.floor((screenWidth - STAGE_X)/2);
-	if(STAGE_OFFSET_X < microCellSize) STAGE_OFFSET_X = microCellSize;
+	//	adoptos medidas y manejo con la escala
+	STAGE_X = 1000;
+	STAGE_Y = 600;
 
-	//	STAGE_Y = ((screenHeight%2)?(screenHeight-1):screenHeight) - microCellSize*2;
-	STAGE_Y = Math.floor(screenHeight*0.90);
-
-	if(STAGE_Y > maxStageY) STAGE_Y = maxStageY;
-	if(STAGE_Y < microStageY) STAGE_Y = microStageY;
-	STAGE_OFFSET_Y = Math.floor((screenHeight - STAGE_Y)/2);
-	if(STAGE_OFFSET_Y < microCellSize) STAGE_OFFSET_Y = microCellSize;
-
-
-	if (DEBUG2)	{	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);	}
-	if (DEBUG2)	{	
-		console.log('SCREEN_X: SCREEN_Y: ' + SCREEN_X + ', ' + SCREEN_Y + '\n'+
-			'STAGE_X, STAGE_Y: ' + STAGE_X +', ' + STAGE_Y		); 
+	//	if (nRelHeightWidth < 0.6){
+	if (STAGE_Y > 0.92 * SCREEN_Y){
+		STAGE_Y = Math.floor(0.92 * SCREEN_Y);
+		STAGE_X = Math.floor(STAGE_Y * 5/3);
 	}
 
+	BLOCK_CELL_SIZE = Math.floor(STAGE_Y / 10.5);
 
-	//	BLOCK_CELL_SIZE = maxCellSize;
-	//	switch(true) {
-	//	case (STAGE_X <= microStageX || STAGE_Y <= microStageY):
-	//		BLOCK_CELL_SIZE = microCellSize;
-	//		break;
-	//	case (STAGE_X <= miniStageX || STAGE_Y <= miniStageY):
-	//		BLOCK_CELL_SIZE = miniCellSize;
-	//		break;
-	//	case (STAGE_X <= midStageX || STAGE_Y <= midStageY):
-	//		BLOCK_CELL_SIZE = midCellSize;
-	//		break;
-	//	}
+	//	nEscala = (nRelHeightWidth > 0.6) ? nEscala = (SCREEN_X - 10) / STAGE_X : nEscala = (SCREEN_Y-10) / STAGE_Y;
 
-	if (DEBUG2){
-		console.log( 'Parametros de pantalla'	);
-		console.log( 'SCREEN_X: ' +		SCREEN_X       );
-		console.log( 'SCREEN_Y: ' + 		SCREEN_Y       );
-		console.log( 'STAGE_X: ' + 		STAGE_X        );
-		console.log( 'STAGE_OFFSET_X: ' + 	STAGE_OFFSET_X );
-		console.log( 'STAGE_Y: ' + 		STAGE_Y        );
-		console.log( 'STAGE_OFFSET_Y: ' +  	STAGE_OFFSET_Y );
-		console.log( 'BLOCK_CELL_SIZE: ' +  BLOCK_CELL_SIZE );
+	STAGE_OFFSET_X = Math.floor((screenWidth - STAGE_X)/2);
+	//	STAGE_OFFSET_Y = Math.floor((screenHeight - STAGE_Y)/2);
+	STAGE_OFFSET_Y = Math.floor( 0.03 * screenHeight );
+
+
+	if (DEBUG){
+		console.log( 'Parametros de pantalla'	+
+			'\nBLOCK_CELL_SIZE: ' +  BLOCK_CELL_SIZE +
+			'\nSCREEN_X, SCREEN_Y: ' +		SCREEN_X + ', ' + 		SCREEN_Y +
+			'\nSTAGE_X, STAGE_Y: ' + 		STAGE_X  + ', ' + STAGE_Y		+
+			'\nSTAGE_OFFSET_X, STAGE_OFFSET_Y: ' + 	STAGE_OFFSET_X + ', ' +  	STAGE_OFFSET_Y 
+			//	'\nnEscala: ' + nEscala +
+			//	'\nnRelHeightWidth : ' + nRelHeightWidth 
+		)
 	}
 
 }
 
 
 //----------------------------------------------
-// game screen position and background color
+// initial screen position and background color 
 //----------------------------------------------
 function initScreenPosColor()
 {
-	//	var Y_Offset = Math.round(BLOCK_CELL_SIZE/6);	//	todavia no se conoce BLOCK_CELL_SIZE
-	//	if (DEBUG)	{ console.log('BLOCK_CELL_SIZE, Y_Offset, Y_Offset + 200: ' + BLOCK_CELL_SIZE + ', ' +(Y_Offset) + ', ' +	Y_Offset + 200 );	}
+	document.getElementById('container').style.cssText = "top:" + (STAGE_OFFSET_Y) + "px; left:" + (STAGE_OFFSET_X) + "px; position: absolute;";
 
-	document.getElementById('ProblemSelect').style.cssText = "top:" + (300) + "px; left:" + (500) + "px; position: absolute;";
-	//	document.getElementById('seleccion').style.cssText = "top:" + (SCREEN_Y-070) + "px; left:" + (600) + "px; position: absolute;";
+	document.body.style.background = 'blue';	//BACKGROUND_COLOR; //body background color
 
-	//	document.getElementById('new').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 70) + "px; position: absolute;";
+	document.getElementById('check').style.cssText = 
+		"top:" + (STAGE_Y - 0.7* BLOCK_CELL_SIZE)+"px; left:" + (13.2 * BLOCK_CELL_SIZE) + 
+		"px; position: absolute; font:" + (16) + "px roboto white";
+	//	checkBtn.style.left = 13.2 * BLOCK_CELL_SIZE;
+	//	checkBtn.style.top = (STAGE_Y-BLOCK_CELL_SIZE)+"px";
+	//	checkBtn.style.height		= 0.6 * BLOCK_CELL_SIZE;
+	//	checkBtn.style.position = "absolute";
+	//	checkBtn.style.font = "16px sriracharegular bold";
 
-	//	document.getElementById('numero').style.cssText = "top:10px; left:120px; position: absolute;";
-
-	//	document.getElementById('reset').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (50) + "px; position: absolute;";
-	//	document.getElementById('initButton').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (50) + "px; position: absolute;";
-
-	//	document.getElementById('giro').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (200) + "px; position: absolute;";
-
-	//	document.getElementById('voltea').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (350) + "px; position: absolute;";
-
-	//	document.getElementById('hints').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (500) + "px; position: absolute;";
-
-	document.getElementById('check').style.cssText = "top:" + (SCREEN_Y-080) + "px; left:" + (650) + "px; position: absolute;";
-
-	//	document.getElementById('start').style.cssText = "top:" + (Math.floor(SCREEN_Y/2) - 20) + "px; left:" + (SCREEN_X - 120) + "px; position: absolute;";
-
-	document.body.style.background = BACKGROUND_COLOR; //body background color
 
 }
+
+
 
 //------------------------------
 // bind block with fixed color
@@ -715,7 +751,8 @@ function	HaceAboutLayer() 	{
 //----------------------------------------------
 function createPuzzle(newPuzzle, activePoly)
 {
-	console.log( '*'.repeat(16) + ' createPuzzle');
+
+	if (DEBUG) {console.log( '*'.repeat(16) + ' createPuzzle')}
 
 	//	var fixedBlock = boardSizeInfo[gBoardSizeId].x * boardSizeInfo[gBoardSizeId].y / 5 - 1; //for debug only
 	var fixedBlock = 0;	//	(boardSizeInfo[gBoardSizeId].numOfLevel - gLevelId)* 2;
@@ -724,14 +761,12 @@ function createPuzzle(newPuzzle, activePoly)
 	//	initBoardState(boardSizeInfo[gBoardSizeId].x,boardSizeInfo[gBoardSizeId].y, fixedBlock, NewPuzzle);
 	initBoardState( 8, 8, fixedBlock, 1);
 
-	if (DEBUG2) {
-		console.log('gPolyGroup: ' + gPolyGroup);
-	};
+	if (DEBUG2) {		console.log('gPolyGroup: ' + gPolyGroup)	};
 
 	//	if(activePoly) activePolygon();		//	original pero siempre verdadero
 	activePolygon();
 
-	//writeFinishMsg(); //for test only
+	//	writeFinishMsg(); //for test only
 }
 
 
@@ -740,52 +775,31 @@ function createPuzzle(newPuzzle, activePoly)
 //---------------------
 function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 {
-	console.log( '*'.repeat(16) + ' initBoardState' );
+	if (DEBUG) {console.log( '*'.repeat(16) + ' initBoardState' )}
 
 	//initial global variable
 	SCREEN_BOARD_X = boardX;
 	SCREEN_BOARD_Y = boardY;
+	BOARD_WIDTH = (SCREEN_BOARD_X * BLOCK_CELL_SIZE);
+	BOARD_HIGH  = (SCREEN_BOARD_Y * BLOCK_CELL_SIZE);
 
-	//	BOARD_WIDTH = (SCREEN_BOARD_X * BLOCK_CELL_SIZE);
-	//	BOARD_HIGH  = (SCREEN_BOARD_Y * BLOCK_CELL_SIZE);
-	BOARD_WIDTH = ( Math.floor( 0.45 * SCREEN_X / SCREEN_BOARD_X ) * SCREEN_BOARD_X );
-	BOARD_HIGH  = ( Math.floor( 0.70 * SCREEN_Y / SCREEN_BOARD_Y ) * SCREEN_BOARD_Y );
-
-	if ( BOARD_WIDTH > BOARD_HIGH )	{ BOARD_WIDTH = BOARD_HIGH;	} else { BOARD_HIGH = BOARD_WIDTH };
-
-	BLOCK_CELL_SIZE = BOARD_WIDTH / SCREEN_BOARD_X;
-
-	if (DEBUG2)	{
-		console.log( 'BLOCK_CELL_SIZE = BOARD_WIDTH / SCREEN_BOARD_X: ' +	BLOCK_CELL_SIZE +', '+ BOARD_WIDTH +', '+ SCREEN_BOARD_X );
-		console.log( 'BOARD_WIDTH, BOARD_HIGH, BLOCK_CELL_SIZE: ' + BOARD_WIDTH + ', ' + BOARD_HIGH + ', ' + BLOCK_CELL_SIZE);
-		console.log('STAGE_X, STAGE_Y: ' + STAGE_X + ', ' + STAGE_Y);
-	}
-
-	//	boardStartX = (STAGE_X-BOARD_WIDTH)/2;
 	boardStartX = BLOCK_CELL_SIZE;
-	boardStartY = Math.floor((SCREEN_Y-BOARD_HIGH)/2);
-
-	//	console.log( 'boardStartX, boardStartY: ' + boardStartX + ', ' + boardStartY );
+	boardStartY = BLOCK_CELL_SIZE;		//	Math.floor((SCREEN_Y-BOARD_HIGH)/2);
 
 	gTotalBlockCell = (SCREEN_BOARD_X * SCREEN_BOARD_Y);
 	gBlockUsed = 0
 	gBlockCellUsed = 0;
-
+	
 	//clear stage & create layer
 	clearStageLayer();
-
-	// intento agregar un contorno al area de juego
-	// addContorno2Layer();
-
-	addBackgroundLayer();
+	addBackgroundLayer();	
 	addBoard2Layer();
-
+	
 	createOperatorObject();
 	addOperator2Layer();
-
-
+	
 	gBoardState = createBoard(SCREEN_BOARD_X, SCREEN_BOARD_Y); //external function
-	clearPolyInsertOrder(); //for hints
+	clearPolyInsertOrder(); //for hints 
 	randomBlock(gBlockGroup); //external function; random the block order
 	randomBlockStyle(gBlockGroup); //external function; //	reordena aleatoriamente los estilos de bloque
 
@@ -794,22 +808,22 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 
 	clearFixedBlock();
 
-	//	en este punto ya debe estar seleccionado el cuadromino a colocar y su posicion
-	wCuadromPos = { x:problemas[nProblema].posX, y:problemas[nProblema].posY };	//	posicion del cuadromino fijo
+	//	en este punto ya debe estar seleccionado el tetromino a colocar y su posicion
+	wTetromPos = { x:problemas[nProblema].posX, y:problemas[nProblema].posY };	//	posicion del tetromino fijo
 	var str = "LSIOT";
-	nCuadromId	= str.indexOf(problemas[nProblema].pieza);
+	nTetromId	= str.indexOf(problemas[nProblema].pieza);
 
-	if (DEBUG)	{
+	if (DEBUG2)	{
 		console.log('contenido de problemas[nProblema] \n'+
 			mostrarPropiedades(problemas[nProblema], 'problemas[nProblema]' ) );
-		console.log('wCuadromPos, nCuadromId: ' +	wCuadromPos.x +', ' + wCuadromPos.y +', ' + nCuadromId	);
+		console.log('wTetromPos, nTetromId: ' +	wTetromPos.x +', ' + wTetromPos.y +', ' + nTetromId	);
 	}
 
 	//	-------------------------------------------------------------------------------------
 	//	Atencion: antes de buscar una solución y colocar bloques fijos se debería colocar el cuadrómino.
-	//	Intento incorporar el cuadromino como fijo
+	//	Intento incorporar el tetromino como fijo
 	//	procedimiento deberia ser similar a addFixedBlock2Layer(result.op, numOfFixedBlocks);
-	wAgregaCuadrominoFijo( wCuadromPos );
+	wAgregatetrominoFijo( wTetromPos );
 
 	//	Atencion elimino para no agregar pentominos fijos (?)
 	//	if(numOfFixedBlocks) {
@@ -823,17 +837,20 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 	//	la que sigue genera el gPolyGroup
 	addBlock2Layer(0);		//	numOfFixedBlocks == 0;
 
-	//	wAddCuadrom2Layer();
+	//	wAddTetrom2Layer();
 
 
-	console.log( 'initBoardState -----------' );
+	if (DEBUG) {	console.log( 'initBoardState -----------' )}
 
 	gStage.add(gBackgroundLayer);
 	gStage.add(gBoardLayer);
 	gStage.add(gMessageLayer);
 
 	if(!newPuzzle && checkSolution)checkButton(1); //restore check solution message
+	
 }
+
+
 
 //-----------------------------------------
 // Random the initial position of polygon
@@ -850,7 +867,7 @@ function randomPolyInitPos(availablePoly)
 	//	reparto el espacio desde el tablero al borde derecho
 	//	var distance =  Math.floor((STAGE_X - BLOCK_CELL_SIZE*2) / ppl);
 	var distance_X =  Math.floor((STAGE_X - BLOCK_CELL_SIZE - BOARD_WIDTH) / (ppl + 1));
-	var distance_Y =  Math.floor(0.8 * (STAGE_Y - BLOCK_CELL_SIZE) / ((availablePoly/ppl) + 1));
+	var distance_Y =  Math.floor(0.7 * (STAGE_Y - BLOCK_CELL_SIZE) / ((availablePoly/ppl) + 1));
 
 	polyInitPos=[];
 	for(var id=0; id < availablePoly; id++) {
@@ -872,16 +889,24 @@ function randomPolyInitPos(availablePoly)
 	for(var id=0; id < availablePoly; id++) {
 		var index = polyInitPos[id];
 
+	if (DEBUG) {	console.log( 
+		'STAGE_OFFSET_X: ' + STAGE_OFFSET_X + 
+		'\nboardStartX: ' + boardStartX +
+		'\nBOARD_WIDTH: ' + BOARD_WIDTH +
+		'\ndistance_X: ' + distance_X
+		)
+	}
+
 		polyInitPos[id] = {
-			x:( STAGE_OFFSET_X + boardStartX + BOARD_WIDTH ) + (distance_X * (0.7 + (index % ppl))),
-			y:Math.floor( distance_Y  * (1.2 + (index % (( availablePoly / ppl ) + 1 ))))
+			x:(0.7 * STAGE_OFFSET_X + boardStartX + BOARD_WIDTH ) + (distance_X * (0.6 + (index % ppl))),
+			//	x:( 0.4 * STAGE_OFFSET_X + boardStartX + BOARD_WIDTH ) + (distance_X * (0.4 + (index % ppl))),
+			y:Math.floor( distance_Y * (1.6 + (index % (( availablePoly / ppl ) + 1 ))))
 		};
 
-
-		//	if (DEBUG)	{ console.log( 'id: ' + id + ', x,y: ' + Object.values(polyInitPos[id]) )	}
+		if (DEBUG)	{ console.log( 'id: ' + id + ', x,y: ' + Object.values(polyInitPos[id]) )	}
 
 	}
-	//	console.log( 'distance_X, distance_Y: ' + distance_X + ', ' +  distance_Y );
+	if (DEBUG) {	console.log( 'distance_X, distance_Y: ' + distance_X + ', ' +  distance_Y )}
 
 }
 
@@ -912,7 +937,7 @@ function restoreFixedBlock2Layer()
 	for(var id=0; id < gFixedPolyGroup.length; id++) {
 		gBoardLayer.add(gFixedPolyGroup[id].poly);
 
-		//	lo que sigue debieran agregarse cuatro celdillas porque el bloque fijo es un cuadromino
+		//	lo que sigue debieran agregarse cuatro celdillas porque el bloque fijo es un tetromino
 
 		if (DEBUG)
 		{
@@ -998,22 +1023,22 @@ function SolvedPos2BoardPos(op, pos)
 function addBackgroundLayer()
 {
 	var borderWidth = Math.round(BLOCK_CELL_SIZE/4);
-	var textOffset = Math.round(BLOCK_CELL_SIZE/6);
-	var titleFontSize = Math.round(BLOCK_CELL_SIZE*0.70);	//	1.32
+	var textOffset = Math.round(BLOCK_CELL_SIZE/8);
+	var titleFontSize = Math.round(BLOCK_CELL_SIZE*0.5);
 
-	//	var titleText1 = new Kinetic.Text({
-	//		x: textOffset,
-	//		y: textOffset,
-	//		text: "PENTOMANÍA FATAL by Willie",
-	//		fill: 'green',					//	fill: BACKGROUND_COLOR,
-	//		fontSize: titleFontSize,
-	//		//fontFamily: "Calibri",
-	//		fontStyle:"bold",
-	//		shadowColor: 'black',
-	//		shadowBlur: 05,
-	//		shadowOffset: [4,4],			//	2, 2],
-	//		shadowOpacity:0.7
-	//	});
+	var titleText1 = new Kinetic.Text({
+		x: textOffset,
+		y: textOffset,
+		text: 'Problem ' + nProblema,
+		fill: TITLE_COLOR,
+		fontSize: titleFontSize,
+		//fontFamily: "Calibri",
+		fontStyle:"bold",
+		shadowColor: 'black',
+		shadowBlur: 0.5,
+		shadowOffset: [4,4],			//	2, 2],
+		shadowOpacity:0.7
+	});
 
 	//	var titleText2 = new Kinetic.Text({
 	//		x: textOffset,
@@ -1030,18 +1055,6 @@ function addBackgroundLayer()
 	//		shadowOpacity:0.3
 	//	});
 
-	var versionText = new Kinetic.Text({
-		x: 200,
-		y: STAGE_Y-titleFontSize/2,
-		text: versionString,
-		fill: BACKGROUND_COLOR,
-		fontSize: titleFontSize/4,
-		fontStyle:"bold",
-		shadowColor: 'black',
-		shadowBlur: 9,
-		shadowOffset: [2, 2],
-		shadowOpacity:0.3
-	});
 
 	var background = new Kinetic.Rect({
 		x: 0,
@@ -1050,6 +1063,8 @@ function addBackgroundLayer()
 		height: STAGE_Y,
 		fill: BACKGROUND_COLOR
 	});
+
+	if (DEBUG) {console.log('boardStartX, boardStartY: ' + boardStartX + ', ' + boardStartY )}
 
 	var boardBackground = new Kinetic.Rect({
 		x: boardStartX,
@@ -1102,13 +1117,14 @@ function addBackgroundLayer()
 	gBackgroundLayer.add(background);
 	//	gBackgroundLayer.add(titleText1);
 	//	gBackgroundLayer.add(titleText2);
-	gBackgroundLayer.add(versionText);
+	gBackgroundLayer.add(titleText1);
 	gBackgroundLayer.add(boardBackground);
 	gBackgroundLayer.add(borderUp);
 	gBackgroundLayer.add(borderLeft);
 	gBackgroundLayer.add(borderRight);
 	gBackgroundLayer.add(borderDown);
 	gBackgroundLayer.add(borderborder);
+
 }
 
 //--------------------------------
@@ -1141,7 +1157,7 @@ function addBoard2Layer()
 			}
 		},
 		stroke: BOARD_COLOR,
-		strokeWidth: 1
+		strokeWidth: 2
 	});
 	gBoardLayer.add(board);
 }
@@ -1160,32 +1176,33 @@ function addBlock2Layer(fixedBlock)
 
 
 
-//----------------------------------
-// restore polygon blocks to layer
-//----------------------------------
-function restoreBlock2Layer(fixedBlock)
-{
-	//-------------------------------------------------------------------
-	// if restore from backup it can not drag again with kineticJS 4.4.0
-	// so re-create object and copy attr from backup - 04/04/2013
-	//-------------------------------------------------------------------
-	clonePolygon(saveInfo.gPolyGroup, 0);			//	fixedBlock);
-
-	for(var g = 0; g < gPolyGroup.length; g++) {
-		var poly = gPolyGroup[g].poly;
-		gBoardLayer.add(poly);
-
-		//restore already inserted poly
-		if(poly.pos.x > 0) {
-			poly.setZIndex(gBlockUsed+1);//after (board + blockUsed)
-			clearShadow(poly);
-			setColor(poly, 1); //set normal color
-			gBlockCellUsed += gPolyGroup[g].block.length;
-			gBlockUsed++;
-		}
-
-	}
-}
+//	//----------------------------------
+//	//	esta funcion se prodria eliminar; no la usa nadie. 22/7/2019
+//	// restore polygon blocks to layer
+//	//----------------------------------
+//	function restoreBlock2Layer(fixedBlock)
+//	{
+//		//-------------------------------------------------------------------
+//		// if restore from backup it can not drag again with kineticJS 4.4.0
+//		// so re-create object and copy attr from backup - 04/04/2013
+//		//-------------------------------------------------------------------
+//		clonePolygon(saveInfo.gPolyGroup, 0);			//	fixedBlock);
+//	
+//		for(var g = 0; g < gPolyGroup.length; g++) {
+//			var poly = gPolyGroup[g].poly;
+//			gBoardLayer.add(poly);
+//	
+//			//restore already inserted poly
+//			if(poly.pos.x > 0) {
+//				poly.setZIndex(gBlockUsed+1);//after (board + blockUsed)
+//				clearShadow(poly);
+//				setColor(poly, 1); //set normal color
+//				gBlockCellUsed += gPolyGroup[g].block.length;
+//				gBlockUsed++;
+//			}
+//	
+//		}
+//	}
 
 //======================================
 // BEGIN for create polygon
@@ -1211,7 +1228,7 @@ function polyRegular(poly)
 {
 	var size = poly.length;
 	var tmpIndex;
-	var mode= 0; hMode = 0, vMode = 2;
+	var mode= 0, hMode = 0, vMode = 2;
 
 	//console.log(poly);
 
@@ -1443,7 +1460,7 @@ function getPositionOfPoly(polyX, polyY, offsetX, offsetY)
 {
 	var boardX, boardY;
 	var precision = 10;		//	(Precision)
-	var rx = ry = -1;
+	var rx = -1,	ry = -1;
 
 	for(var x = 0; x < SCREEN_BOARD_X; x++) {
 		boardX = boardStartX + x * BLOCK_CELL_SIZE;
@@ -1520,7 +1537,9 @@ function getCenterPos(block)
 //--------------------------------
 function getLeftUpPos(block)
 {
-	var left = block[0].x; up = block[0].y;
+	var
+		left = block[0].x,
+		up = block[0].y;
 
 	for(var i =1; i < block.length; i++) {
 		if(left > block[i].x) left = block[i].x;
@@ -1640,7 +1659,7 @@ function createPolygon(blockGroup, fixedBlock)
 			blockGroup[id].polyId = polyId; //blockGroup link to polyGroup
 		}
 
-		firstBlock = blockGroup[id].blockStyle[0]; //get the first block
+		let firstBlock = blockGroup[id].blockStyle[0]; //get the first block
 
 		//conver block to polygon
 		poly = block2Polygon(firstBlock);
@@ -1779,9 +1798,7 @@ function clonePolygon(savePolyGroup, fixedBlock)
 
 function activePolygon()
 {
-	if (DEBUG2)
-	{
-		console.log('linea 1499, gPolyGroup: ' + gPolyGroup);
+	if (DEBUG2) {		console.log('linea 1499, gPolyGroup: ' + gPolyGroup);
 		console.log('linea 1500, gPolyGroup.length: ' + gPolyGroup.length);
 	}
 	//inactivePolygon();
@@ -2117,7 +2134,8 @@ function addOperator2Layer()
 
 function showOperatorObject(poly)
 {
-	console.log('----	function showOperatorObject(poly)	')
+	if (DEBUG) {	console.log('----	function showOperatorObject(poly)	')}
+
 	var cx = poly.getPosition().x;
 	var cy = poly.getPosition().y;
 
@@ -2206,7 +2224,10 @@ function screenBoard2AnswerBoard(srcBoard, op)
 	var dstBoard;
 	var boardX = srcBoard.length;
 	var boardY = srcBoard[0].length;
-	var leftCellCount = rightCellCount = upCellCount = downCellCount = 0;
+	var leftCellCount = 0,
+		rightCellCount = 0,
+		upCellCount = 0,
+		downCellCount = 0;
 
 	//(1) let boardX <= boardY
 	if(boardX > boardY) {
@@ -2399,7 +2420,7 @@ function insertCheck()
 		inactivePolygon();
 		disableAllButton();
 		setTimeout(function() {writeFinishMsg();}, 500); //wait 500 ms
-		sloveState = 1;
+		var	sloveState = 1;
 		//	resolvio, incremento nro problema
 
 		nProblema = (nProblema < CANTPROBLEMAS) ? nProblema+1 : nProblema
@@ -2409,10 +2430,7 @@ function insertCheck()
 		return;
 	}
 
-	if (DEBUG)
-	{
-		console.log('*** checkSolution: ' + checkSolution);
-	};
+	if (DEBUG)	{	console.log('*** checkSolution: ' + checkSolution)	};
 
 
 	if(checkSolution) check();
@@ -2572,7 +2590,8 @@ function disableAllButton()
 
 
 	//checkbox
-	document.getElementById('checkButton').disabled=true;
+	//	document.getElementById('checkButton').disabled=true;
+	//	checkBtn.disabled=true;
 }
 
 
@@ -2619,6 +2638,7 @@ function enableAllButton()
 
 	//checkbox
 	document.getElementById('checkButton').disabled=false;
+
 }
 
 //--------------------
@@ -2641,6 +2661,7 @@ function visibleAllButton()
 	//checkbox
 	document.getElementById('checkButton').style.visibility='visible';
 	document.getElementById('checkboxtext').style.visibility='visible';
+
 }
 
 //--------------------
@@ -2648,16 +2669,9 @@ function visibleAllButton()
 //--------------------
 function hiddenAllButton()
 {
-	//	document.getElementById('nroProblema').style.visibility='hidden';
-	document.getElementById('ProblemSelect').style.visibility='hidden';
-
 	//	botones para giro y volteo
 	giraPieza.style.visibility='hidden';
 	volteaPieza.style.visibility='hidden';
-
-	//checkbox
-	document.getElementById('checkButton').style.visibility='hidden';
-	document.getElementById('checkboxtext').style.visibility='hidden';
 
 	helpBtn.style.visibility='hidden';
 	hintBtn.style.visibility='hidden';
@@ -2665,7 +2679,15 @@ function hiddenAllButton()
 	playBtn.style.visibility='hidden';
 	statusBtn.style.visibility='hidden';
 	configBtn.style.visibility='hidden';
-	nroProbBtn.style.visibility='hidden';
+	//	nroProbBtn.style.visibility='hidden';
+
+	//	nro de problema
+	document.getElementById('nroProblema').style.visibility='hidden';
+	document.getElementById('ProblemSelect').style.visibility='hidden';
+
+	//checkbox
+	document.getElementById('checkButton').style.visibility='hidden';
+	document.getElementById('checkboxtext').style.visibility='hidden';
 	
 }
 
@@ -2722,9 +2744,9 @@ function animateHintsBlock(solvedBoard, op, startFlashTime)
 	var startY = boardStartY + result.y * BLOCK_CELL_SIZE;
 	var id = result.id;
 
-	if (!DEBUG) {
-		console.log('linea 2397, result.id: ' + result.id );
-		console.log('linea 2398, result: x * y * id : ' + result.x + ' * ' + result.y + ' * ' + result.id );
+	if (DEBUG) {
+		console.log('result.id: ' + result.id );
+		console.log('result: x * y * id : ' + result.x + ' * ' + result.y + ' * ' + result.id );
 	}
 
 	//	faltarian definir los blockStyle para el cuadrómino. No es nesario
@@ -2751,11 +2773,7 @@ function findAvailableBlock(solvedBoard)			//	busca aleatoriamente un bloque pro
 	var boardY = solvedBoard[0].length-1;
 	var blockId, polyId;
 
-	if (DEBUG2)
-	{
-		console.log('findAvailableBlock(solvedBoard)');
-		//	dumpBoard(solvedBoard);
-	}
+	if (DEBUG2)	{		console.log('findAvailableBlock(solvedBoard)')	}
 
 	if(fromVertical) {
 		//search available block from Y than X
@@ -2766,7 +2784,7 @@ function findAvailableBlock(solvedBoard)			//	busca aleatoriamente un bloque pro
 
 				if (DEBUG2) { console.log('linea 2435, blockId : ' + blockId ) };
 
-				//	solamente si no se trata de un cuadromino
+				//	solamente si no se trata de un tetromino
 				if (blockId < 90){
 
 					polyId = gBlockGroup[blockId].polyId;		//convert block id to poly id
@@ -2795,12 +2813,11 @@ function findAvailableBlock(solvedBoard)			//	busca aleatoriamente un bloque pro
 			for(var x= 1; x < boardX; x++) {
 				blockId = solvedBoard[x][y]-1;
 
-				if (DEBUG2) {
-					console.log('linea 2470, x, y : ' + x + ' - ' + y );
-					console.log('linea 2471, blockId : ' + blockId );
+				if (DEBUG2) { console.log('x, y : ' + x + ' - ' + y );
+					console.log('blockId : ' + blockId );
 				}
 
-				//	solamente si no se trata de un cuadromino
+				//	solamente si no se trata de un tetromino
 				if (blockId < 90){
 
 					polyId = gBlockGroup[blockId].polyId; //convert block id to poly id
@@ -2814,10 +2831,7 @@ function findAvailableBlock(solvedBoard)			//	busca aleatoriamente un bloque pro
 		}
 	}
 
-	if (!DEBUG)
-	{
-		console.log('linea 2491, x-1, y-1, blockId: ' + x-1 + ' - ' + y-1 + ' - ' + blockId );
-	}
+	if (!DEBUG)	{	console.log('linea 2491, x-1, y-1, blockId: ' + x-1 + ' - ' + y-1 + ' - ' + blockId )	}
 
 	return {x:x-1, y:y-1, id:blockId};
 }
@@ -2832,7 +2846,7 @@ function enableButtonAfterStopRunning(object, button )
 			enableButtonAfterStopRunning(object, button);
 		}, 200)
 	} else {
-		delete object;
+		//	delete object;
 		enableAllButton();
 	}
 }
@@ -2915,20 +2929,19 @@ function writeFinishMsg()
 {
 	var textHigh=26;
 	var textWidth = 12;
-	var scaleX = Math.floor((STAGE_X -10) / (finishText.length * textWidth));
-	var scaleY = Math.floor((STAGE_Y/3)/textHigh) ;
+	var scaleX = Math.floor((STAGE_X -10) / (2 * (finishText.length * textWidth)));
+	var scaleY = Math.floor((STAGE_Y/3)/ (2 * textHigh)) ;
 
 if (!DEBUG)
 {
 	var finishMsg = new Kinetic.Text({
 
-		x: STAGE_X/2 - finishText.length * textWidth/2,
-		y: STAGE_Y/2 - textHigh/2,
+		x: 0.75 * STAGE_X - finishText.length * textWidth/2,
+		y: 0.25 * STAGE_Y - textHigh/2,
 		text:  finishText,
 		fontSize: textHigh,
 		fontStyle:"bold",
 		fill: TEXT_FINISH_COLOR,
-
 		shadowColor: 'black',
 		shadowBlur: 1,
 		shadowOffset: [8, 8],
@@ -2938,8 +2951,8 @@ if (!DEBUG)
 	gBoardLayer.add(finishMsg);
 
 	finishMsg.transitionTo({
-		x: STAGE_X/2 - finishText.length * textWidth*scaleX /2,
-		y:  STAGE_Y/2 - textHigh* scaleY /2 ,
+		x: 0.8 * STAGE_X - finishText.length * textWidth*scaleX /2,
+		y: 0.4 * STAGE_Y - textHigh* scaleY /2 ,
 		scale: {x:scaleX, y:scaleY},
 		duration: 1, // 1 sec
 		easing: "elastic-ease-in-out"
@@ -2962,8 +2975,10 @@ function nextButton()
 	var scaleX = Math.floor(STAGE_X/textAllWidth/4);
 	var scaleY = Math.floor(STAGE_Y/textHigh/8) ;
 
-	var centerX = STAGE_X * 3/4;
-	var centerY = STAGE_Y * 4/5;
+	//	var centerX = STAGE_X * 3/4;
+	//	var centerY = STAGE_Y * 4/5;
+	var centerX = STAGE_X * 0.8;
+	var centerY = STAGE_Y * 0.6;
 
 	var nextMsg = new Kinetic.Text({
 		x: centerX - textAllWidth/2,
@@ -3047,7 +3062,7 @@ function setNextLevel()
 		gLevelId = 1;
 
 		// incrementamos el nro de problema a resolver
-		setStorage("nroProblema", nProblema);
+		setStorage("nroProblemaStored", nProblema);
 
 		if(++gBoardSizeId >= boardSizeInfo.length) {
 			//reset board size
@@ -3068,7 +3083,7 @@ function setNextProblem()
 		//	reset nProblema 
 		nProblema = 1;
 	}
-	setStorage("nroProblema", nProblema);
+	setStorage("nroProblemaStored", nProblema);
 }
 
 
@@ -3172,13 +3187,17 @@ function getSystemLanguage()
 // Text message to screen (for debug only)
 //===============================================
 function writeMessage(message) {
+	
 	var context = gMessageLayer.getContext();
 
 	gMessageLayer.clear();
-	context.font = '28pt arial';
-	context.fillStyle = 'maroon';
-	context.fillText(message, STAGE_X/2-message.length*9.5, STAGE_Y/2+BLOCK_CELL_SIZE * (SCREEN_BOARD_Y/2));
+	//	context.font = '24pt sriracharegular';
+	context.font = '20pt robotomedium';
+	context.fillStyle = '#faa';
+	//	context.fillText(message, STAGE_X/2-message.length*9.5, STAGE_Y * 0.7 +BLOCK_CELL_SIZE * (SCREEN_BOARD_Y/2));
+	context.fillText(message, STAGE_X/2-message.length*9.5, STAGE_Y * 0.9 );
 	gBoardLayer.draw(); //FOR: firefox first time will not display 10/21/2012
+
 }
 
 //==============================================
@@ -3207,18 +3226,16 @@ function dumpBoard(board) {
 //=======================================================================
 //	funciones w
 //=======================================================================
-function wAgregaCuadrominoFijo(pos)	// coloca cuadromino fijo
-//	id: identifica el cuadromino fijo. No es necesario porque cargo un único cuadromino
-//	pos: posición del cuadromino en el tablero.
+function wAgregatetrominoFijo(pos)	// coloca tetromino fijo
+//	id: identifica el tetromino fijo. No es necesario porque cargo un único tetromino
+//	pos: posición del tetromino en el tablero.
 //	esta funcion debe tomar cuadrómino de una tabla que vincule
 //	nro de problema con cuadrómino a colocar y posición
 {
-	if (DEBUG2)
-	{
-		console.log("linea 2849, Ingresando a wAgregaCuadrominoFijo(pos)");
-		console.log("linea 2850, pos.x: " + pos.x );
-		console.log("linea 2851, pos.y: " + pos.y );
-		console.log("linea 2852, wCuadromGroup[nCuadromId].blockStyle[0]: " + wCuadromGroup[nCuadromId].blockStyle[0][0] );
+	if (DEBUG2)	{		console.log("Ingresando a wAgregatetrominoFijo(pos)" +
+		"\npos.x: " + pos.x +
+		"\npos.y: " + pos.y +
+		"\nwTetromGroup[nTetromId].blockStyle[0]: " + wTetromGroup[nTetromId].blockStyle[0][0] );
 	}
 
 	var fixedPoly;
@@ -3226,11 +3243,11 @@ function wAgregaCuadrominoFijo(pos)	// coloca cuadromino fijo
 
 		//	block recibirá la posición relativa de cada cuadradito
 		//	usamos blockStyle[0] porque es el único definido. Diferencia con pentominos
-		var block = dupOpBlock(wCuadromGroup[nCuadromId].blockStyle[0], 0, 0);
+		var block = dupOpBlock(wTetromGroup[nTetromId].blockStyle[0], 0, 0);
 
 		var poly = block2Polygon(block);	//	convierte sistema de coordenadas de bloque a coordenadas de poligono
 
-		if (DEBUG2) { console.log('linea 2865, wAgregaCuadromino fijo, poly: ' + poly ); };
+		if (DEBUG2) { console.log('linea 2865, wAgregatetromino fijo, poly: ' + poly ); };
 
 		//	pos viene como parametro
 		//	var pos = solvedPos2BoardPos(op, gBlockGroup[id].pos)
@@ -3271,7 +3288,7 @@ function wAgregaCuadrominoFijo(pos)	// coloca cuadromino fijo
 		//	fixedPoly.centerPos = centerPos;
 
 		//
-		//	gBlockCellUsed += wCuadromGroup[nCuadromId].block.length;
+		//	gBlockCellUsed += wTetromGroup[nTetromId].block.length;
 		gBlockCellUsed += gFixedPolyGroup[polyId].block.length;
 		gBlockUsed++;
 
@@ -3279,14 +3296,10 @@ function wAgregaCuadrominoFijo(pos)	// coloca cuadromino fijo
 		gBoardLayer.add(fixedPoly);
 
 		//	veamos cuales son los parametros que se van a pasar
-		if (DEBUG2)
-		{
-			//	console.log('gBoardState---->' + gBoardState );
-			//	console.log( '-'.repeat(16) + ' gBoardState' );
+		if (DEBUG2)		{
 			dumpBoard(gBoardState);
-			//	console.log( '-'.repeat(12));
 			console.log( 'pos : ' + pos.x + ' , ' + pos.y            );
-			console.log('llamamos a insertBlockToBoard() desde wAgregaCuadrominoFijo(pos)	'); 
+			console.log('llamamos a insertBlockToBoard() desde wAgregatetrominoFijo(pos)	'); 
 		}
 
 
@@ -3319,11 +3332,10 @@ function wCreateCuadrado(blockGroup, fixedBlock)
 
 	gBlockCellUsed += blockGroup[id].blockStyle[0].length;
 	gBlockUsed++;
- 	if (DEBUG)
-	{
-		console.log('linea 2888, blockGroup    : ' + blockGroup);
-		console.log('linea 2889, blockGroup[0]: ' + blockGroup[0]);
-		console.log('linea 2830, blockGroup[0].blockStyle.x: ' + blockGroup[0].blockStyle.x );
+ 	if (DEBUG)	{
+		console.log('blockGroup    : ' + blockGroup);
+		console.log('blockGroup[0]: ' + blockGroup[0]);
+		console.log('blockGroup[0].blockStyle.x: ' + blockGroup[0].blockStyle.x );
 		//	console.log('linea 3184, blockGroup[0].blockStyle: ' + blockGroup[0].blockStyle);
 	}
 
@@ -3376,22 +3388,22 @@ function CalcCeldasOcupadas()		//	arma un vector con los datos de las celdas ocu
 
 	if (DEBUG2)
 	{
-		console.log('linea 3025, wCuadromPos: ' + wCuadromPos );
-		console.log('linea 3026, wCuadromGroup[nCuadromId].blockStyle ' + wCuadromGroup[nCuadromId].blockStyle );
-		console.log('linea 3027, wCuadromGroup[nCuadromId].blockStyle[0] ' + wCuadromGroup[nCuadromId].blockStyle[0] );
-		console.log('linea 3027, wCuadromGroup[nCuadromId].blockStyle[0][0] ' + wCuadromGroup[nCuadromId].blockStyle[0][0] );
-		console.log('linea 3027, wCuadromGroup[nCuadromId].blockStyle[0][0].x ' + wCuadromGroup[nCuadromId].blockStyle[0][0].x );
-		console.log('linea 3029, wCuadromPos[0].x ' + wCuadromPos.x );
-		console.log('linea 3030, wCuadromGroup[nCuadromId].blockStyle[0][0].y ' + wCuadromGroup[nCuadromId].blockStyle[0][0].y );
-		console.log('linea 3031, wCuadromPos[0].y ' + wCuadromPos.y );
+		console.log('linea 3025, wTetromPos: ' + wTetromPos );
+		console.log('linea 3026, wTetromGroup[nTetromId].blockStyle ' + wTetromGroup[nTetromId].blockStyle );
+		console.log('linea 3027, wTetromGroup[nTetromId].blockStyle[0] ' + wTetromGroup[nTetromId].blockStyle[0] );
+		console.log('linea 3027, wTetromGroup[nTetromId].blockStyle[0][0] ' + wTetromGroup[nTetromId].blockStyle[0][0] );
+		console.log('linea 3027, wTetromGroup[nTetromId].blockStyle[0][0].x ' + wTetromGroup[nTetromId].blockStyle[0][0].x );
+		console.log('linea 3029, wTetromPos[0].x ' + wTetromPos.x );
+		console.log('linea 3030, wTetromGroup[nTetromId].blockStyle[0][0].y ' + wTetromGroup[nTetromId].blockStyle[0][0].y );
+		console.log('linea 3031, wTetromPos[0].y ' + wTetromPos.y );
 
 	}
 
-	for (var i = 0; i < wCuadromGroup[nCuadromId].blockStyle[0].length; i++ )
+	for (var i = 0; i < wTetromGroup[nTetromId].blockStyle[0].length; i++ )
 	{
 		aCeldas[i] = {};
-		aCeldas[i].x = wCuadromGroup[nCuadromId].blockStyle[0][i].x + wCuadromPos.x;
-		aCeldas[i].y = wCuadromGroup[nCuadromId].blockStyle[0][i].y + wCuadromPos.y;
+		aCeldas[i].x = wTetromGroup[nTetromId].blockStyle[0][i].x + wTetromPos.x;
+		aCeldas[i].y = wTetromGroup[nTetromId].blockStyle[0][i].y + wTetromPos.y;
 	};
 
 	return aCeldas;
@@ -3400,7 +3412,6 @@ function CalcCeldasOcupadas()		//	arma un vector con los datos de las celdas ocu
 
 
 function muestraBotonOperador(poly) {
-	//	console.log('----	function muestraBotonOperador(poly)	')
 	var cx = poly.getPosition().x;
 	var cy = poly.getPosition().y;
 
@@ -3520,49 +3531,18 @@ function addContorno2Layer()
 //------------------------------------------
 var CANTPROBLEMAS = 103;
 
-	function PresentaOpciones() {
-		var txt = '<select id="mySelect">'
-		for (var i = 1; i <= CANTPROBLEMAS ; i++ ) {
-			txt += '<option>' + i + '</option>'
-		}
-		txt += '</select>'
-
-        document.getElementById("problema").innerHTML = txt;
-
-	};
-
-	function myFunction() {
-		//	obtener y mostrar el valor elegido	
-		var x = document.getElementById("mySelect").selectedIndex;
-		alert(document.getElementsByTagName("option")[x].value + ", " + x);
-	};
-
-
-
-/*
-function initProblema() {
-	document.getElementById("myNumber").value = NroProblema();
-	function getNroProbl()
-
-	console.log( document.getElementById("myNumber").value );
-};
-
-
-
-
-function myFunction() {
-	if (myNumber.value > CANTPROBLEMAS || myNumber.value < 1 ) {
-		console.log(" numero muy grande! ( ... o muy chico )" );
-		document.getElementById("myNumber").value = NroProblema();
+function PresentaOpciones() {
+	var txt = '<select id="mySelect">'
+	for (var i = 1; i <= CANTPROBLEMAS ; i++ ) {
+		txt += '<option>' + i + '</option>'
 	}
-}
+	txt += '</select>'
 
+	document.getElementById("problema").innerHTML = txt;
 
-function NroProblema() {
-	return Math.ceil(Math.random() * CANTPROBLEMAS );
 };
 
-*/
+
 
 //-----------------
 // on level change
@@ -3579,15 +3559,19 @@ function levelButton(id)
 //---------------------------------------
 function selectIdioma() {
 
+const 
+	flagWidth	= 1.5 * BLOCK_CELL_SIZE,
+	flagHeight= 0.94 * BLOCK_CELL_SIZE;		//	60
+
 //	idioma ingles
 var imgEng = new Image();
 imgEng.onload = function() {
 	var english = new Kinetic.Image({
-		x: SCREEN_X - 400,
-		y: 20,
+		x: STAGE_X - 6.0 * BLOCK_CELL_SIZE,
+		y: 0.3 * BLOCK_CELL_SIZE,
 		image: imgEng,
-		width: 100,
-		height: 60
+		width:	flagWidth,			//	100,
+		height: flagHeight			//	60
 	});
 	gInitLayer.add(english);			// add the shape to the gInitLayer        
 	gStage.add(gInitLayer);			// add the layer to the stage
@@ -3598,14 +3582,14 @@ imgEng.src = 'images/ingles.jpg';
 var imgEsp = new Image();
 imgEsp.onload = function() {
 	var espa = new Kinetic.Image({
-		x: SCREEN_X - 280,
-		y: 20,
+		x: STAGE_X - 4.2 * BLOCK_CELL_SIZE,
+		y: 0.3 * BLOCK_CELL_SIZE,
 		image: imgEsp,
-		width: 100,
-		height: 60
+		width:	flagWidth,			//	100,
+		height: flagHeight			//	60
 	});
 	gInitLayer.add(espa);			// add the shape to the gInitLayer        
-	gStage.add(gInitLayer);			// add the layer to the stage
+	//	gStage.add(gInitLayer);			// add the layer to the stage
 };
 imgEsp.src = 'images/espanol.jpg';
 
@@ -3613,11 +3597,11 @@ imgEsp.src = 'images/espanol.jpg';
 var imgDeu = new Image();
 imgDeu.onload = function() {
 	var aleman = new Kinetic.Image({
-		x: SCREEN_X - 160,
-		y: 20,
+		x: STAGE_X - 2.4 * BLOCK_CELL_SIZE,
+		y: 0.3 * BLOCK_CELL_SIZE,
 		image: imgDeu,
-		width: 100,
-		height: 60
+		width:	flagWidth,			//	100,
+		height: flagHeight			//	60
 	});
 	gInitLayer.add(aleman);			// add the shape to the gInitLayer        
 	gStage.add(gInitLayer);			// add the layer to the stage
@@ -3637,15 +3621,13 @@ function HaceInitLayer()  {//pantalla de inicio
 		x: gStage.getWidth() / 2,
 		y: (gStage.getHeight() * 0.3),
 		text: 'PENTO\nMANÍA',
-		fontSize: SCREEN_X/10,//130,
+		fontSize: STAGE_X/8,//130,
 		fontFamily: FONT_NIVEL1,//'Calibri',
-		fill: '#8a2',
-
+		fill: TITLE_COLOR,
 		shadowColor: 'black',
-		shadowBlur: 05,
+		shadowBlur: 5,
 		shadowOffset: [6,6],			//	2, 2],
 		shadowOpacity:0.7
-
 	});
 
 	// to align text in the middle of the screen, we can set the
@@ -3654,17 +3636,41 @@ function HaceInitLayer()  {//pantalla de inicio
 		x: simpleText.getWidth() / 2
 	});
 
-
-
-
 	// add the shapes to the layer
 	gInitLayer.add(simpleText);
-	//	console.log('simpleText, agregado');
+
+	var versionText = new Kinetic.Text({
+		x: gStage.getWidth() / 2,
+		y: (gStage.getHeight() * 0.7),
+		text: 'vers. ' + versionString,
+		fontFamily: FONT_NIVEL1,
+		fill: TITLE_COLOR,					//	BACKGROUND_COLOR,
+		fontSize: STAGE_X/24
+	});
+	versionText.setOffset({
+		x: versionText.getWidth() / 2
+	});
+	gInitLayer.add(versionText);
+
 
 	selectIdioma();
 
-	gStage.add(gInitLayer);
+	if (DEBUG)	{
+		var debugTxt = new Kinetic.Text({
+			x: gStage.getWidth() *0.24,
+			y: (gStage.getHeight() * 0.8),
+			text: 'SCREEN_X, SCREEN_Y: ' + SCREEN_X + ', ' + SCREEN_Y+ ', ' ,  //	ancho y alto de pantalla en px
+			fontSize: 24,//130,
+			fontFamily: FONT_NIVEL3,
+			fill: '#fed'
+		});
+		gInitLayer.add(debugTxt);
+	}
 
+	//	aqui se deberia agregar botones preparados para la initLayer
+
+	gStage.add(gInitLayer);
+	
 };
 
 

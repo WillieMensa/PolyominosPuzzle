@@ -28,9 +28,12 @@
 
 	<!-- el script que sigue está basado en pentomino.puzzle.js del original -->
 	<script src="ajustes.js"></script>
-	<script src="pentomino-puzzle-062.js"></script>
+
+	<script src="pentomino-puzzle-0651.js"></script>
 
 	<script src="status.js"></script>
+
+	<script src="stage_grilla.js"></script>
 
 
 	<script src="polySolution.js"></script>
@@ -41,21 +44,24 @@
 </head>
 
 <!-- <body onload="init()"> -->
-<body >
+<body id="mainBody">
 
 
-<div id="container" >
-	<h1>Pentomania</h1>
-	<h2>version 0.6.2</h2>
-	<p>prueba</p>
+<!-- <div id="container" class='center'   style='align-self: center;'> -->
+<!-- <canvas id="myCanvas" style="border:2px solid #aa6600;"> -->
+	<div id="container">
+		<h1>Pentomania</h1>
+		<h2>version 0.6.4</h2>
+		<p>prueba</p>
 
-</div>
+	</div>
+<!-- </canvas> -->
+
 
 <div id="ProblemSelect">
 	<label for="nroProblema">Problema número (1-103):</label>
-	<input type="number" id="nroProblema" name="nroProblema" min="1" max="103" onclick="updateProb()" >
-	<!-- value="42" -->
-
+	<!-- <input type="number" id="nroProblema" name="nroProblema" min="1" max="103" onclick="updateProb()" > -->
+	<input type="number" id="nroProblema" name="nroProblema" min="1" max="103" onclick="setNroProbl()" >
 </div>
 
 
@@ -71,11 +77,12 @@
 <!-- experimento boton para girar -->
 <!-- <div id="giro"><input type="button" id="giraPieza" onclick="giraPieza();" value="&#X21BB;"></div> -->
 <!-- <div id="voltea"><input type="button" id="volteaPieza" onclick="volteaPieza();" value="&#X2194;"></div> -->
-<div id="check"><input type="checkbox" id="checkButton" onclick="checkButton(this.checked);">
-	<span id="checkboxtext">Verifica Soluci&oacute;n</span>
+<div id="check">
+	<input type="checkbox" id="checkButton" name="checkButton" value="Bike" onclick="checkButton(this.checked);">
+	<span id="checkboxtext" style='text-align: left;'>Verifica Soluci&oacute;n</span>
 </div>
 
-<div id="jugar"><input type="button" id="jugarButton" onclick="jugarButton(1);" value="Play"></div>
+<!-- <div id="jugar"><input type="button" id="jugarButton" onclick="jugarButton(1);" value="Play"></div> -->
 
 </body>
 </html>

@@ -259,7 +259,10 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 ### version		= "0.6.2"	-	16/7/2019
 	Se incorpora la seleccion de problema y el avance automatico a un nuevo problema al resolver el actual.
 	Preparada para ser publicada con muchos defectos.
+	Esta version no se ve para nada bien en Android ???
 
+### version		= "0.6.3"	-	19/7/2019
+	Corregir tamaños en diferentes pantallas
 
 ### Corecciones a realizar
 	Detalles menores de iconos, texto descripcion
@@ -269,6 +272,18 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 	Compilar archivo js
 	Encuestar grado de dificultad de los diferentes problemas.
 	Idiomas alternativos
+
+	#### version     = "0.6.4"	-	19/7/2019
+	El uso de escala para los layers no me funciona.
+	Reintento con tres o cuatro medidas alternativas de pantallas.
+
+	#### version     = "0.6.5"	-	22/7/2019
+	mejorar las proporciones de los elementos.
+
+	#### version     = "0.6.51"	-	24/7/2019
+	modifico la forma de dimensionar el canvas
+	siendo que tengo las pantas clasificadas por tamaño en cuatro grupos
+	experimentalmente voy a adoptar 4 grupos de medidas para medidas
 
 
 

@@ -64,6 +64,7 @@ function	HaceStatusLayer()	{
 	gStatusLayer.add(simpleText);
 	//	console.log('simpleText, agregado');
 
+	//	gStatusLayer.setScale( STAGE_SCALE );	
 
 	gStage.add(gStatusLayer);
 

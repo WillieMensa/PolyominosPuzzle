@@ -3,8 +3,6 @@ PUZZLE CON ROTACION Y TRASLADO
 Hasta hoy, 15/5/2018, lo mejorcito y mas  parecido a lo que quiero hacer con mi puzzle de pentominos.
 
 Utiliza kinetics.js
-
-*----------------------------
 15/6/2018
 
 
@@ -28,3 +26,134 @@ just for fixed: chrome sets cursor to text while dragging, why?
 
 Solucion problema poliominos: 
 	http://godel.hws.edu/java/pent1.html
+
+
+
+
+
+=============================================================
+NOTAS SOBRE PENTOMANIA
+=============================================================
+
+
+keystore??
+	Key Id  Title                                  Status    Last Used   Uploaded
+	------  -------------------------------------  --------  ----------  ----------
+	339924  SUMADO                                 LOCKED    2018-10-11  2018-08-10
+	339969  almacendeclaves                        LOCKED    2018-08-10  2018-08-10
+	360002  Alamacen de claves 20181224            LOCKED    2018-12-24  2018-12-24
+	no	360003  meorioso                               LOCKED    2019-01-05  2018-12-24
+	no	361200  Memoria y concentracion                LOCKED    2019-01-05  2019-01-05
+	no	361754  M-TIMERo2                             LOCKED    2019-01-09  2019-01-09
+	361772  memorioso                              LOCKED    2019-01-17  2019-01-09
+
+
+PHONEGAP
+2710177  Hola mundo                   1.0.0    FAILED    SUCCESS   SUCCESS   2017-07-14
+2713798  SUMADO                       1.7.5    SKIPPED   SUCCESS   SKIPPED   2018-10-25
+2742754  Screen Test                  1.0.0    SKIPPED   SUCCESS   SKIPPED   2017-08-06
+3272762  AdMobTest                    1.1.0    FAILED    SUCCESS   SKIPPED   2018-08-24
+3279073  TestAdMob                    0.0.1    FAILED    SUCCESS   SUCCESS   2018-08-23
+3281411  Salta la cuerda              1.0.40   FAILED    SUCCESS   SUCCESS   2018-08-30
+3286546  PhoneGap Example para admob  1.0.0    FAILED    SUCCESS   SUCCESS   2018-08-30
+3287700  PG Build App                          FAILED    SUCCESS   SUCCESS   2018-08-31
+3306776  Tercera Prueba               0.1.3    SKIPPED   SUCCESS   SKIPPED   2018-09-19
+3314127  Pentomania                   0.6.2    SKIPPED   SUCCESS   SKIPPED   2019-07-16
+3414713  MEMORIOSO                    2.0.3    SKIPPED   FAILED    SKIPPED   2019-03-28
+3544683  MTIMER                       0.10.02  SKIPPED   SUCCESS   SKIPPED   2019-06-08
+
+
+===================================================
+Generacion de claves para keystore
+===================================================
+
+"c:\Program Files\Android\Android Studio\jre\bin\keytool.exe" -alias pentomania -genkeypair -v -keyalg RSA -keypass termopilas -keysize 2048 -keystore pentomania.keystore -storepass termopilas -validity 10000 
+
+"c:\Program Files\Android\Android Studio\jre\bin\keytool.exe" 
+ -alias pentomania 
+ -genkeypair -v 
+ -keyalg RSA 
+ -keypass termopilas
+ -keysize 2048 
+ -keystore pentomania.keystore 
+ -storepass termopilas
+ -validity 10000
+
+-----------------------------------------------------------------------
+De la siguiente forma se genero el almacen de claves para este producto
+-----------------------------------------------------------------------
+E:\Dropbox\GitHub\PolyominosPuzzle>"c:\Program Files\Android\Android Studio\jre\bin\keytool.exe" -alias pentomania -genkeypair -v -keyalg RSA -keypass termopilas -keysize 2048 -keystore pentomania.keystore -storepass termopilas -validity 10000
+¿Cuáles son su nombre y su apellido?
+  [Unknown]:  Willie Verger
+¿Cuál es el nombre de su unidad de organización?
+  [Unknown]:  unipersonal
+¿Cuál es el nombre de su organización?
+  [Unknown]:  Clever Games
+¿Cuál es el nombre de su ciudad o localidad?
+  [Unknown]:  Rosario
+¿Cuál es el nombre de su estado o provincia?
+  [Unknown]:  Santa Fe
+¿Cuál es el código de país de dos letras de la unidad?
+  [Unknown]:  ar
+¿Es correcto CN=Willie Verger, OU=unipersonal, O=Clever Games, L=Rosario, ST=Santa Fe, C=ar?
+  [no]:  si
+
+Generando par de claves RSA de 2.048 bits para certificado autofirmado (SHA256withRSA) con una validez de 10.000 días
+        para: CN=Willie Verger, OU=unipersonal, O=Clever Games, L=Rosario, ST=Santa Fe, C=ar
+[Almacenando pentomania.keystore]
+
+
+En phonegap build
+name/title	pentomania
+alias		pentomania
+keystore pass	termopilas
+
+
+
+-----------------------------------------------------------
+
+COMPILACION PHONEGAP desde la linea de comando
+
+codigo de la aplicacion PENTOMANIA en Phonegap: 3314127
+
+# Sign-in to PhoneGap Build. login
+  pgb login
+
+  You will be prompted for Adobe ID and password. Once authenticated your
+  authentication token will be saved at ~/.pgbrc. Your Adobe ID and
+  password is not stored.
+  Adobe	ingverger@gmail.com	m0z4mB1qu3	ingverger@gmail.com
+
+
+# create a new app from a github repo
+> pgb new shazamable/repoodly
+
+
+# list your apps
+> pgb ls
+
+
+# actualizar el codigo en Phonegap
+  pgb update 3314127
+  pgb pull 3314127
+
+
+# unlock	Unlock a signing key
+pgb unlock android 3314127 key_password=termopilas keystore_password=termopilas
+
+# construir/compilar la aplicacion
+pgb build 3314127
+
+
+
+#descargar la aplicacion en carpeta dropbox
+  pgb download 3314127 android e:\Dropbox\GitHub\PolyominosPuzzle\.privado\apk\
+
+#descargar la aplicacion en carpeta descargas
+https://build.phonegap.com/apps/3314127/download/android/
+?qr_key=o1ZWQFqH26stWAkGASL5
+
+
+https://build.phonegap.com/apps/3544683/install/o1ZWQFqH26stWAkGASL5
+
+

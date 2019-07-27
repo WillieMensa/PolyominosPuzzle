@@ -24,10 +24,7 @@ function HaceConfigLayer(){
 	//		x: simpleText.getWidth() / 2
 	//	});
 
-
-	// add the shapes to the layer
 	gConfigLayer.add(simpleText);
-	//	console.log('simpleText, agregado');
 
 
 	gStage.add(gConfigLayer);
@@ -56,7 +53,7 @@ gInitLayer.destroy();
 
 gHelpLayer.destroy();
 gAboutLayer.destroy();
-gStatusLayer.destroy();
+//	gStatusLayer.destroy();
 
 
 HaceConfigLayer();
@@ -66,16 +63,33 @@ HaceConfigLayer();
 //	helpBtn.disabled=false;
 //	aboutBtn.disabled=false;
 
-menuBtn.style.visibility='visible';			//	menu ppal
-nroProbBtn.style.visibility='visible';
-
+document.getElementById('ProblemSelect').style.cssText = 
+	"top:" + (STAGE_OFFSET_Y + 0.6 * STAGE_Y) + "px; left:" + 
+	(STAGE_OFFSET_X + 0.33 * STAGE_X) + "px; position: absolute; font:" + (16) + "px roboto white";
 document.getElementById('ProblemSelect').style.visibility='visible';
+document.getElementById('ProblemSelect').style.disabled=false;
 
-if (DEBUG) { console.log('nProblema: ' + nProblema ); };
 
+if (DEBUG) {	console.log('ProblemSelect.style.cssText: ' + document.getElementById('ProblemSelect').style.cssText)}
+
+//	document.getElementById('nroProblema').style.cssText = "font: bold 20px roboto grey";
 document.getElementById('nroProblema').value = nProblema;
+//	document.getElementById('nroProblema').style.value = parseInt(nProblema);
+document.getElementById('nroProblema').style.defaultValue = nProblema;
+//	document.getElementById('nroProblema').style.color = "red";
+document.getElementById('nroProblema').style.disabled=false;
 document.getElementById('nroProblema').style.visibility='visible';
-//	document.getElementById('nroProblema').disabled=false;
+
+if (DEBUG) { console.log('nProblema: ' + nProblema +
+	'\nnroProblema.defaultValue: ' + document.getElementById('nroProblema').style.defaultValue+
+	'\nnroProblema.Value: ' + document.getElementById('nroProblema').value ); };
+
+//	nroProblema.value = nProblema;
+//	document.getElementById('nroProblema').value = nProblema;
+menuBtn.style.visibility='visible';			//	menu ppal
+//	nroProbBtn.style.visibility='visible';
+//	nroProblema.style.visibility='visible';
+//	nroProblema.disabled=false;
 
 
 }
@@ -88,9 +102,13 @@ document.getElementById('nroProblema').style.visibility='visible';
 //----------------------------------
 function setNroProbl() {
 
-	console.log('en setNroProbl()\nnro de problema antes: ' + nProblema);	
-	nProblema = parseInt(document.getElementById('nroProblema').value);	
-	setStorage("nroProblema", nProblema);
+var n = document.getElementById('nroProblema').style.value;
+
+	console.log('en setNroProbl()\nnro de problema antes: ' + nProblema + ', ' + n );	
+	nProblema = parseInt( document.getElementById('nroProblema').value);	
+	console.log('nro de problema fijado: ' + nProblema);
+
+	setStorage("nroProblemaStored", nProblema);
 	console.log('nro de problema fijado: ' + nProblema);
 }
 
@@ -99,7 +117,8 @@ function setNroProbl() {
 //-------------------------------------------
 function getNroProbl()
 {
-	let nCual = parseInt(getStorage("nroProblema"));
+	//	let nCual = parseInt(getStorage("nroProblemaStored"));
+	let nCual = getStorage("nroProblemaStored");
 
 	if(isNaN(nCual) || nCual < 1 || nCual > CANTPROBLEMAS )
 	{
