@@ -176,8 +176,8 @@ var gBlockUsed = 0;		//	how many block used
 
 
 const	
-	DEBUG = true,
-	//	DEBUG = false,
+	//	DEBUG = true,
+	DEBUG = false,
 	DEBUG2 = false;
 
 //====================================
