@@ -58,26 +58,8 @@
 		background-color: #666;
 		max-width: 400px;
 		max-height: 320px;
-  margin: auto;
 		transform: scale(0.28,0.28);
 	}
-
-/*
-	button {
-		background: #669900;
-		border-radius: 4px;
-		border: none;
-		font-family: 'sriracharegular';
-		font-size: 4px;
-		font-weight: bold;
-		line-height: 8px;
-		margin-top: 5px;
-		padding: 0 0px;
-		width: 50px;
-		height: 8px;
-	}
-*/
-
 }
 
 /*
@@ -88,28 +70,12 @@
 /*	screen size 400-640  */
 @media screen and (max-width:640px)  and (min-width:400px) {
 	body {
-		background-color: #600;
+		background-color: #060;
 		max-width: 600px;
 		max-height: 480px;
-  margin: auto;
 		transform: scale(0.4,0.4);
 	}
 
-/*
-	button {
-		background: #669900;
-		border-radius: 8px;
-		border: none;
-		font-family: 'sriracharegular';
-		font-size: 6px;
-		font-weight: bold;
-		line-height: 16px;
-		margin-top: 10px;
-		padding: 0 0px;
-		width: 100px;
-		height: 13px;
-	}
-*/
 
 }
 
@@ -117,26 +83,11 @@
 /*	mid screen size 640-1024  */
 @media screen and (max-width:1024px)  and (min-width:640px) {
 	body {
-		background-color: #600;
+		background-color: #006;
 		max-width: 800px;
 		max-height: 640px;
 		transform: scale(0.64,0.64);
 	}
-/*
-	button {
-		background: #669900;
-		border-radius: 8px;
-		border: none;
-		font-family: 'sriracharegular';
-		font-size: 10px;
-		font-weight: bold;
-		line-height: 16px;
-		margin-top: 10px;
-		padding: 0 0px;
-		width: 100px;
-		height: 20px;
-	}
-*/
 }
 
 
@@ -148,23 +99,6 @@
 		max-height: 600px;
 		transform: scale(1,1); /* Standard syntax */
 	}
-/*
-	button {
-		background: #669900;
-		border-radius: 8px;
-		border: none;
-		font-family: 'sriracharegular';
-		font-size: 16px;
-		font-weight: bold;
-		line-height: 16px;
-		margin-top: 10px;
-		padding: 0 0px;
-		width: 100px;
-		height: 32px;
-	}
-*/
-
-
 }
 
 
