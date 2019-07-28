@@ -176,8 +176,8 @@ var gBlockUsed = 0;		//	how many block used
 
 
 const	
-	//	DEBUG = true,
-	DEBUG = false,
+	DEBUG = true,
+	//	DEBUG = false,
 	DEBUG2 = false;
 
 //====================================
@@ -287,10 +287,11 @@ function init()
 	if (DEBUG) { DibujaGrilla()	}
 
 	//debug
-	if (DEBUG) {
-		console.log( "writeMessage( cell, etc." );
-		writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
+	if (DEBUG) {		
+		//	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
+		writeMessage('antes de llamar a MenuInicial()');
 	}
+
 	MenuInicial();
 
 }
@@ -447,16 +448,7 @@ function MenuInicial() {
 	
 	HaceInitLayer();
 
-
-	//	enableMnuButton()		// enable buttons in main menu
-	//	helpBtn.disabled=false;
-	//	aboutBtn.disabled=false;
-	//	configBtn.disabled=false;
-
-	//	visibleMnuButton()
-	//	helpBtn.visible = false;
-	//	aboutBtn.visible = false;
-	//	configBtn.visible = false;
+	if (DEBUG){	writeMessage('despues de HaceInitLayer()')};
 
 	aboutBtn.style.visibility='visible';
 	helpBtn.style.visibility='visible';			//	help button
@@ -468,12 +460,15 @@ function MenuInicial() {
 	hintBtn.style.visibility='hidden';			//	menu ppal
 
 	//	document.getElementById('nroProblema').style.visibility='hidden';
-	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
+	//	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
 
 	//	cTransfProp
 	//	document.getElementById("mainBody").style.transform = cTransfProp;
 
-	if (DEBUG) { console.log('nProblema: ' + nProblema ); };
+	if (DEBUG) { console.log('nProblema: ' + nProblema ) };
+	if (DEBUG) { writeMessage('final de MenuInicial()') };
+	writeMessage('final de MenuInicial()');
+
 
 }
 
@@ -2482,7 +2477,7 @@ function checkButton(checked)
 {
 	checkSolution = checked;
 
-	writeMessage("");
+	writeMessage('');
 	if(gBlockCellUsed >= gTotalBlockCell) return; //solved
 	if(checkSolution) check();
 }
@@ -3204,10 +3199,10 @@ function writeMessage(message) {
 
 	gMessageLayer.clear();
 	//	context.font = '24pt sriracharegular';
-	context.font = '20pt robotomedium';
-	context.fillStyle = '#faa';
+	context.font = '20pt sriracharegular';
+	context.fillStyle = '#fdb';
 	//	context.fillText(message, STAGE_X/2-message.length*9.5, STAGE_Y * 0.7 +BLOCK_CELL_SIZE * (SCREEN_BOARD_Y/2));
-	context.fillText(message, STAGE_X/2-message.length*9.5, STAGE_Y * 0.9 );
+	context.fillText(message, 0.5 * STAGE_X	- 10.5 * message.length, STAGE_Y * 0.9 );
 	gBoardLayer.draw(); //FOR: firefox first time will not display 10/21/2012
 
 }
@@ -3667,7 +3662,7 @@ function HaceInitLayer()  {//pantalla de inicio
 
 	selectIdioma();
 
-	if (DEBUG)	{
+	if (DEBUG2)	{
 		var debugTxt = new Kinetic.Text({
 			x: gStage.getWidth() *0.24,
 			y: (gStage.getHeight() * 0.8),
