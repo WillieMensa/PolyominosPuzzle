@@ -225,6 +225,18 @@ function init()
 
 	//	document.getElementById('levelButton').options[gLevelId-1].selected  = true;
 
+	try {
+		initLanguage();					//	adaptación a diferentes idiomas
+		initScreenVariable();		//	asigna valores a variables que controlan medidas en pantalla
+		initScreenPosColor();	
+	}
+	catch(err) {
+		writeMessage('error en primer block');
+	} 
+	//	finally {
+	//		Block of code to be executed regardless of the try / catch result
+	//	}
+
 	initLanguage();					//	adaptación a diferentes idiomas
 	initScreenVariable();		//	asigna valores a variables que controlan medidas en pantalla
 	initScreenPosColor();	
