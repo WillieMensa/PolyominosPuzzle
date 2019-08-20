@@ -779,7 +779,31 @@ function createStageLayer()
 	gAboutLayer		= new Kinetic.Layer();
 	gStatusLayer	= new Kinetic.Layer();
 
+	if (DEBUG)
+	{
+		var simpleText = new Kinetic.Text({
+			x: gStage.getWidth() / 2,
+			y: (gStage.getHeight() * 0.3),
+			text: 'PREPARANDO JUEGO',
+			fontSize: BLOCK_CELL_SIZE,
+			fontFamily: FONT_NIVEL1,//'Calibri',
+			fill: TITLE_COLOR
+		});
 
+		// to align text in the middle of the screen, we can set the
+		// shape offset to the center of the text shape after instantiating it
+		simpleText.setOffset({
+			x: simpleText.getWidth() / 2
+		});
+
+		// add the shapes to the layer
+		gInitLayer.add(simpleText);
+		gInitLayer.draw();
+
+
+		alert('arrancando...');
+
+	}
 }
 
 //------------------------------------------------
