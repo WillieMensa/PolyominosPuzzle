@@ -1,6 +1,6 @@
 <widget 
     id          = "ar.com.ingverger.pentomania"
-    version     = "0.6.51" >
+    version     = "0.6.61" >
 
 	<name>Pentomania</name>
 

@@ -1,0 +1,162 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<link href="https://fonts.googleapis.com/css?family=Amatica+SC:700|Bangers|Bungee|Bungee+Inline|Dosis|Sigmar+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Luckiest+Guy|Pacifico|Carter+One" rel="stylesheet">
+
+<style>* {padding: 0; margin: 0}
+
+body {
+	color: #111;
+	font-family: 'Luckiest Guy', cursive;
+	font-size: 5.00em;
+	height: auto;
+	margin:10; 
+	padding:10; 
+	border:02; 
+	background:#fff; 
+	overflow:hidden; 
+}
+	div { position:absolute; margin:0; padding:0; border:0; outline:0; 
+	font-family:arial; font-size:12px; color:white; text-align:center; }
+	#header { width:100%; top:24px; left:0px; }
+	#header a { color:white; }
+	#stats { width:100%; bottom:24px; left:0px; }
+	#playbutton:hover { background:red; }
+	#viewport { width:640px; height:480px; overflow:hidden; top:50%; left:50%; margin-left:-320px; margin-top:-240px; }
+	#level { width:2048px; height:100%; top:0px; left:0px; }
+	#background { width:100%; height:100%; top:0px; left:0px; }
+	.sprite { background-image:url(spritesheet.png); width:32px; height:32px; }
+	.trazo { fill:white; stroke:black;stroke-width:8;opacity:1.0; }
+	.auxiliar { fill:white; stroke:#456;stroke-width:1;opacity:1.0; }
+
+	.over { fill:url(#grad1);stroke:black;stroke-width:0;opacity:1.0 }
+	.up	{ fill:#06F;stroke:black;stroke-width:0;opacity:0.95		}
+	.down	{ fill:#04B;stroke:black;stroke-width:0;opacity:0.95		}
+	.txtblancoyborde { font-family: Carter One; font-size  : 40; stroke : #000; stroke-width : 2; fill : #eee; }
+	.txtblanco { font-family: Carter One; font-size  : 40; fill : #eee; }
+	.txtblancochico { font-family: Carter One; font-size  : 32; fill : #eee; }
+	.flecha { fill:url(#grad2);stroke:black;stroke-width:0;opacity:0.95 }
+
+
+
+
+</style>
+
+
+<svg width="100%" height="100%">
+
+<!-- lineas de guia para medir -->
+<line x1="000" y1="300" x2="1000" y2="300" class = "auxiliar" />
+<line x1="000" y1="350" x2="1000" y2="350" class = "auxiliar" />
+<line x1="000" y1="400" x2="1000" y2="400" class = "auxiliar" />
+<line x1="000" y1="450" x2="1000" y2="450" class = "auxiliar" />
+<line x1="000" y1="500" x2="1000" y2="500" class = "auxiliar" />
+<line x1="000" y1="550" x2="1000" y2="550" class = "auxiliar" />
+<line x1="000" y1="600" x2="1000" y2="600" class = "auxiliar" />
+<line x1="000" y1="650" x2="1000" y2="650" class = "auxiliar" />
+<line x1="000" y1="700" x2="1000" y2="700" class = "auxiliar" />
+<line x1="000" y1="750" x2="1000" y2="750" class = "auxiliar" />
+<line x1="000" y1="800" x2="1000" y2="800" class = "auxiliar" />
+<line x1="000" y1="850" x2="1000" y2="850" class = "auxiliar" />
+<line x1="000" y1="900" x2="1000" y2="900" class = "auxiliar" />
+
+<line x1="050" y1="350" x2="050" y2="700" class = "auxiliar" />
+<line x1="100" y1="350" x2="100" y2="700" class = "auxiliar" />
+<line x1="150" y1="350" x2="150" y2="700" class = "auxiliar" />
+<line x1="200" y1="350" x2="200" y2="700" class = "auxiliar" />
+<line x1="250" y1="350" x2="250" y2="700" class = "auxiliar" />
+<line x1="300" y1="350" x2="300" y2="700" class = "auxiliar" />
+<line x1="350" y1="350" x2="350" y2="700" class = "auxiliar" />
+<line x1="400" y1="350" x2="400" y2="700" class = "auxiliar" />
+<line x1="450" y1="350" x2="450" y2="700" class = "auxiliar" />
+<line x1="500" y1="350" x2="500" y2="700" class = "auxiliar" />
+<line x1="550" y1="350" x2="550" y2="700" class = "auxiliar" />
+<line x1="600" y1="350" x2="600" y2="700" class = "auxiliar" />
+
+<g fill="white" stroke="green" stroke-width="5" transform="translate(500 100) rotate(45)">
+	<rect id="R0" x="0" y="0" width="50" height="50" fill="#ffcc00" stroke="black" stroke-width="5" />
+	<use xlink:href="#R0" transform="translate(000 000)"/>
+	<use xlink:href="#R0" transform="translate(050 000)"/>
+	<use xlink:href="#R0" transform="translate(000 050)"/>
+	<use xlink:href="#R0" transform="translate(050 050)"/>
+	<use xlink:href="#R0" transform="translate(000 100)"/>
+</g>
+
+<!-- cuadradito -->
+
+<!-- piezas pentominos -->
+
+
+	<!-- I -->	
+	<polygon points="200,000 250,000 250,250 200,250"
+		style="fill: #660000; " />
+
+	<!-- N -->	
+	<!-- <rect x="1000" y="030" width="060" height="120" style="fill: #ccc" /> -->
+	<polygon points="0500,000 0550,000 0550,100 0500,100 0500,200 0450,200 0450,050 0500,050"									
+		style="fill: #ff6600; " />
+	
+	<!-- P -->	
+	<g fill="#ffcc00"
+		 transform="rotate(30 50 100)
+								translate(-360 45.5)" >
+		<polygon points="0600,000 0700,000 0700,100 0650,100 0650,150 0600,150"	/>
+
+	</g>
+
+	<!-- T -->	
+	<!-- <rect x="1180" y="030" width="090" height="090" style="fill: #ccc" /> -->
+	<g fill="#ffff00"
+		 transform="rotate(-10 50 100)
+								translate(-360 45.5)
+								skewX(40)
+								scale(1 0.5)">
+		<polygon points="0750,000 0900,000 0900,050 0850,050 0850,150 0800,150 0800,050 0750,050" />
+	</g>
+	
+	
+	<!-- U -->	
+	<!-- <rect x="730" y="210" width="060" height="090" style="fill: #ccc" /> -->
+	<polygon points="000,200 100,200 100,250 050,250 050,300 100,300 100,350 000,350"									
+		style="fill: #99ff00; " />
+	
+	<!-- V -->	
+	<!-- <rect x="820" y="210" width="090" height="090" style="fill: #ccc" /> -->
+	<polygon points="300,250 350,250 350,350 450,350 450,400 300,400"													
+		style="fill: #00cc00; " />
+	
+	<!-- W -->	
+	<!-- <rect x="940" y="210" width="090" height="090" style="fill: #ccc" /> -->
+	<polygon points="500,250 550,250 550,300 0600,300 0600,350 0650,350 0650,400 550,400 550,350 500,350"					
+	style="fill: #006600; " />
+	
+	
+	<!-- Y -->	
+	<!-- <rect x="1180" y="210" width="060" height="120" style="fill: #ccc" /> -->
+	<polygon points="1000,000 1050,000 1050,200 1000,200 1000,100 0950,100 0950,050 1000,050"									
+		style="fill: #0000ff; " />
+
+
+<!-- piezas tetrominos -->
+	<!-- T -->	
+	<!-- <rect x="0600" y="400" width="090" height="060" style="fill: #ccc" /> -->
+	<polygon points="0000,550 0150,550 0150,600 0100,600 0100,650 0050,650 0050,600 0000,600"			style="fill: #333; " />
+
+	<!-- S -->	
+	<!-- <rect x="0950" y="400" width="060" height="090" style="fill: #ccc" /> -->
+	<polygon points="0200,550 0250,550 0250,600 0300,600 0300,700 0250,700 0250,650 0200,650"			style="fill: #333; " />
+
+	<!-- I -->	
+	<!-- <rect x="0700" y="400" width="030" height="012" style="fill: #ccc" /> -->
+	<polygon points="0750,450 0800,450 0800,650 0750,650"			style="fill: #333; " />
+
+	<!-- L -->	
+	<!-- <rect x="0750" y="400" width="060" height="090" style="fill: #ccc" /> -->
+	<polygon points="0350,550 0400,550 0400,650 0450,650 0450,700 0350,700 "			style="fill: #333; " />
+
+	<!-- O -->	
+	<!-- <rect x="0840" y="400" width="060" height="090" style="fill: #ccc" /> -->
+	<polygon points="0500,550 0600,550 0600,650 0500,650"			style="fill: #333; " />
+
+</svg>

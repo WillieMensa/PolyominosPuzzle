@@ -16,18 +16,18 @@ function DibujaGrilla() {
 	while (posY<= STAGE_Y ) {
 		var horizLine = new Kinetic.Line({
 			points: [0, 0, STAGE_X, 0],
-			stroke: 'grey',
+			stroke: '#888',
 			strokeWidth: 1
 		});
 		horizLine.move(0, posY);
 		debugLayer.add(horizLine);
 
 		var nTxt = new Kinetic.Text({				
-			x: 10,
+			x: 25,
 			y: posY,
 			text: posY,
-			fontSize: 14,
-			fontFamily: 'sriracharegular',
+			fontSize: 16,
+			fontFamily: FONT_NIVEL3,
 			fill: '#bcd'
 		});
 		debugLayer.add(nTxt);
@@ -39,7 +39,7 @@ function DibujaGrilla() {
 	while (posX<= STAGE_X ) {
 		var vertLine = new Kinetic.Line({
 			points: [0, 0, 0, STAGE_Y],
-			stroke: 'grey',
+			stroke: '#888',
 			strokeWidth: 1
 		});
 		vertLine.move(posX, 0);
@@ -47,10 +47,10 @@ function DibujaGrilla() {
 
 		var nTxt = new Kinetic.Text({				
 			x: posX,
-			y: 10,
+			y: 25,
 			text: posX,
 			fontSize: 16,
-			fontFamily: 'sriracharegular',
+			fontFamily: FONT_NIVEL3,
 			fill: '#bcd'
 		});
 		debugLayer.add(nTxt);

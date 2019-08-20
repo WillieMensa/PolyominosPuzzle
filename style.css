@@ -1,7 +1,6 @@
 /*
 	style.css
 	22/4/2019
-	22/7/2019 - version	0.6.5
 */
 
 @font-face {
@@ -52,54 +51,77 @@
 */
 
 
-/*	screen size -400  */
+/*
+manejo con @media screen 
+	(trae problema con tamaños de objetos por eso anulo esta seccion???)
+*/
+@media screen and (min-width:1000px) {
+	body {
+		background-color: #006;	
+		transform: scale(1.0, 1.0);
+	}
+
+	button, input {
+		border-radius: 8px;
+		font-size: 1.6em;
+		line-height: 16px;
+		width: 140px;
+		height: 40px;
+	}
+
+}
+
+
+@media screen and (max-width:1000px) and (min-width:700px) {
+	body {
+		background-color: #0d0;
+		transform: scale(0.7, 0.7);
+	}
+	button, input {
+		border-radius: 6px;
+		font-size: 1.1em;
+		line-height: 11px;
+		width: 100px;
+		height: 28px;
+	}
+
+}
+
+
+@media screen and (max-width:700px) and (min-width:500px) {
+	body {
+		background-color: #0d0;
+		transform: scale(0.5, 0.5);
+	}
+	.setButton {
+		font-size:  5em;
+	}
+}
+
+
+@media screen and (max-width:500px)  and (min-width:400px) {
+	body {
+		background-color: #600;
+		transform: scale(0.4, 0.4);
+	}
+	.setButton {
+		font-size:  2em;
+	}
+}
+
 @media screen and (max-width:400px) {
 	body {
 		background-color: #666;
 		max-width: 400px;
-		max-height: 320px;
-		transform: scale(0.28,0.28);
+		max-height: 300px;
+		transform: scale(0.3, 0.3);
 	}
-}
-
-/*
-	limites de pantalla
-	400 640	1024	-	1.6 // height max 
-	320 512  820
-*/	
-/*	screen size 400-640  */
-@media screen and (max-width:640px)  and (min-width:400px) {
-	body {
-		background-color: #060;
-		max-width: 600px;
-		max-height: 480px;
-		transform: scale(0.4,0.4);
-	}
-
-
-}
-
-
-/*	mid screen size 640-1024  */
-@media screen and (max-width:1024px)  and (min-width:640px) {
-	body {
-		background-color: #006;
-		max-width: 800px;
-		max-height: 640px;
-		transform: scale(0.64,0.64);
+	.setButton {
+		font-size:  1em;
 	}
 }
 
 
-/*	max screen size 1024-  */
-@media screen and (min-width:1024px) {
-	body {
-		background-color: #006;	
-		max-width: 1000px;
-		max-height: 600px;
-		transform: scale(1,1); /* Standard syntax */
-	}
-}
 
 
 * {
@@ -115,12 +137,6 @@ h1 {
 
 h2 {
 	font-family: 'sriracharegular', cursive;
-	font-size: 12px;
-
-}
-
-p {
-	font-family: 'robotomedium;
 	font-size: 12px;
 
 }
@@ -146,20 +162,57 @@ p {
 	border: none;
 }
 
-
 /*
-#initButton, #demoButton {
-	background: #892;
-	border: none;
+input, label, select {
+	background: #ddeeff;
+	border-radius: 8px;
 	font-family: 'sriracharegular';
-	font-size: 1em;
-	font-weight: bold;
-	line-height: 40px;
-	margin-top: 20px;
-	padding: 0 0px;
+	font-size: 16px;
+	text-align: right;
+	padding: 4px 4px;
+	color: #222244;
 	width: 120px;
 }
 
+
+#checkboxtext, input, select {
+	font-size: 1.6em;
+	color: 'white';
+	visibility: hidden;
+}
+*/
+
+#checkButton {
+	font-family: 'sriracharegular';
+	font-size: 1.6em;
+	width: 30px;
+}
+
+#check, #checkboxtext {
+	border: none;
+	font-family: 'sriracharegular';
+	font-size: 1.6em;
+	font-weight: normal;
+	/*	line-height: 10px;	*/
+	margin: 0px;
+	padding: 0 0px;
+	width: 200px;
+	visibility: hidden;
+}
+
+/*
+#giraPieza, #volteaPieza {
+	background: #892;
+	border-radius: 8px;
+	border: none;
+	display: block;
+	font-weight: bold;
+	font:  28px sriracharegular bold ;
+	margin-top: 5px;
+	padding: 0px;
+	width: 100px;
+
+}
 */
 
 /*
@@ -167,57 +220,43 @@ p {
 	background: #9988ff;
 	border: 20;
 }
+
+#checkBtn {
+	background: #bbddff
+	border-radius: 8px;
+	font-size: 1.6em;
+	text-align: center;
+	padding: 4px 4px;
+	color: #112222;
+	width: 100px;
+}
 */
 
+#verifica {
+	background: #669900;
+	font-family: 'sriracharegular';
+	font-size: 1.6em;
+	font-weight: bold;
+	line-height: 16px;
+}
+
+
+button, input {
+	background: #669900;
+	border: none;
+	font-family: 'sriracharegular';
+	font-weight: bold;
+	margin-top: 10px;
+	padding: 0 0px;
+}
 
 #giraPieza, #volteaPieza {
-	font:  28px sriracharegular bold ;
-}
+	font:  40px sriracharegular bold ;
+	line-height: 6px;
 
-input, label, select, #nroProblema {
-	background: #669900;
-	border-radius: 8px;
-	border: none;
-	font-family: 'sriracharegular';
-	font-size: 20px;
-	font-weight: bold;
-	line-height: 16px;
-	text-align: center;
-	margin-top: 10px;
-	padding: 0 0px;
-	width: 100px;
-	height: 36px;
-}
-
-#checkboxtext {
-	border: none;
-	font-family: 'sriracharegular';
-	font-size: 20px;
-	font-weight: bold;
-	text-align: left;
-}
-
-button {
-	background: #669900;
-	border-radius: 8px;
-	border: none;
-	font-family: 'sriracharegular';
-	font-size: 20px;
-	font-weight: bold;
-	line-height: 16px;
-	margin-top: 10px;
-	padding: 0 0px;
-	width: 100px;
-	height: 36px;
 }
 
 button:hover {
   background: #ad1;
 }
 
-.center {
-  margin: auto;
-  border: 3px solid #73AD21;
-  padding: 10px;
-  align-self: center;
-}

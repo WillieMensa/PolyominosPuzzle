@@ -17,7 +17,7 @@
 
 
 	<!-- utilizo la version extendida de kinetics.js para tratar de entender el funcionamiento -->
-	<script src="kineticjs\kinetic-v4.4.3.min.js"></script>
+	<script src="e:\Dropbox\GitHub\LibreriasVarias\Kinetic-v4.4.3\kinetic-v4.4.3.min.js"></script>
 
 
 	<script src="animate.js"></script>
@@ -29,11 +29,11 @@
 	<!-- el script que sigue está basado en pentomino.puzzle.js del original -->
 	<script src="ajustes.js"></script>
 
-	<script src="pentomino-puzzle-0651.js"></script>
+	<script src="kinetic_grilla.js"></script>
+
+	<script src="pentomino-puzzle-0661.js"></script>
 
 	<script src="status.js"></script>
-
-	<script src="stage_grilla.js"></script>
 
 
 	<script src="polySolution.js"></script>
@@ -43,45 +43,21 @@
 
 </head>
 
-<!-- <body onload="init()"> -->
-<body id="mainBody">
+<body >
 
 
-<!-- <div id="container" class='center'   style='align-self: center;'> -->
-<!-- <canvas id="myCanvas" style="border:2px solid #aa6600;"> -->
-	<div id="container">
-		<h1>Pentomania</h1>
-		<h2>version 0.6.4</h2>
-		<p>prueba</p>
+<div id="container" >
+	<h1>Pentomania</h1>
+	<h2>version 0.6.6</h2>
+	<p>prueba</p>
 
-	</div>
-<!-- </canvas> -->
-
-
-<div id="ProblemSelect">
-	<label for="nroProblema">Problema número (1-103):</label>
-	<!-- <input type="number" id="nroProblema" name="nroProblema" min="1" max="103" onclick="updateProb()" > -->
-	<input type="number" id="nroProblema" name="nroProblema" min="1" max="103" onclick="setNroProbl()" >
 </div>
 
-
-<!-- botones pantalla menu inicial -->
-<!-- <div id="helpBtn"><input type="button" id="helpButton" onclick="help();" value="help"></div>  -->
-<!-- <div id="aboutBtn"><input type="button" id="aboutButton" onclick="about();" value="about"></div>  -->
-
-<!-- botones pantalla jugar -->
-<!-- <div id="hints"><input type="button" id="hintsButton" onclick="hintsButton();" value="Ayudita"></div>  -->
-<!-- <div id="reset"><input type="button" id="resetButton" onclick="resetButton();" value="Reinicia"></div> -->
-<!-- <div id="inicio"><input type="button" id="initButton" onclick="MenuInicial();" value="Inicio"></div> -->
-
-<!-- experimento boton para girar -->
-<!-- <div id="giro"><input type="button" id="giraPieza" onclick="giraPieza();" value="&#X21BB;"></div> -->
-<!-- <div id="voltea"><input type="button" id="volteaPieza" onclick="volteaPieza();" value="&#X2194;"></div> -->
-<div id="check">
+<!-- <div id="check">
 	<input type="checkbox" id="checkButton" name="checkButton" value="Bike" onclick="checkButton(this.checked);">
-	<span id="checkboxtext" style='text-align: left;'>Verifica Soluci&oacute;n</span>
+	<span id="checkboxtext">Verifica Soluci&oacute;n</span>
 </div>
-
+ -->
 <!-- <div id="jugar"><input type="button" id="jugarButton" onclick="jugarButton(1);" value="Play"></div> -->
 
 </body>

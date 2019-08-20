@@ -1,4 +1,4 @@
-# Pentomania Fatal
+# Pentomania
 
 ### Fuentes
 Desarrollado a partir de Polyomino Puzzle & Solver, codigo creado por Simon Hung
@@ -285,6 +285,11 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 	siendo que tengo las pantas clasificadas por tamaño en cuatro grupos
 	experimentalmente voy a adoptar 4 grupos de medidas para medidas
 
+	#### version     = "0.6.6"	-	18/8/2019
+	Luego de varias pruebas adopto un grupo de cinco escalas segun ancho de pantalla
+
+	#### version     = "0.6.61"	-	19/8/2019
+	Ajustes menores a la escala
 
 
 Se puede descargar desde
