@@ -16,14 +16,7 @@
 		Cada disposición diferentes de las celdillas ocupadas previamente da lugar a un problema. Los problemas son identificados numéricamente. El jugador puede seguir esa secuencia numérica o elegir los problemas arbitrariamente. Cada problema resuelto le suma puntos a su haber.
 		En caso de tener dificultades para encontrar la solución el jugador puede solicitar ayuda. Esta consiste en la colocacion de una pieza por parte de la aplicación y le restará un punto al finalizar el problema.		</description>
 		<author href="http://www.ingverger.com.ar/pentominos.php" email="ingverger@gmail.com">Guillermo Verger		</author>
-		<feature name="http://api.phonegap.com/1.0/battery" />
-		<feature name="http://api.phonegap.com/1.0/camera" />
-		<feature name="http://api.phonegap.com/1.0/contacts" />
-		<feature name="http://api.phonegap.com/1.0/file" />
-		<feature name="http://api.phonegap.com/1.0/geolocation" />
-		<feature name="http://api.phonegap.com/1.0/media" />
-		<feature name="http://api.phonegap.com/1.0/network" />
-		<feature name="http://api.phonegap.com/1.0/notification" />
+
 		<preference name="phonegap-version" value="cli-6.3.0" />
 		<preference name="android-build-tool" value="gradle" />
 		<preference name="orientation" value="default" />
@@ -55,8 +48,7 @@
 		<preference name="DisallowOverscroll" value="true" />
 		<preference name="LoadingDialog" value="Loading Pentomania,I'm loading pentomania. Please wait" />
 		<preference name="LoadUrlTimeoutValue" value="null" />
-		<platform name="ios">
-		</platform>
+
 		<platform name="android">
 		<icon src="file://E:\Dropbox\GitHub\PolyominosPuzzle\res\icon\android\drawable-ldpi-icon.png" qualifier="ldpi" />
 		<icon src="file://E:\Dropbox\GitHub\PolyominosPuzzle\res\icon\android\drawable-mdpi-icon.png" qualifier="mdpi" />
@@ -64,7 +56,6 @@
 		<icon src="file://E:\Dropbox\GitHub\PolyominosPuzzle\res\icon\android\drawable-xxhdpi-icon.png" qualifier="xxhdpi" />
 		<icon src="file://E:\Dropbox\GitHub\PolyominosPuzzle\res\icon\android\drawable-xxxhdpi-icon.png" qualifier="xxxhdpi" />
 		</platform>
-		<platform name="winphone">
-		</platform>
-		 <icon src="icon.png" />
+
+		<icon src="icon.png" />
 		</widget>
