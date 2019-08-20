@@ -61,7 +61,7 @@
 //=========
 // define
 //=========
-const versionString="0.6.6"			//	lleva el numero de version actual
+const versionString="0.6.61"			//	lleva el numero de version actual
 
 //-------------------------------------
 //	https://www.w3schools.com/colors/colors_picker.asp
@@ -184,8 +184,8 @@ var gBlockUsed = 0;		//	how many block used
 
 
 const	
-	DEBUG = true,
-	//	DEBUG = false,
+	//	DEBUG = true,
+	DEBUG = false,
 	DEBUG2 = false;
 
 //====================================
@@ -799,9 +799,6 @@ function createStageLayer()
 		// add the shapes to the layer
 		gInitLayer.add(simpleText);
 		gInitLayer.draw();
-
-
-		alert('arrancando...');
 
 	}
 }
