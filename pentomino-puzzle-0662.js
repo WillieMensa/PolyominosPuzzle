@@ -68,7 +68,7 @@
 //=========
 // define
 //=========
-const versionString="0.6.63"			//	lleva el numero de version actual
+const versionString="0.6.62"			//	lleva el numero de version actual
 
 //-------------------------------------
 //	https://www.w3schools.com/colors/colors_picker.asp
