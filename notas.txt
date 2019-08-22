@@ -153,6 +153,9 @@ pgb build 3314127
 https://build.phonegap.com/apps/3314127/download/android/
 ?qr_key=o1ZWQFqH26stWAkGASL5
 
+https://build.phonegap.com/apps/3314127/download/android/?qr_key=DXWj5gvVphsQsNTPDR2c
+
+https://build.phonegap.com/apps/3314127/install
 
 https://build.phonegap.com/apps/3544683/install/o1ZWQFqH26stWAkGASL5
 

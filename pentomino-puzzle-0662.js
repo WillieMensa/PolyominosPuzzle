@@ -690,7 +690,7 @@ function initScreenVariable()
 	//	STAGE_X = 990;
 	//	STAGE_Y = 605;
 
-	BLOCK_CELL_SIZE = 55;	//	antes Math.floor(STAGE_X / 18) ;
+	BLOCK_CELL_SIZE = 60;	//	antes Math.floor(STAGE_X / 18) ;
 
 
 	//	var gameWidthToHeight = STAGE_X /	STAGE_Y;
@@ -1187,7 +1187,10 @@ function addBackgroundLayer()
 		y: 0,
 		width: STAGE_X,
 		height: STAGE_Y,
+		stroke: '#ddeeff',
+		strokeWidth: 2,
 		fill: BACKGROUND_COLOR
+
 	});
 
 	if (DEBUG) {console.log('boardStartX, boardStartY: ' + boardStartX + ', ' + boardStartY )}
@@ -1939,16 +1942,19 @@ function activePolygon()
 
 		// add cursor style
 		poly.on('pointerover', function() {
+			writeMessage( "*** pointerover ***" );
 			document.body.style.cursor = 'move';
 		});
 
 		poly.on('pointerout', function() {
 			document.body.style.cursor = 'default';
 			//	console.log( "inicio Dragstart ----------------------------" );
+			writeMessage( "*** pointerout ***" );
 		});
 
 		//	dragging, desplazamiento
 		poly.on('touchmove', function() {
+			writeMessage( "*** touchmove ***" );
 			removeFromBoard(this);
 			clearFocusPoly(getLastFocusPoly());
 			setFocusPoly(this);
@@ -1958,6 +1964,7 @@ function activePolygon()
 
 		poly.on('dragstart', function() {
 
+			writeMessage( "*** dragstart ***" );
 			removeFromBoard(this);
 			clearFocusPoly(getLastFocusPoly());
 			//	hideOperatorObject(); //disable operator before drag
@@ -1972,6 +1979,7 @@ function activePolygon()
 
 		poly.on('dragend', function() {
 			//	console.log( "inicio Dragend ----------------------------" );
+			writeMessage( "*** dragend ***" );
 			if(tryInsert2Board(this)) {
 				//insert success
 
@@ -2004,6 +2012,7 @@ function activePolygon()
 
 		poly.on('click', function() {
 
+			writeMessage( "*** click ***" );
 			//	console.log( "inicio click, this: " + Object.values(this));
 
 			clearFocusPoly(getLastFocusPoly());
@@ -2549,8 +2558,7 @@ var checkSolution = false;
 //--------------------------------------
 function insertCheck()
 {
-	if (DEBUG)
-	{
+	if (DEBUG)	{
 		console.log('gBlockCellUsed: ' + gBlockCellUsed + ' / ' + gTotalBlockCell);
 		console.log('nProblema: ' + nProblema )
 	};
@@ -2562,8 +2570,9 @@ function insertCheck()
 		var	sloveState = 1;
 		//	resolvio, incremento nro problema
 
-		nProblema = (nProblema < CANTPROBLEMAS) ? nProblema+1 : nProblema
-
+		nProblema = (nProblema < CANTPROBLEMAS) ? (nProblema+1) : nProblema
+	
+		writeMessage('Ahora viene el problema ' + nProblema);
 		if (DEBUG) { console.log('nProblema: ' + nProblema ) };
 
 		return;
@@ -3072,16 +3081,14 @@ var boardSizeInfo = [
 function writeFinishMsg()
 {
 	var textHigh=26;
-	var textWidth = 12;
-	var scaleX = Math.floor((STAGE_X -11) / (2 * (finishText.length * textWidth)));
+	var textWidth = 14;
+	var scaleX = Math.floor((STAGE_X-11) / (2 * (finishText.length * textWidth)));
 	var scaleY = Math.floor((STAGE_Y/3)/ (2 * textHigh)) ;
 
-if (!DEBUG)
-{
 	var finishMsg = new Kinetic.Text({
 
-		x: 9 * BLOCK_CELL_SIZE,		// - finishText.length * textWidth/2,
-		y: 0.25 * STAGE_Y - textHigh/2,
+		x: 8 * BLOCK_CELL_SIZE,		// - finishText.length * textWidth/2,
+		y: 0.1 * STAGE_Y - textHigh/2,
 		text:  finishText,
 		fontSize: textHigh,
 		fontStyle:"bold",
@@ -3096,13 +3103,13 @@ if (!DEBUG)
 
 	finishMsg.transitionTo({
 		x: 0.8 * STAGE_X - finishText.length * textWidth*scaleX /2,
-		y: 0.4 * STAGE_Y - textHigh* scaleY /2 ,
+		y: 0.3 * STAGE_Y - textHigh* scaleY /2 ,
 		scale: {x:scaleX, y:scaleY},
 		duration: 1, // 1 sec
 		easing: "elastic-ease-in-out"
 	});
 	setTimeout("nextButton();",600); //after 600ms, display next button
-}
+
 }
 
 //----------------------
