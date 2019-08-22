@@ -290,6 +290,15 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 
 	#### version     = "0.6.61"	-	19/8/2019
 	Ajustes menores a la escala
+	Cambio estrategia. Ahora medidas fijas presentadas segun la escala detectada.
+
+	#### version     = "0.6.62"	- 21/8/2019
+	Detecte error en Android.
+	Corrigiendo proporciones
+
+	#### version     = "0.6.63"	- 22/8/2019
+	tratando de corregir no desplazamiento de pentominos en Android
+
 
 
 Se puede descargar desde

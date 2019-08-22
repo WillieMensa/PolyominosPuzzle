@@ -1,8 +1,11 @@
 ﻿/*	=============================================================================
 	Pentomino Puzzle
 
+	#### version     = "0.6.63"	- 22/8/2019
+	tratando de corregir no desplazamiento de pentominos en Android
+
 	#### version     = "0.6.62"	- 21/8/2019
-	Detecte error de no avance en Android.
+	Detecte error en Android.
 	Corrigiendo proporciones
 
 	#### version     = "0.6.61"	- 18/8/2019
@@ -65,7 +68,7 @@
 //=========
 // define
 //=========
-const versionString="0.6.62"			//	lleva el numero de version actual
+const versionString="0.6.63"			//	lleva el numero de version actual
 
 //-------------------------------------
 //	https://www.w3schools.com/colors/colors_picker.asp
@@ -1748,7 +1751,7 @@ function tryInsert2Board(poly)
 
 	if(polyPos.x > 0) { //poly in board
 		//try insert to board
-		if (!DEBUG)	{ console.log('linea 1356, llamamos a insertBlockToBoard() desde tryInsert2Board'); };
+		if (DEBUG2)	{ console.log('llamamos a insertBlockToBoard() desde tryInsert2Board'); };
 
 		if(insertBlockToBoard(gBoardState, SCREEN_BOARD_X, SCREEN_BOARD_Y, gPolyGroup[poly.polyId].block, polyPos, poly.blockId+1)) {
 			//insert success
@@ -1925,7 +1928,7 @@ function clonePolygon(savePolyGroup, fixedBlock)
 
 function activePolygon()
 {
-	if (DEBUG2) {		console.log('linea 1499, gPolyGroup: ' + gPolyGroup);
+	if (DEBUG2) {		console.log('gPolyGroup: ' + gPolyGroup);
 		console.log('linea 1500, gPolyGroup.length: ' + gPolyGroup.length);
 	}
 	//inactivePolygon();
@@ -1942,6 +1945,15 @@ function activePolygon()
 		poly.on('pointerout', function() {
 			document.body.style.cursor = 'default';
 			//	console.log( "inicio Dragstart ----------------------------" );
+		});
+
+		//	dragging, desplazamiento
+		poly.on('touchmove', function() {
+			removeFromBoard(this);
+			clearFocusPoly(getLastFocusPoly());
+			setFocusPoly(this);
+			setShadow(this);
+			gBoardLayer.draw();
 		});
 
 		poly.on('dragstart', function() {
@@ -3324,8 +3336,10 @@ function writeMessage(message) {
 
 	gMessageLayer.clear();
 	//	context.font = '24pt sriracharegular';
-	context.font = '20pt robotomedium';
-	context.fillStyle = '#faa';
+	context.font = '20pt sriracharegular';
+	//	context.style.font = '20pt sriracharegular bold';
+
+	context.fillStyle = '#ff2';
 	//	context.fillText(message, STAGE_X/2-message.length*9.5, STAGE_Y * 0.7 +BLOCK_CELL_SIZE * (SCREEN_BOARD_Y/2));
 	context.fillText(message, STAGE_X/2-message.length*9.5, STAGE_Y * 0.9 );
 	gBoardLayer.draw(); //FOR: firefox first time will not display 10/21/2012
