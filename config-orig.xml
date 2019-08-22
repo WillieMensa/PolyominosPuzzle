@@ -1,6 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <widget 
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
     id          = "ar.com.ingverger.pentomania"
-    version     = "0.6.61" >
+    version     = "0.6.62" >
 
 	<name>Pentomania</name>
 
@@ -26,7 +28,6 @@
 	<access origin="*" />
 
     <platform name="android">
-        <allow-intent href="market:*" />
 		<icon   src="icon.png" />
     </platform>
 

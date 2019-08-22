@@ -63,26 +63,26 @@ HaceConfigLayer();
 //	helpBtn.disabled=false;
 //	aboutBtn.disabled=false;
 
-document.getElementById('ProblemSelect').style.cssText = 
-	"top:" + (STAGE_OFFSET_Y + 0.6 * STAGE_Y) + "px; left:" + 
-	(STAGE_OFFSET_X + 0.33 * STAGE_X) + "px; position: absolute; font:" + (16) + "px roboto white";
-document.getElementById('ProblemSelect').style.visibility='visible';
-document.getElementById('ProblemSelect').style.disabled=false;
+//	document.getElementById('ProblemSelect').style.cssText = 
+//		"top:" + (STAGE_OFFSET_Y + 0.6 * STAGE_Y) + "px; left:" + 
+//		(STAGE_OFFSET_X + 0.33 * STAGE_X) + "px; position: absolute; font:" + (16) + "px roboto white";
+//	document.getElementById('ProblemSelect').style.visibility='visible';
+//	document.getElementById('ProblemSelect').style.disabled=false;
 
 
 if (DEBUG) {	console.log('ProblemSelect.style.cssText: ' + document.getElementById('ProblemSelect').style.cssText)}
 
 //	document.getElementById('nroProblema').style.cssText = "font: bold 20px roboto grey";
-document.getElementById('nroProblema').value = nProblema;
+nroProblema.value = nProblema;
 //	document.getElementById('nroProblema').style.value = parseInt(nProblema);
-document.getElementById('nroProblema').style.defaultValue = nProblema;
+//	document.getElementById('nroProblema').style.defaultValue = nProblema;
 //	document.getElementById('nroProblema').style.color = "red";
-document.getElementById('nroProblema').style.disabled=false;
-document.getElementById('nroProblema').style.visibility='visible';
+nroProblema.disabled=false;
+nroProblema.visibility='visible';
+nroProbBtn.visibility='visible';
 
 if (DEBUG) { console.log('nProblema: ' + nProblema +
-	'\nnroProblema.defaultValue: ' + document.getElementById('nroProblema').style.defaultValue+
-	'\nnroProblema.Value: ' + document.getElementById('nroProblema').value ); };
+	'\nnroProblema.Value: ' + nroProblema.value ); };
 
 //	nroProblema.value = nProblema;
 //	document.getElementById('nroProblema').value = nProblema;
