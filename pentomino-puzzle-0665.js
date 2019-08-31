@@ -1,6 +1,14 @@
 ﻿/*	=============================================================================
 	Pentomino Puzzle
 
+	#### version     = "0.6.65"	- 23/8/2019
+	Retomo la determinacion de variables para pantalla original (que permitia mover en pantallas chicas)
+	Abandono el uso de escalas Css
+
+	#### version     = "0.6.64"	- 23/8/2019
+	Esta version no funciona en pantallas chicas. 
+	Podria ser poor el uso de escalas segun tamaño de pantalla
+
 	#### version     = "0.6.63"	- 22/8/2019
 	tratando de corregir no desplazamiento de pentominos en Android
 
@@ -68,7 +76,7 @@
 //=========
 // define
 //=========
-const versionString="0.6.62"			//	lleva el numero de version actual
+const versionString="0.6.65"			//	lleva el numero de version actual
 
 //-------------------------------------
 //	https://www.w3schools.com/colors/colors_picker.asp
@@ -103,8 +111,8 @@ const	TITLE_COLOR = '#8a2';
 //	fonts para textos
 const
 	FONT_NIVEL1 = "luckiest_guyregular",	//	titulo:	"Bangers",	"Luckiest Guy",	"Titan One", "Sigmar One"
-	FONT_NIVEL2 = "bangersregular",				//	botones: "Bangers",	//	"Sigmar One",
-	FONT_NIVEL3 = "robotomedium"				//	textos:
+	FONT_NIVEL2 = "robotomedium",					//	textos:
+	FONT_NIVEL3 = "sriracharegular"				//	textos:
 
 //-------------------------------------------------------------------------
 // block colors:
@@ -210,6 +218,7 @@ var
 	playBtn,			//	jugar
 	statusBtn,		//	status button
 	nroProblema,	//	el input
+	labelBtn,			//	para hacer fondo del input
 	giraPieza,		//	rotate button
 	volteaPieza,
 	txtVerifica,	//	texto indicar verificacion
@@ -448,22 +457,57 @@ const btnHeight = 0.5 * BLOCK_CELL_SIZE;
 
 	//	nroProbBtn boton aceptar numero de problema
 	nroProbBtn = document.createElement("button");
-	nroProbBtn.innerHTML = "aceptar";
+	nroProbBtn.innerHTML = "Aceptar";
 	document.body.appendChild(nroProbBtn);
 	nroProbBtn.addEventListener ("click", function() {  setNroProbl() } );// 3. Add event handler
-	nroProbBtn.style.left = STAGE_OFFSET_X + 7.0 * BLOCK_CELL_SIZE;
+	nroProbBtn.style.left = STAGE_OFFSET_X + 10 * BLOCK_CELL_SIZE;
 	nroProbBtn.style.top	= STAGE_OFFSET_Y + 10 * BLOCK_CELL_SIZE; 
 	nroProbBtn.style.position = "absolute";
 
+
+	//-----------------------	prueba
+	labelBtn = document.createElement("button");
+	labelBtn.innerHTML = "Problema número (1-103):";
+	document.body.appendChild(labelBtn);
+	//	labelBtn.addEventListener ("click", function() {  setNroProbl() } );// 3. Add event handler
+	labelBtn.style.width = 8 * BLOCK_CELL_SIZE;
+	labelBtn.style.left = STAGE_OFFSET_X + 5 * BLOCK_CELL_SIZE;
+	labelBtn.style.top	= STAGE_OFFSET_Y + 7 * BLOCK_CELL_SIZE;	//	"550px";
+	labelBtn.style.position = "absolute";
+	labelBtn.style.align = "right";
+	//	gConfigLayer.add(labelBtn);
+
+	//	var labelText = new Kinetic.Text({
+	//		x: (gStage.getWidth() * 0.5),
+	//		y: 6 * BLOCK_CELL_SIZE ,
+	//		text: 'Problema número (1-104)',
+	//		fontSize: 0.4 * BLOCK_CELL_SIZE,			//	130,
+	//		fontFamily: FONT_NIVEL3,	//	'Calibri',
+	//		fill: 'black'
+	//	});
+	//	labelText.setOffset({
+	//		x: labelText.getWidth()
+	//	});
+
+	// to align text in the middle of the screen, we can set the
+	// shape offset to the center of the text shape after instantiating it
+	//	simpleText.setOffset({
+	//		x: simpleText.getWidth() / 2
+	//	});
+	//	gConfigLayer.add(labelText);
+
 	nroProblema = document.createElement("INPUT");
 	nroProblema.setAttribute("type", "number");
-	nroProblema.label = "Problema número (1-103)";
 	nroProblema.value = nProblema;
 	document.body.appendChild(nroProblema);
-	nroProblema.style.left = "800px";	
-	nroProblema.style.top = "550px";
+	nroProblema.style.left	= STAGE_OFFSET_X + 12 * BLOCK_CELL_SIZE;	//	"800px";	
+	nroProblema.style.top		= STAGE_OFFSET_Y + 7 * BLOCK_CELL_SIZE;	//	"550px";
 	nroProblema.style.position = "absolute";
-	nroProblema.style.font = "16px sriracharegular bold";
+	nroProblema.style.fontSize = 0.4 * BLOCK_CELL_SIZE;				//	"16px sriracharegular bold";
+	nroProblema.style.font = FONT_NIVEL3;			//	"16px sriracharegular bold";
+	nroProblema.style.textAlign = 'right';
+	nroProblema.style.background = '#99cc00';
+	//	nroProblema.style.float = "right";
 
 /*
 	hintBtn = document.createElement("button");
@@ -525,7 +569,7 @@ function MenuInicial() {
 	hintBtn.style.visibility='hidden';			//	menu ppal
 
 	//	document.getElementById('nroProblema').style.visibility='hidden';
-	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);
+	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " SCREEN_X: " + SCREEN_X + " SCREEN_Y: " + SCREEN_Y);
 
 	if (DEBUG) { console.log('nProblema: ' + nProblema ); };
 
@@ -643,24 +687,47 @@ function initLanguage()		//	para adaptar a diferentes idiomas
 //----------------------------------------------
 function initScreenVariable()
 {
-	if (DEBUG)	{ console.log('en initScreenVariable---')	}
 	var screenWidth = 0, screenHeight = 0;	// ancho y alto de pantallla
 
+	//	reemplazo para agrandar tablero
 	//	var maxStageX = 1000;
 	//	var maxStageY = 800;
-	//	var maxCellSize = 64;
-	//	
-	//	var midStageX = 800;
-	//	var midStageY = 600;
-	//	var midCellSize = 50;		//	var midCellSize = 32;
-	//	
-	//	var miniStageX = 600;
-	//	var miniStageY = 400;
-	//	var miniCellSize = 36;	// 24;
-	//	
-	//	var microStageX = 400;
-	//	var microStageY = 300;
-	//	var microCellSize = 32;	// 20;
+	//	var maxCellSize = 40;
+
+/*
+	variables originales
+	var maxStageX = 1000;
+	var maxStageY = 600;
+	var maxCellSize = 64;
+
+	var midStageX = 800;
+	var midStageY = 600;
+	var midCellSize = 50;		//	var midCellSize = 32;
+
+	var miniStageX = 600;
+	var miniStageY = 400;
+	var miniCellSize = 36;	// 24;
+
+	var microStageX = 400;
+	var microStageY = 300;
+	var microCellSize = 32;	// 20;
+*/
+
+	var maxStageX = 1080;
+	var maxStageY = 660;
+	var maxCellSize = 60;
+
+	var midStageX = 810;
+	var midStageY = 450;
+	var midCellSize = 45;		//	var midCellSize = 32;
+
+	var miniStageX = 612;
+	var miniStageY = 340;
+	var miniCellSize = 34;	// 24;
+
+	var microStageX = 450;
+	var microStageY = 250;
+	var microCellSize = 25;	// 20;
 
 	//----------------------------------------------------------------------
 	// Window size and scrolling:
@@ -682,53 +749,53 @@ function initScreenVariable()
 		screenHeight = document.body.clientHeight;
 	}
 
-	//	esta seria la parte nueva
 	SCREEN_X = screenWidth;
 	SCREEN_Y = screenHeight;
 
-	//	las que siguen serian dos constantes
-	//	STAGE_X = 990;
-	//	STAGE_Y = 605;
-
-	BLOCK_CELL_SIZE = 60;	//	antes Math.floor(STAGE_X / 18) ;
+	//	STAGE_X = ((screenWidth%2)? (screenWidth-1):screenWidth) - microCellSize*2;
+	STAGE_X = Math.floor(screenWidth*0.95);
 
 
-	//	var gameWidthToHeight = STAGE_X /	STAGE_Y;
-	//	var screenWidthToHeight = SCREEN_X / SCREEN_Y;
-
-	//-----------------------------
-	//	ajuste tamaño BLOCK_CELL_SIZE para absorver pantallas muy aplanadas > 1.6
-	//	switch (true) {
-	//		case (screenWidthToHeight > 2):
-	//			BLOCK_CELL_SIZE = 45;		
-	//			break; 
-	//		case (screenWidthToHeight > 1.8):
-	//			BLOCK_CELL_SIZE = 48;		
-	//			break; 
-	//		case (screenWidthToHeight > 18/11):
-	//			BLOCK_CELL_SIZE = 51;
-	//			break; 
-	//		default: 
-	//		BLOCK_CELL_SIZE = 55;	//	antes Math.floor(STAGE_X / 18) ;
-	//	}
-	//-----------------------------
-
-	STAGE_Y = 11 * BLOCK_CELL_SIZE;
-	STAGE_X = 20 * BLOCK_CELL_SIZE;
-	
+	//	if(STAGE_X > maxStageX) STAGE_X = maxStageX;
+	//	if(STAGE_X < microStageX) STAGE_X = microStageX;
 	STAGE_OFFSET_X = Math.floor((screenWidth - STAGE_X)/2);
+	if(STAGE_OFFSET_X < microCellSize) STAGE_OFFSET_X = microCellSize;
+
+	//	STAGE_Y = ((screenHeight%2)?(screenHeight-1):screenHeight) - microCellSize*2;
+	STAGE_Y = Math.floor(screenHeight*0.90);
+
+	if(STAGE_Y > maxStageY) STAGE_Y = maxStageY;
+	if(STAGE_Y < microStageY) STAGE_Y = microStageY;
 	STAGE_OFFSET_Y = Math.floor((screenHeight - STAGE_Y)/2);
+	if(STAGE_OFFSET_Y < microCellSize) STAGE_OFFSET_Y = microCellSize;
+
+
+	//	if (DEBUG)	{	writeMessage("cell " +BLOCK_CELL_SIZE + " X,Y " + STAGE_X + "," + STAGE_Y + " offX: " + STAGE_OFFSET_X + " offY: " + STAGE_OFFSET_Y);	}
+	if (DEBUG)	{	console.log("SCREEN_X: " + SCREEN_X + ' SCREEN_Y: ' + SCREEN_Y ); }
+
+
+	BLOCK_CELL_SIZE = maxCellSize;
+	switch(true) {
+	case (STAGE_X <= microStageX || STAGE_Y <= microStageY):
+		BLOCK_CELL_SIZE = microCellSize;
+		break;
+	case (STAGE_X <= miniStageX || STAGE_Y <= miniStageY):
+		BLOCK_CELL_SIZE = miniCellSize;
+		break;
+	case (STAGE_X <= midStageX || STAGE_Y <= midStageY):
+		BLOCK_CELL_SIZE = midCellSize;
+		break;
+	}
 
 	if (DEBUG){
-		console.log( 'Parametros de pantalla'	+
-			'\nBLOCK_CELL_SIZE: ' +  BLOCK_CELL_SIZE +
-			'\nSCREEN_X: ' +		SCREEN_X +
-			'\nSCREEN_Y: ' + 		SCREEN_Y +
-			'\nSTAGE_X: ' + 		STAGE_X  +
-			'\nSTAGE_Y: ' + 		STAGE_Y		+
-			'\nSTAGE_OFFSET_X: ' + 	STAGE_OFFSET_X +
-			'\nSTAGE_OFFSET_Y: ' +  	STAGE_OFFSET_Y 
-		)
+		console.log( 'Parametros de pantalla'	);
+		console.log( 'SCREEN_X: ' +		SCREEN_X       );
+		console.log( 'SCREEN_Y: ' + 		SCREEN_Y       );
+		console.log( 'STAGE_X: ' + 		STAGE_X        );
+		console.log( 'STAGE_OFFSET_X: ' + 	STAGE_OFFSET_X );
+		console.log( 'STAGE_Y: ' + 		STAGE_Y        );
+		console.log( 'STAGE_OFFSET_Y: ' +  	STAGE_OFFSET_Y );
+		console.log( 'BLOCK_CELL_SIZE: ' +  BLOCK_CELL_SIZE );
 	}
 
 }
@@ -883,6 +950,8 @@ function createPuzzle(newPuzzle, activePoly)
 //---------------------
 function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 {
+	var nFilaProblema;		//	identifica elemento en la tabla de problemas
+
 	if (DEBUG) {console.log( '*'.repeat(16) + ' initBoardState' )}
 
 	//initial global variable
@@ -916,14 +985,15 @@ function initBoardState(boardX, boardY, numOfFixedBlocks, newPuzzle)
 
 	clearFixedBlock();
 
+	nFilaProblema = nProblema - 1;
 	//	en este punto ya debe estar seleccionado el tetromino a colocar y su posicion
-	wTetromPos = { x:problemas[nProblema].posX, y:problemas[nProblema].posY };	//	posicion del tetromino fijo
+	wTetromPos = { x:problemas[nFilaProblema].posX, y:problemas[nFilaProblema].posY };	//	posicion del tetromino fijo
 	var str = "LSIOT";
-	nTetromId	= str.indexOf(problemas[nProblema].pieza);
+	nTetromId	= str.indexOf(problemas[nFilaProblema].pieza);
 
 	if (DEBUG2)	{
-		console.log('contenido de problemas[nProblema] \n'+
-			mostrarPropiedades(problemas[nProblema], 'problemas[nProblema]' ) );
+		console.log('contenido de problemas[nFilaProblema] \n'+
+			mostrarPropiedades(problemas[nFilaProblema], 'problemas[nFilaProblema]' ) );
 		console.log('wTetromPos, nTetromId: ' +	wTetromPos.x +', ' + wTetromPos.y +', ' + nTetromId	);
 	}
 
@@ -1140,7 +1210,7 @@ function addBackgroundLayer()
 	var titleFontSize = Math.round(BLOCK_CELL_SIZE*0.5);
 
 	var titleText1 = new Kinetic.Text({
-		x: textOffset,
+		x: BLOCK_CELL_SIZE,			//textOffset,
 		y: textOffset,
 		text: 'Problem ' + nProblema,
 		fill: TITLE_COLOR,
@@ -1932,13 +2002,21 @@ function clonePolygon(savePolyGroup, fixedBlock)
 function activePolygon()
 {
 	if (DEBUG2) {		console.log('gPolyGroup: ' + gPolyGroup);
-		console.log('linea 1500, gPolyGroup.length: ' + gPolyGroup.length);
+		console.log('gPolyGroup.length: ' + gPolyGroup.length);
 	}
 	//inactivePolygon();
 	for(var g = 0; g < gPolyGroup.length; g++) {
 		var poly = gPolyGroup[g].poly;
 
 		poly.setDraggable(true);
+
+		//	--------------------------------------------
+		//	prueba metodos adiconales para mover con touch
+		//	necesario en pantallas chicas
+    // TOUCH
+    //	document.addEventListener("touchstart", touchHandler);
+    //	document.addEventListener("touchmove", touchHandler);
+
 
 		// add cursor style
 		poly.on('pointerover', function() {
@@ -1953,8 +2031,20 @@ function activePolygon()
 		});
 
 		//	dragging, desplazamiento
-		poly.on('touchmove', function() {
-			writeMessage( "*** touchmove ***" );
+		//	poly.on('touchmove', function() {
+		poly.on('pointermove', function() {
+			writeMessage( "*** pointermove ***" );
+			removeFromBoard(this);
+			clearFocusPoly(getLastFocusPoly());
+			setFocusPoly(this);
+			setShadow(this);
+			gBoardLayer.draw();
+		});
+
+		//	este lo agrego yo para probar
+		poly.on('pointerdown click', function() {
+			//	writeMessage( "*** pointerdown ***" );
+			//	alert('activo pointerdown');
 			removeFromBoard(this);
 			clearFocusPoly(getLastFocusPoly());
 			setFocusPoly(this);
@@ -2010,27 +2100,28 @@ function activePolygon()
 			//dumpBoard(gBoardState); //for debug only
 		});
 
-		poly.on('click', function() {
+//			poly.on('click', function() {
+//	
+//				writeMessage( "*** click ***" );
+//				//	console.log( "inicio click, this: " + Object.values(this));
+//	
+//				clearFocusPoly(getLastFocusPoly());
+//				hideOperatorObject(); //remove operator from old position
+//	
+//				//	boton operador
+//				//	ocultaBotonOperador();
+//	
+//				removeFromBoard(this);
+//				setFocusPoly(this);
+//				setShadow(this);
+//				showOperatorObject(this); //enable operator at new position
+//	
+//				//	y habilito el boton equivalente
+//				muestraBotonOperador(this);
+//	
+//				//dumpBoard(gBoardState); //for debug only
+//			});
 
-			writeMessage( "*** click ***" );
-			//	console.log( "inicio click, this: " + Object.values(this));
-
-			clearFocusPoly(getLastFocusPoly());
-			hideOperatorObject(); //remove operator from old position
-
-			//	boton operador
-			//	ocultaBotonOperador();
-
-			removeFromBoard(this);
-			setFocusPoly(this);
-			setShadow(this);
-			showOperatorObject(this); //enable operator at new position
-
-			//	y habilito el boton equivalente
-			muestraBotonOperador(this);
-
-			//dumpBoard(gBoardState); //for debug only
-		});
 /*
 		poly.on('dragmove click', function() {
 			// for debug only
@@ -2570,7 +2661,7 @@ function insertCheck()
 		var	sloveState = 1;
 		//	resolvio, incremento nro problema
 
-		nProblema = (nProblema < CANTPROBLEMAS) ? (nProblema+1) : nProblema
+		nProblema = (nProblema < CANTPROBLEMAS) ? (parseInt(nProblema)+1.0) : nProblema
 	
 		writeMessage('Ahora viene el problema ' + nProblema);
 		if (DEBUG) { console.log('nProblema: ' + nProblema ) };
@@ -2835,6 +2926,7 @@ function hiddenAllButton()
 	configBtn.style.visibility='hidden';
 	nroProbBtn.style.visibility='hidden';
 	nroProblema.style.visibility='hidden';
+	labelBtn.style.visibility='hidden';
 	checkBtn.style.visibility='hidden';
 	//	txtVerifica.style.visibility='hidden';
 

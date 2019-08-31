@@ -299,6 +299,11 @@ A partir de aqui diseñar la disposición que le daremos a las piezas.
 	#### version     = "0.6.63"	- 22/8/2019
 	tratando de corregir no desplazamiento de pentominos en Android
 
+	#### version     = "0.6.64"	- 28/8/2019
+	Se arreglaron algunas cuestiones dimensinales
+
+	#### version     = "0.6.65"	- 28/8/2019
+	Corrigiendo manejo de dimensiones para que pueda funcionar en pantallas reducidas.
 
 
 Se puede descargar desde

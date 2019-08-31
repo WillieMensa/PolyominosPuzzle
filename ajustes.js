@@ -13,9 +13,14 @@ function HaceConfigLayer(){
 		x: (gStage.getWidth() * 0.4),
 		y: (gStage.getHeight() * 0.2),
 		text: 'AJUSTES',
-		fontSize: SCREEN_X/12,			//	130,
-		fontFamily: FONT_NIVEL2,	//	'Calibri',
-		fill: '#334D00'
+		fontSize: 1.5 * BLOCK_CELL_SIZE,			//	130,
+		fontFamily: FONT_NIVEL1,	//	'Calibri',
+		fill: TITLE_COLOR,
+		shadowColor: 'black',
+		shadowBlur: 5,
+		shadowOffset: [6,6],			//	2, 2],
+		shadowOpacity:0.7
+
 	});
 
 	// to align text in the middle of the screen, we can set the
@@ -55,9 +60,11 @@ gHelpLayer.destroy();
 gAboutLayer.destroy();
 //	gStatusLayer.destroy();
 
+console.log(' haciendo ConfigLayer ');
 
 HaceConfigLayer();
 
+console.log(' despues de ConfigLayer ');
 //	visibleStatusBtn()
 //	menuBtn.disabled=false;
 //	helpBtn.disabled=false;
@@ -70,7 +77,7 @@ HaceConfigLayer();
 //	document.getElementById('ProblemSelect').style.disabled=false;
 
 
-if (DEBUG) {	console.log('ProblemSelect.style.cssText: ' + document.getElementById('ProblemSelect').style.cssText)}
+//	if (DEBUG) {	console.log('ProblemSelect.style.cssText: ' + document.getElementById('ProblemSelect').style.cssText)}
 
 //	document.getElementById('nroProblema').style.cssText = "font: bold 20px roboto grey";
 nroProblema.value = nProblema;
@@ -78,8 +85,10 @@ nroProblema.value = nProblema;
 //	document.getElementById('nroProblema').style.defaultValue = nProblema;
 //	document.getElementById('nroProblema').style.color = "red";
 nroProblema.disabled=false;
-nroProblema.visibility='visible';
-nroProbBtn.visibility='visible';
+nroProbBtn.disabled=false;
+//	nroProblema.visibility='visible';
+//	labelBtn.visibility='visible';
+//	nroProbBtn.visibility='visible';
 
 if (DEBUG) { console.log('nProblema: ' + nProblema +
 	'\nnroProblema.Value: ' + nroProblema.value ); };
@@ -87,8 +96,9 @@ if (DEBUG) { console.log('nProblema: ' + nProblema +
 //	nroProblema.value = nProblema;
 //	document.getElementById('nroProblema').value = nProblema;
 menuBtn.style.visibility='visible';			//	menu ppal
-//	nroProbBtn.style.visibility='visible';
-//	nroProblema.style.visibility='visible';
+nroProbBtn.style.visibility='visible';
+labelBtn.style.visibility='visible';
+nroProblema.style.visibility='visible';
 //	nroProblema.disabled=false;
 
 
@@ -102,10 +112,10 @@ menuBtn.style.visibility='visible';			//	menu ppal
 //----------------------------------
 function setNroProbl() {
 
-var n = document.getElementById('nroProblema').style.value;
+var n = nroProblema.value;
 
 	console.log('en setNroProbl()\nnro de problema antes: ' + nProblema + ', ' + n );	
-	nProblema = parseInt( document.getElementById('nroProblema').value);	
+	nProblema = parseInt( nroProblema.value);	
 	console.log('nro de problema fijado: ' + nProblema);
 
 	setStorage("nroProblemaStored", nProblema);

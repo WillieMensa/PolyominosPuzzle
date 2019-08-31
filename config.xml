@@ -2,7 +2,7 @@
 <widget 
     xmlns:gap   = "http://phonegap.com/ns/1.0"
     id          = "ar.com.ingverger.pentomania"
-    version     = "0.6.63" >
+    version     = "0.6.65" >
 
 	<name>Pentomania</name>
 
